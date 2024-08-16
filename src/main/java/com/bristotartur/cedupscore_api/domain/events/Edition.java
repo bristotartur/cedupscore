@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "TB_EDITION")
@@ -29,6 +31,9 @@ public class Edition {
 
     @Column(nullable = false)
     private LocalDate closingDate;
+
+    @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
+    private Set<EditionRegistration> editionRegistrations = new HashSet<>();
 
     @Override
     public String toString() {

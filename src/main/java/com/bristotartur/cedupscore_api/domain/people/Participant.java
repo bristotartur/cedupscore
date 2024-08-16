@@ -1,7 +1,8 @@
 package com.bristotartur.cedupscore_api.domain.people;
 
 import com.bristotartur.cedupscore_api.domain.events.EditionRegistration;
-import com.bristotartur.cedupscore_api.enums.TeamLogo;
+import com.bristotartur.cedupscore_api.enums.GenderCategory;
+import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,38 +11,48 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "TB_TEAM")
+@Table(name = "TB_PARTICIPANT")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class Team {
+public class Participant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    @Enumerated(EnumType.STRING)
-    private TeamLogo logo;
+    @Column(nullable = false)
+    private String cpf;
 
     @Column(nullable = false)
-    private Boolean isActive;
+    private String rg;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private GenderCategory gender;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ParticipantType type;
+
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
 
     @Override
     public String toString() {
-        return "Team{" +
+        return "Participant{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", logo=" + logo +
-                ", isActive=" + isActive +
+                ", cpf='" + cpf + '\'' +
+                ", rg='" + rg + '\'' +
+                ", gender=" + gender +
+                ", type=" + type +
+                ", editionRegistrations=" + editionRegistrations +
                 '}';
     }
 
@@ -49,8 +60,8 @@ public class Team {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Team team = (Team) o;
-        return Objects.equals(id, team.id);
+        Participant that = (Participant) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
