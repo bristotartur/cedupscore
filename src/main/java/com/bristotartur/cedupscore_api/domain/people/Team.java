@@ -1,6 +1,7 @@
 package com.bristotartur.cedupscore_api.domain.people;
 
 import com.bristotartur.cedupscore_api.domain.events.EditionRegistration;
+import com.bristotartur.cedupscore_api.domain.events.TeamScore;
 import com.bristotartur.cedupscore_api.enums.TeamLogo;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,9 @@ public class Team {
 
     @Column(nullable = false)
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<TeamScore> teamScores = new HashSet<>();
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
