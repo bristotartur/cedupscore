@@ -1,5 +1,6 @@
 package com.bristotartur.cedupscore_api.domain.events;
 
+import com.bristotartur.cedupscore_api.domain.matches.Round;
 import com.bristotartur.cedupscore_api.domain.registrations.SportRegistration;
 import com.bristotartur.cedupscore_api.domain.scores.SportScore;
 import com.bristotartur.cedupscore_api.enums.GenderCategory;
@@ -41,6 +42,9 @@ public class SportEvent extends Event {
 
     @OneToMany(mappedBy = "sportEvent", cascade = CascadeType.ALL)
     private Set<SportRegistration> sportRegistrations = new HashSet<>();
+
+    @OneToMany(mappedBy = "sportEvent", cascade = CascadeType.ALL)
+    private Set<Round> rounds = new HashSet<>();
 
     public SportEvent(Long id, Status status, LocalDateTime startedAt, LocalDateTime endedAt, SportType type, GenderCategory modality, Edition edition) {
         super(id, status, startedAt, endedAt);
