@@ -1,5 +1,7 @@
 package com.bristotartur.cedupscore_api.domain.events;
 
+import com.bristotartur.cedupscore_api.domain.registrations.TaskRegistration;
+import com.bristotartur.cedupscore_api.domain.scores.TaskScore;
 import com.bristotartur.cedupscore_api.enums.Status;
 import com.bristotartur.cedupscore_api.enums.TaskType;
 import jakarta.persistence.*;

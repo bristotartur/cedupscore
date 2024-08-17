@@ -1,5 +1,7 @@
 package com.bristotartur.cedupscore_api.domain.events;
 
+import com.bristotartur.cedupscore_api.domain.registrations.EditionRegistration;
+import com.bristotartur.cedupscore_api.domain.scores.TeamScore;
 import com.bristotartur.cedupscore_api.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;

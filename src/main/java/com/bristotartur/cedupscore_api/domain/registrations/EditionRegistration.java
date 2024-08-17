@@ -1,19 +1,29 @@
-package com.bristotartur.cedupscore_api.domain.events;
+package com.bristotartur.cedupscore_api.domain.registrations;
 
+import com.bristotartur.cedupscore_api.domain.events.Edition;
+import com.bristotartur.cedupscore_api.domain.people.Participant;
 import com.bristotartur.cedupscore_api.domain.people.Team;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "TB_TEAM_SCORE")
+@Table(name = "TB_EDITION_REGISTRATION")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@SuperBuilder(toBuilder = true)
-public class TeamScore extends Score {
+@Builder
+public class EditionRegistration {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "participant_id", nullable = false)
+    private Participant participant;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id", nullable = false)
@@ -23,17 +33,11 @@ public class TeamScore extends Score {
     @JoinColumn(name = "edition_id", nullable = false)
     private Edition edition;
 
-    public TeamScore(Long id, Integer score, Team team, Edition edition) {
-        super(id, score);
-        this.team = team;
-        this.edition = edition;
-    }
-
     @Override
     public String toString() {
-        return "TeamScore{" +
-                "id=" + getId() +
-                ", score=" + getScore() +
+        return "EditionRegistration{" +
+                "id=" + id +
+                ", participant=" + participant +
                 ", team=" + team +
                 ", edition=" + edition +
                 '}';
@@ -43,13 +47,13 @@ public class TeamScore extends Score {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TeamScore teamScore = (TeamScore) o;
-        return Objects.equals(getId(), teamScore.getId());
+        EditionRegistration that = (EditionRegistration) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return Objects.hashCode(id);
     }
 
 }

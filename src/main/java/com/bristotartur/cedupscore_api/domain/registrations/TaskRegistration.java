@@ -1,5 +1,6 @@
-package com.bristotartur.cedupscore_api.domain.events;
+package com.bristotartur.cedupscore_api.domain.registrations;
 
+import com.bristotartur.cedupscore_api.domain.events.TaskEvent;
 import com.bristotartur.cedupscore_api.domain.people.Participant;
 import jakarta.persistence.*;
 import lombok.*;

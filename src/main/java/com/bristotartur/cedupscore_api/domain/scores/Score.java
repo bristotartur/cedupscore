@@ -1,4 +1,4 @@
-package com.bristotartur.cedupscore_api.domain.events;
+package com.bristotartur.cedupscore_api.domain.scores;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

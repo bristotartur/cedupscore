@@ -1,7 +1,7 @@
 package com.bristotartur.cedupscore_api.domain.people;
 
-import com.bristotartur.cedupscore_api.domain.events.EditionRegistration;
-import com.bristotartur.cedupscore_api.domain.events.TaskRegistration;
+import com.bristotartur.cedupscore_api.domain.registrations.EditionRegistration;
+import com.bristotartur.cedupscore_api.domain.registrations.TaskRegistration;
 import com.bristotartur.cedupscore_api.enums.GenderCategory;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import jakarta.persistence.*;

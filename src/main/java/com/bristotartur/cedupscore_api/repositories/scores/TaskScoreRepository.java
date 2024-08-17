@@ -1,6 +1,6 @@
-package com.bristotartur.cedupscore_api.repositories;
+package com.bristotartur.cedupscore_api.repositories.scores;
 
-import com.bristotartur.cedupscore_api.domain.events.TaskScore;
+import com.bristotartur.cedupscore_api.domain.scores.TaskScore;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,4 +1,4 @@
-package com.bristotartur.cedupscore_api.repositories;
+package com.bristotartur.cedupscore_api.repositories.people;
 
 import com.bristotartur.cedupscore_api.domain.people.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
