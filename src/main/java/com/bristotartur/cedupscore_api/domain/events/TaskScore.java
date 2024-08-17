@@ -8,34 +8,34 @@ import lombok.experimental.SuperBuilder;
 import java.util.Objects;
 
 @Entity
-@Table(name = "TB_TEAM_SCORE")
+@Table(name = "TB_TASK_SCORE")
 @NoArgsConstructor
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-public class TeamScore extends Score {
+public class TaskScore extends Score {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "edition_id", nullable = false)
-    private Edition edition;
+    @JoinColumn(name = "task_event_id", nullable = false)
+    private TaskEvent taskEvent;
 
-    public TeamScore(Long id, Integer score, Team team, Edition edition) {
+    public TaskScore(Long id, Integer score, Team team, TaskEvent taskEvent) {
         super(id, score);
         this.team = team;
-        this.edition = edition;
+        this.taskEvent = taskEvent;
     }
 
     @Override
     public String toString() {
-        return "TeamScore{" +
+        return "TaskScore{" +
                 "id=" + getId() +
                 ", score=" + getScore() +
                 ", team=" + team +
-                ", edition=" + edition +
+                ", taskEvent=" + taskEvent +
                 '}';
     }
 
@@ -43,13 +43,13 @@ public class TeamScore extends Score {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TeamScore teamScore = (TeamScore) o;
-        return Objects.equals(getId(), teamScore.getId());
+        TaskScore taskScore = (TaskScore) o;
+        return Objects.equals(getId(), taskScore.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return Objects.hash(getId());
     }
 
 }

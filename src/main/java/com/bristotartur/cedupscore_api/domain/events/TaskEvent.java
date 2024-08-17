@@ -9,7 +9,9 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "TB_TASK_EVENT")
@@ -30,6 +32,9 @@ public class TaskEvent extends Event {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "edition_id", nullable = false)
     private Edition edition;
+
+    @OneToMany(mappedBy = "taskEvent", cascade = CascadeType.ALL)
+    private Set<TaskScore> taskScores = new HashSet<>();
 
     public TaskEvent(Long id, Status status, LocalDateTime startedAt, LocalDateTime endedAt, TaskType type, String description, Edition edition) {
         super(id, status, startedAt, endedAt);
