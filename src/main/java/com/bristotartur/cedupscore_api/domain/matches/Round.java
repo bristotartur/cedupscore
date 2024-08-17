@@ -6,7 +6,9 @@ import com.bristotartur.cedupscore_api.enums.SportType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "TB_ROUND")
@@ -35,6 +37,9 @@ public class Round {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "sport_event_id", nullable = false)
     private SportEvent sportEvent;
+
+    @OneToMany(mappedBy = "round", cascade = CascadeType.ALL)
+    private Set<Match> matches = new HashSet<>();
 
     @Override
     public String toString() {

@@ -1,5 +1,6 @@
 package com.bristotartur.cedupscore_api.domain.people;
 
+import com.bristotartur.cedupscore_api.domain.matches.MatchTeam;
 import com.bristotartur.cedupscore_api.domain.registrations.EditionRegistration;
 import com.bristotartur.cedupscore_api.domain.scores.SportScore;
 import com.bristotartur.cedupscore_api.domain.scores.TaskScore;
@@ -46,6 +47,9 @@ public class Team {
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<MatchTeam> matchTeams = new HashSet<>();
 
     @Override
     public String toString() {
