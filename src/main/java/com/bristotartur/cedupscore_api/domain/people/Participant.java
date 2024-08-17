@@ -1,6 +1,7 @@
 package com.bristotartur.cedupscore_api.domain.people;
 
 import com.bristotartur.cedupscore_api.domain.events.EditionRegistration;
+import com.bristotartur.cedupscore_api.domain.events.TaskRegistration;
 import com.bristotartur.cedupscore_api.enums.GenderCategory;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import jakarta.persistence.*;
@@ -42,6 +43,9 @@ public class Participant {
 
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
+
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    private Set<TaskRegistration> taskRegistrations = new HashSet<>();
 
     @Override
     public String toString() {

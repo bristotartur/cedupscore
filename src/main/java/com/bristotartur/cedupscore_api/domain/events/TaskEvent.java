@@ -36,6 +36,9 @@ public class TaskEvent extends Event {
     @OneToMany(mappedBy = "taskEvent", cascade = CascadeType.ALL)
     private Set<TaskScore> taskScores = new HashSet<>();
 
+    @OneToMany(mappedBy = "taskEvent", cascade = CascadeType.ALL)
+    private Set<TaskRegistration> taskRegistrations = new HashSet<>();
+
     public TaskEvent(Long id, Status status, LocalDateTime startedAt, LocalDateTime endedAt, TaskType type, String description, Edition edition) {
         super(id, status, startedAt, endedAt);
         this.type = type;
