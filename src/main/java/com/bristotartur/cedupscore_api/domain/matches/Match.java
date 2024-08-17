@@ -1,5 +1,8 @@
 package com.bristotartur.cedupscore_api.domain.matches;
 
+import com.bristotartur.cedupscore_api.domain.actions.Goal;
+import com.bristotartur.cedupscore_api.domain.actions.MatchSet;
+import com.bristotartur.cedupscore_api.domain.actions.PenaltyCard;
 import com.bristotartur.cedupscore_api.enums.GenderCategory;
 import com.bristotartur.cedupscore_api.enums.Importance;
 import com.bristotartur.cedupscore_api.enums.SportType;
@@ -65,6 +68,15 @@ public class Match {
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     private Set<MatchTeam> matchTeams = new HashSet<>(2);
+
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    private Set<Goal> goals = new HashSet<>();
+
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    private Set<PenaltyCard> penaltyCards = new HashSet<>();
+
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    private Set<MatchSet> sets = new HashSet<>();
 
     @Override
     public String toString() {
