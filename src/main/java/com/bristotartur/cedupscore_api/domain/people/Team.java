@@ -1,6 +1,8 @@
 package com.bristotartur.cedupscore_api.domain.people;
 
 import com.bristotartur.cedupscore_api.domain.registrations.EditionRegistration;
+import com.bristotartur.cedupscore_api.domain.scores.SportScore;
+import com.bristotartur.cedupscore_api.domain.scores.TaskScore;
 import com.bristotartur.cedupscore_api.domain.scores.TeamScore;
 import com.bristotartur.cedupscore_api.enums.TeamLogo;
 import jakarta.persistence.*;
@@ -35,6 +37,12 @@ public class Team {
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private Set<TeamScore> teamScores = new HashSet<>();
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<TaskScore> taskScores = new HashSet<>();
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private Set<SportScore> sportScores = new HashSet<>();
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();

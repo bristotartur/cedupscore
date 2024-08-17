@@ -38,6 +38,9 @@ public class Edition {
     private Set<TaskEvent> taskEvents = new HashSet<>();
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
+    private Set<SportEvent> sportEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
     private Set<TeamScore> teamScores = new HashSet<>();
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
