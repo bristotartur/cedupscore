@@ -44,6 +44,9 @@ public class Participant {
     @Enumerated(EnumType.STRING)
     private ParticipantType type;
 
+    @Column(nullable = false)
+    private Boolean isActive;
+
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
 
@@ -68,7 +71,7 @@ public class Participant {
                 ", rg='" + rg + '\'' +
                 ", gender=" + gender +
                 ", type=" + type +
-                ", editionRegistrations=" + editionRegistrations +
+                ", isActive=" + isActive +
                 '}';
     }
 
