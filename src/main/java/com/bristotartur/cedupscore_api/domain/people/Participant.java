@@ -34,9 +34,6 @@ public class Participant {
     private String cpf;
 
     @Column(nullable = false)
-    private String rg;
-
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private GenderCategory gender;
 
@@ -68,7 +65,6 @@ public class Participant {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", cpf='" + cpf + '\'' +
-                ", rg='" + rg + '\'' +
                 ", gender=" + gender +
                 ", type=" + type +
                 ", isActive=" + isActive +
