@@ -1,5 +1,6 @@
 package com.bristotartur.cedupscore_api.domain.events;
 
+import com.bristotartur.cedupscore_api.domain.actions.Punishment;
 import com.bristotartur.cedupscore_api.domain.registrations.EditionRegistration;
 import com.bristotartur.cedupscore_api.domain.scores.TeamScore;
 import com.bristotartur.cedupscore_api.enums.Status;
@@ -45,6 +46,9 @@ public class Edition {
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
+
+    @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
+    private Set<Punishment> punishments = new HashSet<>();
 
     @Override
     public String toString() {
