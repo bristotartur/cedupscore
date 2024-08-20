@@ -5,5 +5,6 @@ public enum TeamLogo {
     MESTRES,
     PAPA,
     TWISTER,
-    UNICONTTI
+    UNICONTTI,
+    COIOTE
 }
