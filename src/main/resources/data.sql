@@ -3,7 +3,7 @@
 INSERT INTO
     tb_edition (status, start_date, closing_date)
 VALUES
-    ('ENDED', '2024-04-01', '2024-08-09');
+    ('ENDED', '2023-04-01', '2024-08-09');
 
 -- TEAMS
 

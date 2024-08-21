@@ -36,18 +36,23 @@ public class Edition {
     private LocalDate closingDate;
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<TaskEvent> taskEvents = new HashSet<>();
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<SportEvent> sportEvents = new HashSet<>();
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<TeamScore> teamScores = new HashSet<>();
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<Punishment> punishments = new HashSet<>();
 
     @Override

@@ -63,7 +63,7 @@ public class TeamService {
         var team = this.findTeamById(id);
 
         if (!teamScoreRepository.findAllByTeam(team).isEmpty()) {
-            throw new UnprocessableEntityException("A equipe não pode ser removida");
+            throw new UnprocessableEntityException("A equipe não pode ser removida.");
         }
         teamRepository.delete(team);
     }
@@ -96,7 +96,7 @@ public class TeamService {
                     .filter(edition -> edition.getStatus().equals(Status.IN_PROGRESS))
                     .findFirst()
                     .ifPresent(edition -> {
-                        throw new ConflictException("A equipe não pode ser desativada");
+                        throw new ConflictException("A equipe não pode ser desativada.");
                     });
         }
         team.setIsActive(isActive);
