@@ -81,7 +81,7 @@ public class EditionService {
         if (!edition.getStatus().equals(Status.SCHEDULED)) {
             throw new UnprocessableEntityException("A edição não pode ser removida.");
         }
-        if (!edition.getTaskEvents().isEmpty() || !edition.getSportEvents().isEmpty()) {
+        if (!edition.getEvents().isEmpty()) {
             throw new UnprocessableEntityException("A edição não pode ser removida.");
         }
         editionRepository.delete(edition);

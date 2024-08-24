@@ -1,20 +1,21 @@
 package com.bristotartur.cedupscore_api.domain.registrations;
 
-import com.bristotartur.cedupscore_api.domain.events.TaskEvent;
+import com.bristotartur.cedupscore_api.domain.events.Event;
 import com.bristotartur.cedupscore_api.domain.people.Participant;
+import com.bristotartur.cedupscore_api.domain.people.Team;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "TB_TASK_REGISTRATION")
+@Table(name = "TB_EVENT_REGISTRATION")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class TaskRegistration {
+public class EventRegistration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +26,19 @@ public class TaskRegistration {
     private Participant participant;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "task_event_id", nullable = false)
-    private TaskEvent taskEvent;
+    @JoinColumn(name = "team_id", nullable = false)
+    private Team team;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
 
     @Override
     public String toString() {
-        return "TaskRegistration{" +
+        return "EventRegistration{" +
                 "id=" + id +
                 ", participant=" + participant +
-                ", taskEvent=" + taskEvent +
+                ", event=" + event +
                 '}';
     }
 
@@ -41,7 +46,7 @@ public class TaskRegistration {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TaskRegistration that = (TaskRegistration) o;
+        EventRegistration that = (EventRegistration) o;
         return Objects.equals(id, that.id);
     }
 

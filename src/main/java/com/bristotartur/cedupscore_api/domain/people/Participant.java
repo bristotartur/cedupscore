@@ -3,9 +3,9 @@ package com.bristotartur.cedupscore_api.domain.people;
 import com.bristotartur.cedupscore_api.domain.actions.Goal;
 import com.bristotartur.cedupscore_api.domain.actions.PenaltyCard;
 import com.bristotartur.cedupscore_api.domain.registrations.EditionRegistration;
-import com.bristotartur.cedupscore_api.domain.registrations.SportRegistration;
-import com.bristotartur.cedupscore_api.domain.registrations.TaskRegistration;
-import com.bristotartur.cedupscore_api.enums.GenderCategory;
+import com.bristotartur.cedupscore_api.domain.registrations.EventRegistration;
+import com.bristotartur.cedupscore_api.enums.Gender;
+import com.bristotartur.cedupscore_api.enums.Modality;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,7 +35,7 @@ public class Participant {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private GenderCategory gender;
+    private Gender gender;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -45,18 +45,19 @@ public class Participant {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
 
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
-    private Set<TaskRegistration> taskRegistrations = new HashSet<>();
+    @Builder.Default
+    private Set<EventRegistration> eventRegistrations = new HashSet<>();
 
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
-    private Set<SportRegistration> sportRegistrations = new HashSet<>();
-
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<Goal> goals = new HashSet<>();
 
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<PenaltyCard> penaltyCards = new HashSet<>();
 
     @Override

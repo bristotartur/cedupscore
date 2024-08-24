@@ -1,6 +1,5 @@
 package com.bristotartur.cedupscore_api.dtos.response;
 
-import com.bristotartur.cedupscore_api.enums.TeamLogo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -11,7 +10,7 @@ public class TeamResponseDto extends RepresentationModel<TeamResponseDto> {
 
     public final String name;
 
-    public final TeamLogo logo;
+    public final String logoUrl;
 
     public final Boolean isActive;
 }

@@ -1,6 +1,9 @@
 package com.bristotartur.cedupscore_api.enums;
 
-public enum SportType {
+public enum ExtraType {
+    NORMAL,
+    ACCOMPLISHED,
+    CULTURAL,
     BASKETBALL,
     CHESS,
     FUTSAL,

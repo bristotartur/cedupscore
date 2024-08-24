@@ -1,7 +1,6 @@
 package com.bristotartur.cedupscore_api.enums;
 
-public enum GenderCategory {
+public enum Gender {
     MASCULINE,
-    FEMININE,
-    MIXED
+    FEMININE
 }

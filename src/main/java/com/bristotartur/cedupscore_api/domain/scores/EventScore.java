@@ -1,6 +1,6 @@
 package com.bristotartur.cedupscore_api.domain.scores;
 
-import com.bristotartur.cedupscore_api.domain.events.SportEvent;
+import com.bristotartur.cedupscore_api.domain.events.Event;
 import com.bristotartur.cedupscore_api.domain.people.Team;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,25 +11,25 @@ import lombok.experimental.SuperBuilder;
 import java.util.Objects;
 
 @Entity
-@Table(name = "TB_SPORT_SCORE")
+@Table(name = "TB_EVENT_SCORE")
 @NoArgsConstructor
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-public class SportScore extends Score {
+public class EventScore extends Score {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "sport_event_id", nullable = false)
-    private SportEvent sportEvent;
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
 
-    public SportScore(Long id, Integer score, Team team, SportEvent sportEvent) {
+    public EventScore(Long id, Integer score, Team team, Event event) {
         super(id, score);
         this.team = team;
-        this.sportEvent = sportEvent;
+        this.event = event;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SportScore extends Score {
                 "id=" + getId() +
                 ", score=" + getScore() +
                 ", team=" + team +
-                ", sportEvent=" + sportEvent +
+                ", event=" + event +
                 '}';
     }
 
@@ -46,8 +46,8 @@ public class SportScore extends Score {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SportScore sportScore = (SportScore) o;
-        return Objects.equals(getId(), sportScore.getId());
+        EventScore eventScore = (EventScore) o;
+        return Objects.equals(getId(), eventScore.getId());
     }
 
     @Override

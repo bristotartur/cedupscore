@@ -3,9 +3,7 @@ package com.bristotartur.cedupscore_api.domain.matches;
 import com.bristotartur.cedupscore_api.domain.actions.Goal;
 import com.bristotartur.cedupscore_api.domain.actions.MatchSet;
 import com.bristotartur.cedupscore_api.domain.actions.PenaltyCard;
-import com.bristotartur.cedupscore_api.enums.GenderCategory;
 import com.bristotartur.cedupscore_api.enums.Importance;
-import com.bristotartur.cedupscore_api.enums.SportType;
 import com.bristotartur.cedupscore_api.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +26,9 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Integer round;
+
     @Column(name = "team_a_score", nullable = false)
     private Integer teamScoreA;
 
@@ -36,15 +37,7 @@ public class Match {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private SportType type;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private Importance importance;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private GenderCategory modality;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -62,37 +55,35 @@ public class Match {
     @Column(nullable = false)
     private LocalDateTime endedAt;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "round_id", nullable = false)
-    private Round round;
-
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<MatchTeam> matchTeams = new HashSet<>(2);
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<Goal> goals = new HashSet<>();
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<PenaltyCard> penaltyCards = new HashSet<>();
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<MatchSet> sets = new HashSet<>();
 
     @Override
     public String toString() {
         return "Match{" +
                 "id=" + id +
+                ", round=" + round +
                 ", teamScoreA=" + teamScoreA +
                 ", teamScoreB=" + teamScoreB +
-                ", type=" + type +
                 ", importance=" + importance +
-                ", modality=" + modality +
                 ", status=" + status +
                 ", woTeam=" + woTeam +
                 ", hasExtra=" + hasExtra +
                 ", startedAt=" + startedAt +
                 ", endedAt=" + endedAt +
-                ", round=" + round +
                 '}';
     }
 

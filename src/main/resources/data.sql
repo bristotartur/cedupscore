@@ -8,7 +8,7 @@ VALUES
 -- TEAMS
 
 INSERT INTO
-    tb_team (name, logo, is_active)
+    tb_team (name, logo_url, is_active)
 VALUES
     ('Atômica', 'ATOMICA', true),
     ('Mestres de Obras', 'MESTRES', true),

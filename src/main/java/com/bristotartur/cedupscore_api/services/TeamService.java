@@ -53,8 +53,8 @@ public class TeamService {
         teamRepository.findByName(dto.name()).ifPresent(team -> {
             throw new ConflictException("O nome '%s' já está em uso.".formatted(team.getName()));
         });
-        teamRepository.findByLogo(dto.logo()).ifPresent(team -> {
-            throw new ConflictException("A logo '%s' já está em uso.".formatted(team.getLogo()));
+        teamRepository.findByLogoUrl(dto.logoUrl()).ifPresent(team -> {
+            throw new ConflictException("A logo '%s' já está em uso.".formatted(team.getLogoUrl()));
         });
         return teamRepository.save(teamMapper.toNewTeam(dto));
     }
@@ -76,9 +76,9 @@ public class TeamService {
                 throw new ConflictException("O nome '%s' já está em uso.".formatted(t.getName()));
             });
         }
-        if (!team.getLogo().equals(dto.logo())) {
-            teamRepository.findByLogo(dto.logo()).ifPresent(t -> {
-                throw new ConflictException("A logo '%s' já está em uso.".formatted(t.getLogo()));
+        if (!team.getLogoUrl().equals(dto.logoUrl())) {
+            teamRepository.findByLogoUrl(dto.logoUrl()).ifPresent(t -> {
+                throw new ConflictException("A logo '%s' já está em uso.".formatted(t.getLogoUrl()));
             });
         }
         return teamRepository.save(teamMapper.toExistingTeam(id, dto, team.getIsActive()));
