@@ -9,8 +9,8 @@ public enum Modality {
 
         return switch (modality) {
             case MIXED -> true;
-            case MASCULINE -> gender.equals(Gender.MASCULINE);
-            case FEMININE -> gender.equals(Gender.FEMININE);
+            case MASCULINE -> gender.equals(Gender.MALE);
+            case FEMININE -> gender.equals(Gender.FEMALE);
         };
     }
 

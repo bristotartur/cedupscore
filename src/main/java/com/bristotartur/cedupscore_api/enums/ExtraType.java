@@ -2,7 +2,7 @@ package com.bristotartur.cedupscore_api.enums;
 
 public enum ExtraType {
     NORMAL,
-    ACCOMPLISHED,
+    COMPLETION,
     CULTURAL,
     BASKETBALL,
     CHESS,
