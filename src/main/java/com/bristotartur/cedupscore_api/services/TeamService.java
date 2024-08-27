@@ -92,10 +92,10 @@ public class TeamService {
         if (!isActive) {
             teamScoreRepository.findAllByTeam(team)
                     .stream()
-                    .map(TeamScore::getEdition)
-                    .filter(edition -> edition.getStatus().equals(Status.IN_PROGRESS))
+                    .map(registration -> registration.getEdition().getStatus())
+                    .filter(status -> !status.equals(Status.ENDED) && !status.equals(Status.CANCELED))
                     .findFirst()
-                    .ifPresent(edition -> {
+                    .ifPresent(status -> {
                         throw new ConflictException("A equipe não pode ser desativada.");
                     });
         }

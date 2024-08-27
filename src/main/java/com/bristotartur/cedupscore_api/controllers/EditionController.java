@@ -23,11 +23,12 @@ public class EditionController {
     @GetMapping
     public ResponseEntity<Page<EditionResponseDto>> listAllEditions(Pageable pageable) {
         var editions = editionService.findAllEditions(pageable);
-        var dtos = editions.stream()
+        var dtos = editions.getContent()
+                .stream()
                 .map(editionService::createEditionResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, editions.getPageable(), editions.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, editions.getSize()));
     }
 
     @GetMapping(path = "/{id}")
