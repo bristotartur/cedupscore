@@ -1,11 +1,11 @@
 package com.bristotartur.cedupscore_api.mappers;
 
-import com.bristotartur.cedupscore_api.domain.events.Edition;
-import com.bristotartur.cedupscore_api.domain.events.Event;
-import com.bristotartur.cedupscore_api.domain.people.Participant;
-import com.bristotartur.cedupscore_api.domain.people.Team;
-import com.bristotartur.cedupscore_api.domain.registrations.EditionRegistration;
-import com.bristotartur.cedupscore_api.domain.registrations.EventRegistration;
+import com.bristotartur.cedupscore_api.domain.Edition;
+import com.bristotartur.cedupscore_api.domain.Event;
+import com.bristotartur.cedupscore_api.domain.Participant;
+import com.bristotartur.cedupscore_api.domain.Team;
+import com.bristotartur.cedupscore_api.domain.EditionRegistration;
+import com.bristotartur.cedupscore_api.domain.EventRegistration;
 import com.bristotartur.cedupscore_api.dtos.response.EditionRegistrationResponseDto;
 import com.bristotartur.cedupscore_api.dtos.response.TeamResponseDto;
 import org.mapstruct.Mapper;

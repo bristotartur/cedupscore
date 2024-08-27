@@ -1,8 +1,8 @@
 package com.bristotartur.cedupscore_api.services;
 
-import com.bristotartur.cedupscore_api.domain.events.Event;
+import com.bristotartur.cedupscore_api.domain.Event;
 import com.bristotartur.cedupscore_api.exceptions.NotFoundException;
-import com.bristotartur.cedupscore_api.repositories.events.EventRepository;
+import com.bristotartur.cedupscore_api.repositories.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

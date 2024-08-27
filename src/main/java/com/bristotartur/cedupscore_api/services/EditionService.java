@@ -1,6 +1,6 @@
 package com.bristotartur.cedupscore_api.services;
 
-import com.bristotartur.cedupscore_api.domain.events.Edition;
+import com.bristotartur.cedupscore_api.domain.Edition;
 import com.bristotartur.cedupscore_api.dtos.response.EditionResponseDto;
 import com.bristotartur.cedupscore_api.enums.Status;
 import com.bristotartur.cedupscore_api.exceptions.ConflictException;
@@ -8,8 +8,8 @@ import com.bristotartur.cedupscore_api.exceptions.NotFoundException;
 import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
 import com.bristotartur.cedupscore_api.mappers.EditionMapper;
 import com.bristotartur.cedupscore_api.mappers.ScoreMapper;
-import com.bristotartur.cedupscore_api.repositories.events.EditionRepository;
-import com.bristotartur.cedupscore_api.repositories.scores.TeamScoreRepository;
+import com.bristotartur.cedupscore_api.repositories.EditionRepository;
+import com.bristotartur.cedupscore_api.repositories.TeamScoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

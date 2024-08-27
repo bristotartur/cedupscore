@@ -1,10 +1,8 @@
 package com.bristotartur.cedupscore_api.mappers;
 
-import com.bristotartur.cedupscore_api.domain.events.Edition;
-import com.bristotartur.cedupscore_api.dtos.request.EditionRequestDto;
+import com.bristotartur.cedupscore_api.domain.Edition;
 import com.bristotartur.cedupscore_api.dtos.response.EditionResponseDto;
 import com.bristotartur.cedupscore_api.dtos.response.ScoreResponseDto;
-import com.bristotartur.cedupscore_api.enums.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

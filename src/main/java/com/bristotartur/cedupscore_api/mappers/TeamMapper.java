@@ -1,6 +1,6 @@
 package com.bristotartur.cedupscore_api.mappers;
 
-import com.bristotartur.cedupscore_api.domain.people.Team;
+import com.bristotartur.cedupscore_api.domain.Team;
 import com.bristotartur.cedupscore_api.dtos.request.TeamRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.TeamResponseDto;
 import org.mapstruct.Mapper;

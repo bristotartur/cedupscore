@@ -1,18 +1,16 @@
 package com.bristotartur.cedupscore_api.services;
 
-import com.bristotartur.cedupscore_api.domain.people.Participant;
+import com.bristotartur.cedupscore_api.domain.Participant;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
-import com.bristotartur.cedupscore_api.dtos.response.EditionRegistrationResponseDto;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantResponseDto;
 import com.bristotartur.cedupscore_api.enums.Status;
-import com.bristotartur.cedupscore_api.exceptions.ConflictException;
 import com.bristotartur.cedupscore_api.exceptions.NotFoundException;
 import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
 import com.bristotartur.cedupscore_api.mappers.ParticipantMapper;
 import com.bristotartur.cedupscore_api.mappers.RegistrationMapper;
-import com.bristotartur.cedupscore_api.repositories.people.ParticipantRepository;
-import com.bristotartur.cedupscore_api.repositories.registrations.EditionRegistrationRepository;
-import com.bristotartur.cedupscore_api.repositories.registrations.EventRegistrationRepository;
+import com.bristotartur.cedupscore_api.repositories.ParticipantRepository;
+import com.bristotartur.cedupscore_api.repositories.EditionRegistrationRepository;
+import com.bristotartur.cedupscore_api.repositories.EventRegistrationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,7 +1,6 @@
 package com.bristotartur.cedupscore_api.services;
 
-import com.bristotartur.cedupscore_api.domain.people.Team;
-import com.bristotartur.cedupscore_api.domain.scores.TeamScore;
+import com.bristotartur.cedupscore_api.domain.Team;
 import com.bristotartur.cedupscore_api.dtos.request.TeamRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.TeamResponseDto;
 import com.bristotartur.cedupscore_api.enums.Status;
@@ -9,8 +8,8 @@ import com.bristotartur.cedupscore_api.exceptions.ConflictException;
 import com.bristotartur.cedupscore_api.exceptions.NotFoundException;
 import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
 import com.bristotartur.cedupscore_api.mappers.TeamMapper;
-import com.bristotartur.cedupscore_api.repositories.people.TeamRepository;
-import com.bristotartur.cedupscore_api.repositories.scores.TeamScoreRepository;
+import com.bristotartur.cedupscore_api.repositories.TeamRepository;
+import com.bristotartur.cedupscore_api.repositories.TeamScoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
