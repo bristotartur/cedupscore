@@ -1,3 +1,10 @@
+-- ROLES
+
+INSERT INTO tb_role
+VALUES
+    (1, 'SUPER_ADMIN'),
+    (2, 'EVENT_ADMIN');
+
 -- EDITION
 
 INSERT INTO
@@ -29,7 +36,9 @@ VALUES
 
 -- PARTICIPANT
 
-INSERT INTO tb_participant (name, cpf, gender, type, is_active) VALUES
+INSERT INTO
+    tb_participant (name, cpf, gender, type, is_active)
+VALUES
     ('CARLOS SILVA', '123.456.789-00', 'MALE', 'PARENT', true),
     ('FERNANDA COSTA', '234.567.890-12', 'FEMALE', 'TEACHER', true),
     ('JULIANA MENDES', '345.678.901-23', 'FEMALE', 'TEACHER', true),
@@ -83,8 +92,10 @@ INSERT INTO tb_participant (name, cpf, gender, type, is_active) VALUES
 
 -- EDITION REGISTRATIONS
 
+INSERT INTO
+    tb_edition_registration (participant_id, team_id, edition_id)
+VALUES
 -- Atômica
-INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (1, 1, 1),
     (2, 1, 1),
     (3, 1, 1),
@@ -94,10 +105,9 @@ INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (7, 1, 1),
     (8, 1, 1),
     (9, 1, 1),
-    (10, 1, 1);
+    (10, 1, 1),
 
 -- Mestres de Obras
-INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (11, 2, 1),
     (12, 2, 1),
     (13, 2, 1),
@@ -107,10 +117,9 @@ INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (17, 2, 1),
     (18, 2, 1),
     (19, 2, 1),
-    (20, 2, 1);
+    (20, 2, 1),
 
 -- Papa-Léguas
-INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (21, 3, 1),
     (22, 3, 1),
     (23, 3, 1),
@@ -120,10 +129,9 @@ INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (27, 3, 1),
     (28, 3, 1),
     (29, 3, 1),
-    (30, 3, 1);
+    (30, 3, 1),
 
 -- Twister
-INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (31, 4, 1),
     (32, 4, 1),
     (33, 4, 1),
@@ -133,10 +141,9 @@ INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (37, 4, 1),
     (38, 4, 1),
     (39, 4, 1),
-    (40, 4, 1);
+    (40, 4, 1),
 
 -- Unicontti
-INSERT INTO tb_edition_registration (participant_id, team_id, edition_id) VALUES
     (41, 5, 1),
     (42, 5, 1),
     (43, 5, 1),
