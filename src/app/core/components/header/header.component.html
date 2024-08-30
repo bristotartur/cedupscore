@@ -1,0 +1,21 @@
+<header>
+    <div class="header-container">
+        <h1>{{ title }}</h1>
+        <div class="user-icon">
+            <i class="fa-solid fa-user"></i>
+        </div>
+    </div>
+    <nav>
+        <ul>
+            @for (item of navItems; track $index) {
+                <app-nav-item 
+                    [itemName]="item.name"
+                    [iconClass]="item.iconClass"
+                    [link]="item.link"
+                    [isSelected]="item.isSelected"
+                    (select)="selectItem($index)"
+                />
+            }
+        </ul>
+    </nav>
+</header>
