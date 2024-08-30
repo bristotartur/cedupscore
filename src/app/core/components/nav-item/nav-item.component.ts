@@ -21,7 +21,7 @@ export class NavItemComponent {
 
   @Output() select = new EventEmitter<void>();
 
-  selectItem(): void {
+  onClick(): void {
     this.select.emit();
   }
 

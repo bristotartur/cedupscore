@@ -1,8 +1,8 @@
 <li>
     <a 
         [routerLink]="link"
-        [ngClass]="{ 'select': isSelected }"
-        (click)="selectItem()"
+        [ngClass]="{ 'selected': isSelected }"
+        (click)="onClick()"
     >
         <i [ngClass]="iconClass"></i><span>{{ itemName }}</span>
 

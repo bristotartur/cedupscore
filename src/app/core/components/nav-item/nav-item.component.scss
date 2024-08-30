@@ -18,11 +18,9 @@ a {
     font-weight: 400;
     color: $neutral-color-1;
     text-decoration: none;
-    text-align: center; 
+    text-align: center;
 
-    i {
-        font-size: 18px;
-    }
+    i { font-size: 18px; }
 
     span {
         font-size: 14px;
@@ -38,5 +36,7 @@ a {
         margin-top: 2px;
     }
 
-    &.selected { color: $font-color; }
+    &.selected {
+        color: $font-color;
+    }
 }

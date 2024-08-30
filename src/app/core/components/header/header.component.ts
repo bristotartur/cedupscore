@@ -17,12 +17,12 @@ export class HeaderComponent implements OnInit {
   selectedItem!: number;
 
   navItems = [
-    { name: 'Geral', iconClass: 'fa-solid fa-house', link: '', isSelected: true },
-    { name: 'Placar', iconClass: 'fa-solid fa-medal', link: '', isSelected: false },
-    { name: 'Tarefas', iconClass: 'fa-solid fa-list-check', link: '', isSelected: false },
-    { name: 'Esportes', iconClass: 'fa-solid fa-volleyball', link: '', isSelected: false },
-    { name: 'Membros', iconClass: 'fa-solid fa-person', link: '', isSelected: false },
-    { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '', isSelected: false }
+    { name: 'Geral', iconClass: 'fa-solid fa-house', link: '/', isSelected: true },
+    { name: 'Placar', iconClass: 'fa-solid fa-medal', link: '/placares', isSelected: false },
+    { name: 'Tarefas', iconClass: 'fa-solid fa-list-check', link: '/tarefas', isSelected: false },
+    { name: 'Esportes', iconClass: 'fa-solid fa-volleyball', link: '/esportes', isSelected: false },
+    { name: 'Membros', iconClass: 'fa-solid fa-person', link: '/membros', isSelected: false },
+    { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '/recursos', isSelected: false }
   ];
 
   constructor (private router: Router) {  }
