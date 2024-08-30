@@ -1,0 +1,49 @@
+@import '../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 900px;
+    min-height: 750px;
+    height: auto;
+
+    background-color: $primary-color;
+
+    box-sizing: border-box;
+    border-radius: $default-radius;
+    padding: 26px 33px;
+
+    .message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin-top: 200px;
+
+        p {
+            color: $neutral-color-1;
+            font-size: 22px;
+        }
+    }
+}
+
+@media screen and (max-width: 992px) {
+    main { width: 80vw; }
+}
+
+@media screen and (max-width: 768px) {
+    main {
+        width: 100vw;
+        height: 87vh;
+        border-radius: 0px;
+    }
+}
