@@ -4,7 +4,10 @@
         [ngClass]="{ 'selected': isSelected }"
         (click)="onClick()"
     >
-        <i [ngClass]="iconClass"></i><span>{{ itemName }}</span>
+        <div class="icon-container">
+            <i [ngClass]="iconClass"></i>
+        </div>
+        <span>{{ itemName }}</span>
 
         @if (isSelected) {
             <div class="select-bar"></div>

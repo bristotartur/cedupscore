@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { NavItemComponent } from '../nav-item/nav-item.component';
 import { Router } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
+    NgClass,
     NavItemComponent
   ],
   templateUrl: './header.component.html',
@@ -14,7 +16,9 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
   title = 'Cedupscore';
-  selectedItem!: number;
+  isMenuOpen = false;
+  screenWidth!: number;
+  currentItem!: { name: string, iconClass: string };
 
   navItems = [
     { name: 'Geral', iconClass: 'fa-solid fa-house', link: '/', isSelected: true },
@@ -25,17 +29,36 @@ export class HeaderComponent implements OnInit {
     { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '/recursos', isSelected: false }
   ];
 
-  constructor (private router: Router) {  }
+  constructor(private router: Router) {  }
 
   ngOnInit(): void {
+    this.screenWidth = window.innerWidth;
     this.router.events.subscribe(() => {
       this.updateSelectedItem(this.router.url);
     });
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    this.screenWidth = window.innerWidth;
+
+    if (this.screenWidth > 768 && this.isMenuOpen) {
+      this.isMenuOpen = false;
+    }
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
   selectItem(index: number): void {
     this.navItems.forEach((item, i) => {
       item.isSelected = (i == index);
+      
+      if (item.isSelected) {
+        this.currentItem = { name: item.name, iconClass: item.iconClass };
+      }
+      this.isMenuOpen = false;
     });
   }
 

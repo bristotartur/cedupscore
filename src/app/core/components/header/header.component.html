@@ -1,12 +1,29 @@
 <header>
     <div class="header-container">
         <h1>{{ title }}</h1>
+        
         <div class="user-icon">
             <i class="fa-solid fa-user"></i>
         </div>
     </div>
     <nav>
-        <ul>
+        @if (screenWidth <= 768) {
+            <div class="toggle-btn" (click)="toggleMenu()">
+                <i [ngClass]="currentItem.iconClass"></i>
+                <span>{{ currentItem.name }}</span>
+            </div>
+        }
+        <ul
+            [ngClass]="{ 
+                'open': isMenuOpen, 'closed': !isMenuOpen && screenWidth <= 768 
+            }"
+        >
+            @if (screenWidth <= 768 && isMenuOpen) {
+                <div class="close-btn" (click)="toggleMenu()">
+                    <i class="fa-solid fa-x"></i>
+                </div>
+            }
+            
             @for (item of navItems; track $index) {
                 <app-nav-item 
                     [itemName]="item.name"
