@@ -13,3 +13,20 @@ spring:
     web:
       pageable:
         default-page-size: 14
+
+api:
+  security:
+    public:
+      key: classpath:app.pub
+
+    private:
+      key: classpath:app.key
+
+    token:
+      secret: my-secret-key
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
