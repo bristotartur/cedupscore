@@ -1,11 +1,6 @@
 package com.bristotartur.cedupscore_api.services;
 
-import com.bristotartur.cedupscore_api.domain.Edition;
-import com.bristotartur.cedupscore_api.domain.Event;
-import com.bristotartur.cedupscore_api.domain.Participant;
-import com.bristotartur.cedupscore_api.domain.Team;
-import com.bristotartur.cedupscore_api.domain.EditionRegistration;
-import com.bristotartur.cedupscore_api.domain.EventRegistration;
+import com.bristotartur.cedupscore_api.domain.*;
 import com.bristotartur.cedupscore_api.enums.Modality;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import com.bristotartur.cedupscore_api.enums.Status;
