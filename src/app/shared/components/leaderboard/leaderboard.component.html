@@ -1,0 +1,47 @@
+<div class="table-container">
+    <table id="table-1">
+        <tbody>
+            @for (team of teamsPositions; track $index) {
+                <tr>
+                    <td>
+                        <div [ngClass]="['position', '_' + team.position]">
+                            {{ team.position }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-logo"></div>
+                    </td>
+                    <td>{{ team.name }}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table id="table-2">
+        <thead>
+            <tr>
+                @for (column of columns; track $index) {
+                    <th scope="col">{{ column }}</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (data of teamsData; track $index) {
+                <tr>
+                    @if (hasAttribute(data, 'score')) { <td>{{ data.score }}</td> }
+                    @if (hasAttribute(data, 'tasksWon')) { <td>{{ data.tasksWon }}</td> }
+                    @if (hasAttribute(data, 'sportsWon')) { <td>{{ data.sportsWon }}</td> }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div
+    [ngClass]="[
+        'table-legend',
+        (legends.length < 3) ? 'two-elements' : 'more-than-two'
+    ]"
+>
+    @for (legend of legends; track $index) {
+        <span>{{ legend }}</span>
+    }
+</div>
