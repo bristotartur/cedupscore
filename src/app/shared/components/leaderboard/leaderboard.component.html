@@ -27,9 +27,9 @@
         <tbody>
             @for (data of teamsData; track $index) {
                 <tr>
-                    @if (hasAttribute(data, 'score')) { <td>{{ data.score }}</td> }
-                    @if (hasAttribute(data, 'tasksWon')) { <td>{{ data.tasksWon }}</td> }
-                    @if (hasAttribute(data, 'sportsWon')) { <td>{{ data.sportsWon }}</td> }
+                    @for (value of getValues(data); track $index) {
+                        <td>{{ value }}</td>
+                    }
                 </tr>
             }
         </tbody>

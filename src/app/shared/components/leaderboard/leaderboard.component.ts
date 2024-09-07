@@ -12,12 +12,12 @@ import { TeamPosition } from '../../models/team-postion.model';
 export class LeaderboardComponent {
 
   @Input() columns!: string[];
-  @Input("legend") legends!: string[];
-  @Input() teamsPositions!: TeamPosition[];
-  @Input() teamsData!: any[];
+  @Input('legend') legends!: string[];
+  @Input('positions') teamsPositions!: TeamPosition[];
+  @Input('data') teamsData!: any[];
 
-  hasAttribute(obj: any, attr: string): boolean {
-    return obj && obj.hasOwnProperty(attr);
+  getValues(data: any): any[] {
+    return Object.values(data);
   }
 
 }
