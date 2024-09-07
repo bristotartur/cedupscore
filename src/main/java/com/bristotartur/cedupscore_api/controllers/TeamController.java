@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,18 +38,21 @@ public class TeamController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<TeamResponseDto> saveTeam(@RequestBody @Valid TeamRequestDto requestDto) {
         var team = teamService.saveTeam(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeamResponseDto(team));
     }
 
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
         teamService.deleteTeam(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<TeamResponseDto> replaceTeam(@PathVariable Long id,
                                                        @RequestBody @Valid TeamRequestDto requestDto) {
 
@@ -57,6 +61,7 @@ public class TeamController {
     }
 
     @PatchMapping(path = "/{id}/set")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<TeamResponseDto> setTeamActive(@PathVariable Long id,
                                                          @RequestParam("is-active") Boolean isActive) {
 

@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,18 +45,21 @@ public class EditionController {
     }
 
     @PostMapping(path = "/open-edition")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<EditionResponseDto> saveEdition() {
         var edition = editionService.openNewEdition();
         return ResponseEntity.status(HttpStatus.CREATED).body(editionService.createEditionResponseDto(edition));
     }
 
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteEdition(@PathVariable Long id) {
         editionService.deleteEdition(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(path = "/{id}/update")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<EditionResponseDto> updateEditionStatus(@PathVariable Long id,
                                                                   @RequestParam("status") String status) {
         var fotmattedStatus = Status.findStatusLike(status);

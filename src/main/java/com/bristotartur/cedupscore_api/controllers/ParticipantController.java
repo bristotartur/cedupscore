@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,6 +108,7 @@ public class ParticipantController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<ParticipantResponseDto> saveParticipant(@RequestBody @Valid ParticipantRequestDto requestDto) {
         var participant = participantService.saveParticipant(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -114,6 +116,7 @@ public class ParticipantController {
     }
 
     @PostMapping(path = "/{id}/register-in-edition/{editionId}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<ParticipantResponseDto> registerInEdition(@PathVariable Long id,
                                                                     @PathVariable Long editionId,
                                                                     @RequestParam("team") Long teamId) {
@@ -123,6 +126,7 @@ public class ParticipantController {
     }
 
     @PostMapping(path = "/{id}/register-in-event/{eventId}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<ParticipantResponseDto> registerInEvent(@PathVariable Long id,
                                                                   @PathVariable Long eventId,
                                                                   @RequestParam("team") Long teamId) {
@@ -132,24 +136,28 @@ public class ParticipantController {
     }
 
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
         participantService.deleteParticipant(id);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/{id}/remove-edition-registration/{registrationId}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteEditionRegistration(@PathVariable Long id, @PathVariable Long registrationId) {
         participantService.deleteEditionRegistration(id, registrationId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/{id}/remove-event-registration/{registrationId}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteEventRegistration(@PathVariable Long id, @PathVariable Long registrationId) {
         participantService.deleteEventRegistration(id, registrationId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<ParticipantResponseDto> replaceParticipant(@PathVariable Long id,
                                                                      @RequestBody @Valid ParticipantRequestDto requestDto) {
         var participant = participantService.replaceParticipant(id, requestDto);
@@ -157,6 +165,7 @@ public class ParticipantController {
     }
 
     @PatchMapping(path = "/{id}/set")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<ParticipantResponseDto> setParticipantActive(@PathVariable Long id,
                                                                        @RequestParam("is-active") Boolean isActive) {
         var participant = participantService.setParticipantActive(id, isActive);
