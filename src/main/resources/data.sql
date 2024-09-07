@@ -10,7 +10,8 @@ VALUES
 INSERT INTO
     tb_edition (status, start_date, closing_date)
 VALUES
-    ('SCHEDULED', '2023-04-01', '2023-08-09');
+    ('SCHEDULED', '2023-04-01', '2023-08-09'),
+    ('ENDED', '2022-04-01', '2022-05-05');
 
 -- TEAMS
 
@@ -26,13 +27,19 @@ VALUES
 -- TEAM SCORES
 
 INSERT INTO
-    tb_team_score (score, team_id, edition_id)
+    tb_team_score (score, team_id, tasks_won, sports_won, edition_id)
 VALUES
-    (2430, 1, 1),
-    (2410, 2, 1),
-    (2120, 3, 1),
-    (1500, 4, 1),
-    (2000, 5, 1);
+    (2430, 1, 5, 5, 1),
+    (2410, 2, 5, 5, 1),
+    (2120, 3, 5, 5, 1),
+    (1500, 4, 5, 5, 1),
+    (2000, 5, 5, 5, 1),
+
+    (2300, 1, 5, 1, 2),
+    (2300, 2, 5, 0, 2),
+    (2200, 3, 5, 4, 2),
+    (2250, 4, 5, 2, 2),
+    (2100, 5, 5, 0, 2);
 
 -- PARTICIPANT
 

@@ -18,6 +18,6 @@ public class EditionResponseDto extends RepresentationModel<EditionResponseDto> 
 
     public final LocalDate closingDate;
 
-    public final List<ScoreResponseDto> teamScores;
+    public final List<TeamScoreResponseDto> teamsScores;
 
 }

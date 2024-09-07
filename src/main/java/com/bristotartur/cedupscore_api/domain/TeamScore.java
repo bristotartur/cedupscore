@@ -14,6 +14,12 @@ import java.util.Objects;
 @SuperBuilder(toBuilder = true)
 public class TeamScore extends Score {
 
+    @Column(nullable = false)
+    private Integer tasksWon;
+
+    @Column(nullable = false)
+    private Integer sportsWon;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
