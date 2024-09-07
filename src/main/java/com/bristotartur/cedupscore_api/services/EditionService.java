@@ -30,7 +30,7 @@ public class EditionService {
     private final TeamService teamService;
 
     public Page<Edition> findAllEditions(Pageable pageable) {
-        return editionRepository.findAll(pageable);
+        return editionRepository.findAllDescending(pageable);
     }
 
     public Edition findEditionById(Long id) {
