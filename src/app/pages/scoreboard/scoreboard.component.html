@@ -1,3 +1,7 @@
+<app-select-button 
+    [options]="options"
+    (option)="selectOption($event)"
+/>
 <app-page-body>
     <app-leaderboard 
         [columns]="columns"

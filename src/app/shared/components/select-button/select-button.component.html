@@ -1,0 +1,8 @@
+<div class="select-container">
+    <select (change)="onOptionSelected($event)">
+        @for (option of options; track $index) {
+            <option [value]="option.value">{{ option.name }}</option>
+        }
+    </select>
+    <i class="fa-solid fa-caret-down" ></i>
+</div>

@@ -5,6 +5,7 @@ import { EditionService } from '../../features/edition/services/edition.service'
 import { Edition } from '../../features/edition/models/edition.model';
 import { TeamPosition } from '../../shared/models/team-postion.model';
 import { TeamScoreboard } from '../../features/edition/models/team-scoreboard.model';
+import { SelectButtonComponent } from "../../shared/components/select-button/select-button.component";
 
 @Component({
   selector: 'app-scoreboard',
@@ -12,7 +13,8 @@ import { TeamScoreboard } from '../../features/edition/models/team-scoreboard.mo
   imports: [
     PageBodyComponent,
     LeaderboardComponent,
-  ],
+    SelectButtonComponent
+],
   templateUrl: './scoreboard.component.html',
   styleUrl: './scoreboard.component.scss'
 })
@@ -21,10 +23,11 @@ export class ScoreboardComponent implements OnInit {
   private editionService = inject(EditionService);
 
   columns = ['Pts', 'TG', 'EG'];
-  legend = ['TC - Tarefas ganhas', 'EC - Esportes ganhos'];
+  legend = ['TG - Tarefas ganhas', 'EG - Esportes ganhos'];
 
   editions: Edition[] = [];
   names: string[] = [];
+  options: { name: string, value: number }[] = [];
 
   postions!: TeamPosition[];
   teamsData!: TeamScoreboard[];
@@ -52,7 +55,17 @@ export class ScoreboardComponent implements OnInit {
   getEditions(): void {
     this.editionService.listEditions().subscribe(page => {
       this.editions = page.content;
+      this.setOptions(this.editions);
       this.setData(this.editions[0]);
+    });
+  }
+
+  setOptions(editions: Edition[]): void {
+    editions.forEach((edition, index) => {
+      let startDate = new Date(edition.startDate);
+      let year = startDate.getFullYear().toString();
+
+      this.options.push({ name: year, value: index });
     });
   }
 
@@ -81,6 +94,11 @@ export class ScoreboardComponent implements OnInit {
       previousScore = teamScore.score;
     });
     this.onResize();
+  }
+
+  selectOption(value: string | number): void {
+    let edition = this.editions[+value];
+    this.setData(edition);
   }
 
   reduceNames(): void {

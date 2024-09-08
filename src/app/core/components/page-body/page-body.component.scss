@@ -12,7 +12,7 @@ main {
     align-items: center;
 
     width: 900px;
-    min-height: 750px;
+    min-height: 730px;
     height: auto;
 
     background-color: $primary-color;
@@ -49,5 +49,5 @@ main {
 }
 
 @media screen and (max-width: 688px) {
-    main { padding: 26px 18px; }
+    main { padding: 16px 18px; }
 }
