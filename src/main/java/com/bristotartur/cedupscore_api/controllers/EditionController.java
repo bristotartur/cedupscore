@@ -4,14 +4,13 @@ import com.bristotartur.cedupscore_api.dtos.response.EditionResponseDto;
 import com.bristotartur.cedupscore_api.enums.Status;
 import com.bristotartur.cedupscore_api.services.EditionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/editions")
@@ -22,14 +21,13 @@ public class EditionController {
     private final EditionService editionService;
 
     @GetMapping
-    public ResponseEntity<Page<EditionResponseDto>> listAllEditions(Pageable pageable) {
-        var editions = editionService.findAllEditions(pageable);
-        var dtos = editions.getContent()
-                .stream()
+    public ResponseEntity<List<EditionResponseDto>> listAllEditions() {
+        var editions = editionService.findAllEditions();
+        var dtos = editions.stream()
                 .map(editionService::createEditionResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, editions.getSize()));
+        return ResponseEntity.ok().body(dtos);
     }
 
     @GetMapping(path = "/{id}")

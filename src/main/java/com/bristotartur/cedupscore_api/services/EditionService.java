@@ -11,12 +11,11 @@ import com.bristotartur.cedupscore_api.mappers.ScoreMapper;
 import com.bristotartur.cedupscore_api.repositories.EditionRepository;
 import com.bristotartur.cedupscore_api.repositories.TeamScoreRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +28,8 @@ public class EditionService {
     private final ScoreMapper scoreMapper;
     private final TeamService teamService;
 
-    public Page<Edition> findAllEditions(Pageable pageable) {
-        return editionRepository.findAllDescending(pageable);
+    public List<Edition> findAllEditions() {
+        return editionRepository.findAllDescending();
     }
 
     public Edition findEditionById(Long id) {
