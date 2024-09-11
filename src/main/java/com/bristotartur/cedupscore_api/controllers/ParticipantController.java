@@ -30,7 +30,7 @@ public class ParticipantController {
                 .map(participantService::createParticipantResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
     }
 
     @GetMapping(path = "/list-by")
@@ -42,7 +42,7 @@ public class ParticipantController {
                 .map(participantService::createParticipantResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
     }
 
     @GetMapping(path = "/from-edition/{editionId}")
@@ -54,7 +54,7 @@ public class ParticipantController {
                 .map(participantService::createParticipantResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
     }
 
     @GetMapping(path = "/from-team/{teamId}/in-edition/{editionId}")
@@ -67,7 +67,7 @@ public class ParticipantController {
                 .map(participantService::createParticipantResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
     }
 
     @GetMapping(path = "/from-event/{eventId}")
@@ -79,7 +79,7 @@ public class ParticipantController {
                 .map(participantService::createParticipantResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
     }
 
     @GetMapping(path = "/from-team/{teamId}/in-event/{eventId}")
@@ -92,7 +92,7 @@ public class ParticipantController {
                 .map(participantService::createParticipantResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
     }
 
     @GetMapping(path = "/{id}")

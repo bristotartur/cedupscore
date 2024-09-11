@@ -32,7 +32,7 @@ public class UserController {
                 .map(userService::createUserResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, users.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, users.getTotalElements()));
     }
 
     @GetMapping(path = "/list-by")
@@ -46,7 +46,7 @@ public class UserController {
                 .map(userService::createUserResponseDto)
                 .toList();
 
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, users.getSize()));
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, users.getTotalElements()));
     }
 
     @GetMapping(path = "/{id}")
