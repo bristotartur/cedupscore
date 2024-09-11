@@ -6,6 +6,9 @@ import { Edition } from '../../features/edition/models/edition.model';
 import { TeamPosition } from '../../shared/models/team-postion.model';
 import { TeamScoreboard } from '../../features/edition/models/team-scoreboard.model';
 import { SelectButtonComponent } from "../../shared/components/select-button/select-button.component";
+import { BehaviorSubject, filter, from, map, Observable, switchMap, tap, toArray } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { TeamScore } from '../../features/edition/models/team-score.model';
 
 @Component({
   selector: 'app-scoreboard',
@@ -13,30 +16,104 @@ import { SelectButtonComponent } from "../../shared/components/select-button/sel
   imports: [
     PageBodyComponent,
     LeaderboardComponent,
-    SelectButtonComponent
-],
+    SelectButtonComponent,
+    CommonModule
+  ],
   templateUrl: './scoreboard.component.html',
-  styleUrl: './scoreboard.component.scss'
+  styleUrls: ['./scoreboard.component.scss']
 })
 export class ScoreboardComponent implements OnInit {
 
   private editionService = inject(EditionService);
 
-  columns = ['Pts', 'TG', 'EG'];
-  legend = ['TG - Tarefas ganhas', 'EG - Esportes ganhos'];
+  selectedEdition$ = new BehaviorSubject<Edition | null>(null);
+  postions$ = new BehaviorSubject<TeamPosition[]>([]);
+  editions$!: Observable<Edition[]>;
+  teamsData$!: Observable<TeamScoreboard[]>;
 
-  editions: Edition[] = [];
   names: string[] = [];
   options: { name: string, value: number }[] = [];
 
-  postions!: TeamPosition[];
-  teamsData!: TeamScoreboard[];
-
-  constructor() {}
+  constructor() {
+    this.editions$ = this.editionService.listEditions();
+  }
 
   ngOnInit(): void {
-    this.getEditions();
+    this.editions$.pipe(
+      tap(editions => this.setOptions(editions)),
+      tap(editions => this.selectedEdition$.next(editions[0]))
+    ).subscribe();
+
+    this.selectedEdition$.pipe(
+      filter(edition => !!edition),
+      switchMap(edition => this.getTeamsPositions(edition!))
+    ).subscribe(positions => {
+      this.postions$.next(positions)
+      if (window.innerWidth < 768) this.reduceNames();
+    });
+
+    this.teamsData$ = this.selectedEdition$.pipe(
+      filter(edition => !!edition),
+      switchMap(edition => this.getTeamScoreboard(edition!))
+    );
     this.onResize();
+  }
+
+  setOptions(editions: Edition[]): void {
+    this.options = editions.map((edition, index) => {
+      let startDate = new Date(edition.startDate);
+      let year = startDate.getFullYear().toString();
+
+      return { name: year, value: index };
+    });
+  }
+
+  getTeamsPositions(edition: Edition): Observable<TeamPosition[]> {
+    return from(edition.teamsScores).pipe(
+      toArray(),
+      map(teamsScores => teamsScores.sort((a, b) => b.score - a.score)),
+      map(sortedTeams => this.calculateTeamsPositions(sortedTeams)),
+      tap(positions => {
+        this.names = positions.map(pos => pos.name);
+      })
+    );
+  }
+
+  private calculateTeamsPositions(sortedTeams: TeamScore[]): TeamPosition[] {
+    let currentPos = 1;
+    let previousScore = sortedTeams[0]?.score;
+    let tiedTeamsCount = 0;
+
+    return sortedTeams.map((teamScore, index) => {
+      if (teamScore.score === previousScore && index !== 0) {
+        tiedTeamsCount++;
+      } else if (index !== 0) {
+        currentPos += tiedTeamsCount + 1;
+        tiedTeamsCount = 0;
+      }
+      previousScore = teamScore.score;
+
+      return { position: currentPos, name: teamScore.team.name };
+    });
+  }
+
+  getTeamScoreboard(edition: Edition): Observable<TeamScoreboard[]> {
+    return from(edition.teamsScores).pipe(
+      toArray(), 
+      map(teamsScores => teamsScores.sort((a, b) => b.score - a.score)),
+      map(sortedTeams => sortedTeams.map(teamScore => ({
+        score: teamScore.score,
+        tasksWon: teamScore.tasksWon,
+        sportsWon: teamScore.sportsWon
+      })))
+    );
+  }
+
+  selectOption(value: string | number): void {
+    this.editions$.subscribe(editions => {
+      const selectedEdition = editions[+value];
+      this.selectedEdition$.next(selectedEdition);
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -46,68 +123,24 @@ export class ScoreboardComponent implements OnInit {
     if (screenWidth < 768) {
       this.reduceNames();
     } else {
-      this.postions.forEach((team, index) => {
-        team.name = this.names[index];
-      });
+      this.restoreNames();
     }
   }
 
-  getEditions(): void {
-    this.editionService.listEditions().subscribe(page => {
-      this.editions = page.content;
-      this.setOptions(this.editions);
-      this.setData(this.editions[0]);
-    });
-  }
-
-  setOptions(editions: Edition[]): void {
-    editions.forEach((edition, index) => {
-      let startDate = new Date(edition.startDate);
-      let year = startDate.getFullYear().toString();
-
-      this.options.push({ name: year, value: index });
-    });
-  }
-
-  setData(edition: Edition): void {
-    const sortedTeams = [...edition.teamsScores].sort((a, b) => b.score - a.score);
-
-    let currentPos = 1;
-    let previousScore = sortedTeams[0]?.score;
-    let tiedTeamsCount = 0;
-
-    this.postions = [];
-    this.teamsData = [];
-    this.names = [];
-
-    sortedTeams.forEach((teamScore, index) => {
-      if (teamScore.score === previousScore && index !== 0) {
-        tiedTeamsCount++;
-      } else if (index !== 0) {
-        currentPos += tiedTeamsCount + 1;
-        tiedTeamsCount = 0;
-      }
-      this.postions.push({ position: currentPos, name: teamScore.team.name });
-      this.teamsData.push({ score: teamScore.score, tasksWon: teamScore.tasksWon, sportsWon: teamScore.sportsWon });
-      this.names.push(teamScore.team.name);
-
-      previousScore = teamScore.score;
-    });
-    this.onResize();
-  }
-
-  selectOption(value: string | number): void {
-    let edition = this.editions[+value];
-    this.setData(edition);
-  }
-
   reduceNames(): void {
-    this.postions.forEach(team => {
+    const reducedPositions = this.postions$.value.map(team => {
       const name = team.name.split(/[\s-]/);
-      if (name.length > 1) {
-        team.name = name[0];
-      }
+      return { ...team, name: name[0] };
     });
+    this.postions$.next(reducedPositions);
+  }
+
+  restoreNames(): void {
+    const restoredPositions = this.postions$.value.map((team, index) => ({
+      ...team,
+      name: this.names[index]
+    }));
+    this.postions$.next(restoredPositions);
   }
 
 }

@@ -4,9 +4,9 @@
 />
 <app-page-body>
     <app-leaderboard 
-        [columns]="columns"
-        [legend]="legend"
-        [positions]="postions"
-        [data]="teamsData"
+        [columns]="['Pts', 'TG', 'EG']"
+        [legend]="['TG - Tarefas ganhas', 'EG - Esportes ganhos']"
+        [positions]="(postions$ | async)!"
+        [data]="(teamsData$ | async)!"
     />
 </app-page-body>
