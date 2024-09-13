@@ -2,6 +2,8 @@ package com.bristotartur.cedupscore_api.controllers;
 
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantResponseDto;
+import com.bristotartur.cedupscore_api.enums.Gender;
+import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import com.bristotartur.cedupscore_api.services.ParticipantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,45 +25,15 @@ public class ParticipantController {
     private final ParticipantService participantService;
 
     @GetMapping
-    public ResponseEntity<Page<ParticipantResponseDto>> listAllParticipants(Pageable pageable) {
-        var participants = participantService.findAllParticipants(pageable);
-        var dtos = participants.getContent()
-                .stream()
-                .map(participantService::createParticipantResponseDto)
-                .toList();
-
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
-    }
-
-    @GetMapping(path = "/list-by")
-    public ResponseEntity<Page<ParticipantResponseDto>> listParticipantsByName(@RequestParam("name") String name,
-                                                                               Pageable pageable) {
-        var participants = participantService.findParticipantsByName(name, pageable);
-        var dtos = participants.getContent()
-                .stream()
-                .map(participantService::createParticipantResponseDto)
-                .toList();
-
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
-    }
-
-    @GetMapping(path = "/from-edition/{editionId}")
-    public ResponseEntity<Page<ParticipantResponseDto>> listParticipantsFromEdition(@PathVariable Long editionId,
-                                                                                    Pageable pageable) {
-        var participants = participantService.findParticipantsFromEdition(editionId, pageable);
-        var dtos = participants.getContent()
-                .stream()
-                .map(participantService::createParticipantResponseDto)
-                .toList();
-
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
-    }
-
-    @GetMapping(path = "/from-team/{teamId}/in-edition/{editionId}")
-    public ResponseEntity<Page<ParticipantResponseDto>> listParticipantsFromTeam(@PathVariable Long teamId,
-                                                                                 @PathVariable Long editionId,
-                                                                                 Pageable pageable) {
-        var participants = participantService.findParticipantsFromTeam(teamId, editionId, pageable);
+    public ResponseEntity<Page<ParticipantResponseDto>> listAllParticipants(@RequestParam(value = "name", required = false) String name,
+                                                                            @RequestParam(value = "edition", required = false) Long editionId,
+                                                                            @RequestParam(value = "team", required = false) Long teamId,
+                                                                            @RequestParam(value = "gender", required = false) Gender gender,
+                                                                            @RequestParam(value = "type", required = false) ParticipantType participantType,
+                                                                            @RequestParam(value = "status", required = false) String status,
+                                                                            @RequestParam(value = "order", required = false) String order,
+                                                                            Pageable pageable) {
+        var participants = participantService.findAllParticipants(name, editionId, teamId, gender, participantType, status, order, pageable);
         var dtos = participants.getContent()
                 .stream()
                 .map(participantService::createParticipantResponseDto)

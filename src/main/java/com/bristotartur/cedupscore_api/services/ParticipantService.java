@@ -3,6 +3,8 @@ package com.bristotartur.cedupscore_api.services;
 import com.bristotartur.cedupscore_api.domain.Participant;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantResponseDto;
+import com.bristotartur.cedupscore_api.enums.Gender;
+import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import com.bristotartur.cedupscore_api.enums.Status;
 import com.bristotartur.cedupscore_api.exceptions.NotFoundException;
 import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
@@ -13,11 +15,16 @@ import com.bristotartur.cedupscore_api.repositories.EditionRegistrationRepositor
 import com.bristotartur.cedupscore_api.repositories.EventRegistrationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
+
+import static com.bristotartur.cedupscore_api.repositories.ParticipantSpecifications.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,24 +41,20 @@ public class ParticipantService {
     private final EventService eventService;
     private final ParticipantValidationService participantValidator;
 
-    public Page<Participant> findAllParticipants(Pageable pageable) {
-        return participantRepository.findAll(pageable);
-    }
-
-    public Page<Participant> findParticipantsByName(String name, Pageable pageable) {
-        return participantRepository.findByNameLike(name.toUpperCase(Locale.ROOT), pageable);
-    }
-
-    public Page<Participant> findParticipantsFromEdition(Long editionId, Pageable pageable) {
-        var edition = editionService.findEditionById(editionId);
-        return participantRepository.findByEdition(edition, pageable);
-    }
-
-    public Page<Participant> findParticipantsFromTeam(Long teamId, Long editionId, Pageable pageable) {
-        var team = teamService.findTeamById(teamId);
-        var edition = editionService.findEditionById(editionId);
-
-        return participantRepository.findByTeamAndEdition(team, edition, pageable);
+    public Page<Participant> findAllParticipants(String name, Long editionId, Long teamId, Gender gender, ParticipantType type, String status, String order, Pageable pageable) {
+        var sort = switch (order != null ? order : "") {
+            case "a-z" -> Sort.by("name").ascending();
+            case "z-a" -> Sort.by("name").descending();
+            default -> Sort.by("id").descending();
+        };
+        var spec = Specification.where(hasName(name)
+                .and(fromEdition(editionId))
+                .and(fromTeam(teamId))
+                .and(hasGender(gender))
+                .and(hasType(type))
+                .and(hasStatus(status))
+        );
+        return participantRepository.findAll(spec, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
     }
 
     public Page<Participant> findParticipantsFromEvent(Long eventId, Pageable pageable) {
