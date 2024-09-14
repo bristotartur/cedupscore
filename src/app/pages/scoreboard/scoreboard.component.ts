@@ -9,6 +9,7 @@ import { SelectButtonComponent } from "../../shared/components/select-button/sel
 import { BehaviorSubject, filter, from, map, Observable, switchMap, tap, toArray } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { TeamScore } from '../../features/edition/models/team-score.model';
+import { Option } from '../../shared/models/option.model';
 
 @Component({
   selector: 'app-scoreboard',
@@ -32,7 +33,7 @@ export class ScoreboardComponent implements OnInit {
   teamsData$!: Observable<TeamScoreboard[]>;
 
   names: string[] = [];
-  options: { name: string, value: number }[] = [];
+  options: Option[] = [];
 
   constructor() {
     this.editions$ = this.editionService.listEditions();

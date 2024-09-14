@@ -1,5 +1,10 @@
-<div class="select-container">
+<div [ngClass]="{ 
+    'select-container': true, 'simplified': isSimplified, customClass: customClass !== '' 
+}">
     <select (change)="onOptionSelected($event)">
+        @if (selectName) {
+            <option value="" hidden>{{ selectName }}</option>
+        }
         @for (option of options; track $index) {
             <option [value]="option.value">{{ option.name }}</option>
         }

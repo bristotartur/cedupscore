@@ -1,0 +1,62 @@
+:host, .filters-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 22px;
+}
+
+:host {
+    justify-content: space-between; 
+    width: 100%;
+    padding-top: 25px;
+}
+
+@media screen and (max-width: 992px) {
+    :host { 
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .filters-container {
+        justify-content: space-between;
+        gap: 0px;
+        width: 100%;
+    }
+
+    .ordering-container { width: 100%; }
+}
+
+@media screen and (max-width: 844px) {
+    :host { 
+        flex-direction: row;
+        height: 125px;
+    }
+
+    .filters-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        width: 85%;
+    }
+
+    .ordering-container { 
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+        width: 22%;
+        height: 100%; 
+    }
+}
+
+@media screen and (max-width: 586px) {
+    :host { 
+        flex-direction: column;
+        height: fit-content; 
+    }
+
+    .filters-container, .ordering-container { width: 100%; }
+
+    .ordering-container { justify-content: flex-start; }
+
+}

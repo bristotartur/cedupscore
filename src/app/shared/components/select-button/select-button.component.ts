@@ -1,16 +1,20 @@
 import { NgClass } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Option } from '../../models/option.model';
 
 @Component({
   selector: 'app-select-button',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   templateUrl: './select-button.component.html',
-  styleUrl: './select-button.component.scss'
+  styleUrls: ['./select-button.component.scss']
 })
 export class SelectButtonComponent {
 
-  @Input() options!: { name: string, value: string | number }[];
+  @Input('name') selectName!: string;
+  @Input() options!: Option[];
+  @Input('simplified') isSimplified: boolean = false;
+  @Input() customClass: string = '';
 
   @Output() option = new EventEmitter<string | number>();
 
