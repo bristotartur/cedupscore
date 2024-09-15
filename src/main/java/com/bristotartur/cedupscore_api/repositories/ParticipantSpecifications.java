@@ -23,7 +23,7 @@ public final class ParticipantSpecifications {
             var registrationJoin = root.join("editionRegistrations", JoinType.LEFT);
             var editionJoin = registrationJoin.join("edition", JoinType.LEFT);
 
-            return editionId != null ? criteria.equal(editionJoin.get("id"), editionId) : null;
+            return (editionId != null) ? criteria.equal(editionJoin.get("id"), editionId) : null;
         };
     }
 
@@ -32,20 +32,20 @@ public final class ParticipantSpecifications {
             var registrationJoin = root.join("editionRegistrations", JoinType.LEFT);
             var teamJoin = registrationJoin.join("team", JoinType.LEFT);
 
-            return teamId != null ? criteria.equal(teamJoin.get("id"), teamId) : null;
+            return (teamId != null) ? criteria.equal(teamJoin.get("id"), teamId) : null;
         };
     }
 
     public static Specification<Participant> hasGender(Gender gender) {
 
-        return (root, query, criteria) -> gender != null
+        return (root, query, criteria) -> (gender != null)
                 ? criteria.like(criteria.upper(root.get("gender")), gender.name())
                 : null;
     }
 
     public static Specification<Participant> hasType(ParticipantType type) {
 
-        return (root, query, criteria) -> type != null
+        return (root, query, criteria) -> (type != null)
                 ? criteria.like(criteria.upper(root.get("type")), "%" + type.name() + "%")
                 : null;
     }

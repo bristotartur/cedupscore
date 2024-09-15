@@ -22,7 +22,6 @@ public interface ParticipantMapper {
         return ParticipantResponseDto.builder()
                 .id(participant.getId())
                 .name(participant.getName())
-                .cpf(participant.getCpf())
                 .type(participant.getType())
                 .gender(participant.getGender())
                 .isActive(participant.getIsActive())
