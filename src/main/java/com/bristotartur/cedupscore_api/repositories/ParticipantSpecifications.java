@@ -1,10 +1,13 @@
 package com.bristotartur.cedupscore_api.repositories;
 
+import com.bristotartur.cedupscore_api.domain.EditionRegistration;
 import com.bristotartur.cedupscore_api.domain.Participant;
 import com.bristotartur.cedupscore_api.enums.Gender;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.Objects;
 
 public final class ParticipantSpecifications {
 
@@ -19,20 +22,40 @@ public final class ParticipantSpecifications {
     }
 
     public static Specification<Participant> fromEdition(Long editionId) {
+
         return (root, query, criteria) -> {
+            if (editionId == null) return null;
             var registrationJoin = root.join("editionRegistrations", JoinType.LEFT);
             var editionJoin = registrationJoin.join("edition", JoinType.LEFT);
 
-            return (editionId != null) ? criteria.equal(editionJoin.get("id"), editionId) : null;
+            return criteria.equal(editionJoin.get("id"), editionId);
         };
     }
 
-    public static Specification<Participant> fromTeam(Long teamId) {
+    public static Specification<Participant> fromTeam(Long teamId, Long editionId) {
+
         return (root, query, criteria) -> {
+            if (teamId == null) return null;
+
             var registrationJoin = root.join("editionRegistrations", JoinType.LEFT);
             var teamJoin = registrationJoin.join("team", JoinType.LEFT);
 
-            return (teamId != null) ? criteria.equal(teamJoin.get("id"), teamId) : null;
+            if (editionId == null) {
+                var subquery = query.subquery(Long.class);
+                var subRoot = subquery.from(EditionRegistration.class);
+
+                subquery.select(criteria.max(subRoot.get("id")));
+                subquery.where(criteria.equal(subRoot.get("participant"), root));
+
+                return criteria.and(
+                        criteria.equal(teamJoin.get("id"), teamId),
+                        criteria.equal(registrationJoin.get("id"), subquery)
+                );
+            }
+            return criteria.and(
+                    criteria.equal(registrationJoin.get("edition").get("id"), editionId),
+                    criteria.equal(teamJoin.get("id"), teamId)
+            );
         };
     }
 

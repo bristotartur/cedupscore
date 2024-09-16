@@ -49,7 +49,7 @@ public class ParticipantService {
         };
         var spec = Specification.where(hasName(name)
                 .and(fromEdition(editionId))
-                .and(fromTeam(teamId))
+                .and(fromTeam(teamId, editionId))
                 .and(hasGender(gender))
                 .and(hasType(type))
                 .and(hasStatus(status))
