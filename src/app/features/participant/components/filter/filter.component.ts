@@ -16,10 +16,12 @@ import { Option } from '../../../../shared/models/option.model';
 export class FilterComponent implements OnChanges {
 
   @Input('teams') inputTeams!: Team[];
+  @Input('disabled') isDisabled: boolean = false;
+
   @Output() filterChange = new EventEmitter<SearchFilter>();
 
   teams: Option[] = [{ name: 'Todas', value: '' }];
-  filter: SearchFilter = { team: '', gender: '', type: '', status: '', ordering: '' };
+  filter: SearchFilter = { team: '', gender: '', type: '', status: '', order: '' };
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['inputTeams']) {
@@ -54,7 +56,7 @@ export class FilterComponent implements OnChanges {
     { name: 'Inativos', value: 'inactive' }
   ];
   
-  orderingOptions = [
+  orderOptions = [
     { name: 'Normal', value: '' },
     { name: 'A-Z', value: 'a-z' },
     { name: 'Z-A', value: 'z-a' },

@@ -38,6 +38,8 @@
     
         appearance: none;
         outline: none;
+
+        cursor: inherit;
     }
     
     i {
@@ -55,12 +57,21 @@
 
     &.simplified {
         margin: 0px;
+        cursor: default;
+
         select {
             min-width: 126px;
             background-color: $neutral-color-3;
             font-weight: 500;
         }
     }
+
+    &.disabled {
+        cursor: default;
+        select, i { color: $neutral-color-1; }
+    }
+
+    &:not(.disabled) { cursor: pointer; }
 }
 
 @media screen and (max-width: 992px) {

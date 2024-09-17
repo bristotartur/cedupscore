@@ -1,7 +1,10 @@
 <div [ngClass]="{ 
-    'select-container': true, 'simplified': isSimplified, customClass: customClass !== '' 
+    'select-container': true, 
+    'simplified': isSimplified,
+    'disabled': isDisabled,
+    customClass: customClass !== '' 
 }">
-    <select (change)="onOptionSelected($event)">
+    <select [disabled]="isDisabled" (change)="onOptionSelected($event)">
         @if (selectName) {
             <option value="" hidden>{{ selectName }}</option>
         }

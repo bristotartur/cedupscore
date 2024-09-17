@@ -3,6 +3,7 @@
         <app-select-button 
             name="Equipe" 
             customClass="fit-on-reduce"
+            [disabled]="isDisabled"
             [simplified]="true" 
             [options]="teams"
             (option)="updateFilter('team', $event)" 
@@ -12,6 +13,7 @@
         <app-select-button 
             name="Gênero"
             customClass="fit-on-reduce"
+            [disabled]="isDisabled"
             [simplified]="true"
             [options]="genderOptions"
             (option)="updateFilter('gender', $event)" 
@@ -21,6 +23,7 @@
         <app-select-button 
             name="Tipo"
             customClass="fit-on-reduce"
+            [disabled]="isDisabled"
             [simplified]="true"
             [options]="participantTypeOptions"
             (option)="updateFilter('type', $event)" 
@@ -30,6 +33,7 @@
         <app-select-button 
             name="Status"
             customClass="fit-on-reduce"
+            [disabled]="isDisabled"
             [simplified]="true"
             [options]="statusOptions"
             (option)="updateFilter('status', $event)" 
@@ -40,9 +44,10 @@
     <abbr title="Ordem da listagem">
         <app-select-button 
             name="Ordem"
+            [disabled]="isDisabled"
             [simplified]="true"
-            [options]="orderingOptions"
-            (option)="updateFilter('ordering', $event)" 
+            [options]="orderOptions"
+            (option)="updateFilter('order', $event)" 
         />
     </abbr>
 </div>

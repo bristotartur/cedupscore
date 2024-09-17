@@ -13,6 +13,7 @@ export class SelectButtonComponent {
 
   @Input('name') selectName!: string;
   @Input() options!: Option[];
+  @Input('disabled') isDisabled: boolean = false;
   @Input('simplified') isSimplified: boolean = false;
   @Input() customClass: string = '';
 

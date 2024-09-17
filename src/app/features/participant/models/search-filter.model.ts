@@ -7,5 +7,5 @@ export interface SearchFilter {
     gender: Gender | '',
     type: ParticipantType | '',
     status: 'active' | 'inactive' | '',
-    ordering: 'a-z' | 'z-a' | ''
+    order: 'a-z' | 'z-a' | ''
 }
