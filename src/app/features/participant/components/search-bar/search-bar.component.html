@@ -1,0 +1,22 @@
+<div class="search-container">
+    <label for="search-bar">
+        <i class="fa-solid fa-magnifying-glass" ></i>
+    </label>
+    <input
+        #searchBar
+        id="search-bar"
+        type="search"
+        minlength="1"
+        maxlength="255"
+        [placeholder]="placeholder"
+        [mask]="mask"
+        [formControl]="inputValue"
+    >
+    <abbr title="Tipo de busca">
+        <app-select-button
+            [simplified]="true"
+            [options]="options"
+            (option)="selectOption($event)"
+        />
+    </abbr>
+</div>
