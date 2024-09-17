@@ -5,8 +5,8 @@ import { EditionRegistration } from "../../edition/models/edition-registration.m
 export interface Participant {
     id: number,
     name: string,
-    cpf: string,
     type: ParticipantType,
     gender: Gender,
+    isActive: boolean
     editionRegistrations: EditionRegistration[]
 }

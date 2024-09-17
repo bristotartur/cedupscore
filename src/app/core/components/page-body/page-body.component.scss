@@ -4,6 +4,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    margin-bottom: 80px;
 }
 
 main {
@@ -41,9 +43,13 @@ main {
 }
 
 @media screen and (max-width: 768px) {
+    :host { margin: 0px; }
+
     main {
         width: 100vw;
-        height: 87vh;
+        height: auto;
+        min-height: 87vh;
+
         border-radius: 0px;
     }
 }
