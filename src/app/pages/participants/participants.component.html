@@ -1,1 +1,32 @@
-<app-page-body></app-page-body>
+<app-select-button 
+    name="Edição"
+    [disabled]="currentSearchType == 'cpf'"
+    [options]="editionsOptions"
+    (option)="onEditionChange($event)" 
+/>
+<app-page-body>
+    <section id="search-section">
+        <app-search-bar 
+            (valueChange)="onSearchInputChange($event)" 
+            (searchTypeChange)="onSearchTypeChange($event)"
+        />
+        @if (teams$ | async) {
+            <app-filter 
+                [teams]="teams$.getValue()" 
+                [disabled]="currentSearchType == 'cpf'"
+                (filterChange)="onFilterChange($event)"
+            />
+        }
+    </section>
+    <section id="list-section">
+        @if (participantsPage$ | async) {
+            <app-participant-page 
+                [totalPages]="totalPages || 1"
+                [content]="participantsPage$.getValue()?.content || []"
+                [currentPage]="currentPage"
+                [edition]="filter.edition || ''"
+                (pageChange)="onPageChange($event)"
+            />
+        }
+    </section>
+</app-page-body>

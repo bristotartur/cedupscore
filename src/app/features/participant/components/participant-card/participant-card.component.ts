@@ -58,7 +58,7 @@ export class ParticipantCardComponent implements OnInit{
       this.adjustedName = reduceName(this.name, 18);
       return;
     }
-    if (this.screenWidth > 480 && this.screenWidth <= 582) {
+    if (this.screenWidth > 480 && this.screenWidth <= 586) {
       this.adjustedName = reduceName(this.name, 22);
       return;
     }

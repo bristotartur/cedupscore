@@ -1,4 +1,25 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { ParticipantType } from "../enums/participant-type.enum";
+import { Observable, throwError } from "rxjs";
+import { ExceptionResponse } from "../models/exception-response.model";
+
+export function handleError(err: HttpErrorResponse): Observable<never> {
+    let exceptionResponse: ExceptionResponse = {
+        title: err.error.title || 'Server Error.',
+        status: err.status,
+        details: err.error.details || 'Sem detalhes disponíveis.',
+        developerMessage: err.error.developerMessage || 'Sem mensagem do desenvolvedor.',
+        timestamp: err.error.timestamp || new Date().toISOString()
+      };
+      
+      if (err.error.fields) {
+        exceptionResponse.fields = err.error.fields;
+      }
+      if (err.error.fieldsMessages) {
+        exceptionResponse.fieldsMessages = err.error.fieldsMessages;
+      }
+      return throwError(() => exceptionResponse);
+}
 
 export function transformParticipantStatus(status: boolean | 'Ativo' | 'Inativo') {
     return (typeof(status) !== 'boolean') 
@@ -24,7 +45,7 @@ export function reduceName(name: string, limit: number): string {
     let names = name.split(/\s+/);
     let firstName = names[0];
     
-    if (firstName.length > 15 && firstName.length <= limit - 3) return firstName;
+    if (firstName.length > Math.floor(limit / 4 * 3) && firstName.length <= limit - 3) return firstName;
     
     const conectives = new Set(['DA', 'DE', 'DO', 'DAS', 'DOS']);
     const len = names.length;
