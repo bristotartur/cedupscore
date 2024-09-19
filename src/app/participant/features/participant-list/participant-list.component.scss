@@ -1,0 +1,31 @@
+@import '../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section { 
+    width: 100%;
+    padding-bottom: 25px;
+
+    &#search-section { border-bottom: 2px solid $neutral-color-3; }
+
+    &#list-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    
+        width: 100%;
+        max-width: 100%;
+    
+        padding: 0 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    section {
+        &#list-section { padding: 0; } 
+    }
+}
