@@ -43,21 +43,21 @@ public class EditionController {
     }
 
     @PostMapping(path = "/open-edition")
-    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
     public ResponseEntity<EditionResponseDto> saveEdition() {
         var edition = editionService.openNewEdition();
         return ResponseEntity.status(HttpStatus.CREATED).body(editionService.createEditionResponseDto(edition));
     }
 
     @DeleteMapping(path = "/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
     public ResponseEntity<Void> deleteEdition(@PathVariable Long id) {
         editionService.deleteEdition(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(path = "/{id}/update")
-    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
     public ResponseEntity<EditionResponseDto> updateEditionStatus(@PathVariable Long id,
                                                                   @RequestParam("status") String status) {
         var fotmattedStatus = Status.findStatusLike(status);

@@ -52,17 +52,17 @@ public class Match {
     @Column(nullable = false)
     private LocalDateTime endedAt;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "match_id", referencedColumnName = "id")
+    private FutsalHandballExtra extra;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
+
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @Builder.Default
     private Set<MatchTeam> matchTeams = new HashSet<>(2);
-
-    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<Goal> goals = new HashSet<>();
-
-    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<PenaltyCard> penaltyCards = new HashSet<>();
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @Builder.Default
@@ -81,6 +81,10 @@ public class Match {
                 ", hasExtra=" + hasExtra +
                 ", startedAt=" + startedAt +
                 ", endedAt=" + endedAt +
+                ", extra=" + extra +
+                ", event=" + event +
+                ", matchTeams=" + matchTeams +
+                ", sets=" + sets +
                 '}';
     }
 

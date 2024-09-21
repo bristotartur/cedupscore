@@ -2,17 +2,25 @@ package com.bristotartur.cedupscore_api.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "TB_TEAM_SCORE")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@SuperBuilder(toBuilder = true)
-public class TeamScore extends Score {
+@Builder
+public class TeamScore {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Integer score;
+
 
     @Column(nullable = false)
     private Integer tasksWon;
@@ -28,17 +36,13 @@ public class TeamScore extends Score {
     @JoinColumn(name = "edition_id", nullable = false)
     private Edition edition;
 
-    public TeamScore(Long id, Integer score, Team team, Edition edition) {
-        super(id, score);
-        this.team = team;
-        this.edition = edition;
-    }
-
     @Override
     public String toString() {
         return "TeamScore{" +
-                "id=" + getId() +
-                ", score=" + getScore() +
+                "id=" + id +
+                ", score=" + score +
+                ", tasksWon=" + tasksWon +
+                ", sportsWon=" + sportsWon +
                 ", team=" + team +
                 ", edition=" + edition +
                 '}';
@@ -49,12 +53,12 @@ public class TeamScore extends Score {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TeamScore teamScore = (TeamScore) o;
-        return Objects.equals(getId(), teamScore.getId());
+        return Objects.equals(id, teamScore.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return Objects.hashCode(id);
     }
 
 }

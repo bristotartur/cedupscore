@@ -1,8 +1,10 @@
 package com.bristotartur.cedupscore_api.domain;
 
+import com.bristotartur.cedupscore_api.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -28,13 +30,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "TB_USER_ROLE",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
+
+    @OneToMany(mappedBy = "responsibleUser", cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<Event> events = new HashSet<>();
 
     @Override
     public String toString() {
@@ -43,6 +45,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
 

@@ -1,6 +1,5 @@
 package com.bristotartur.cedupscore_api.services;
 
-import com.bristotartur.cedupscore_api.domain.Role;
 import com.bristotartur.cedupscore_api.dtos.request.LoginRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.LoginResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,23 +29,20 @@ public class AuthService {
         }
         var expiresIn = 300L;
         var userId = user.getId().toString();
-        var scopes = user.getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(Collectors.joining(" "));
+        var userRole = user.getRole().name();
 
-        var token = this.createToken(expiresIn, userId, scopes, jwtEncoder);
+        var token = this.createToken(expiresIn, userId, userRole, jwtEncoder);
 
         return new LoginResponseDto(token, expiresIn);
     }
 
-    private String createToken(Long expiresIn, String userId, String scopes, JwtEncoder encoder) {
+    private String createToken(Long expiresIn, String userId, String scope, JwtEncoder encoder) {
         var now = Instant.now();
 
         var claims = JwtClaimsSet.builder()
                 .issuer("cedupscore-api")
                 .subject(userId)
-                .claim("scope", scopes)
+                .claim("scope", scope)
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiresIn))
                 .build();

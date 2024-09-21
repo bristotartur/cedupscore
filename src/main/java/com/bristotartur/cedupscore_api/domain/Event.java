@@ -64,6 +64,10 @@ public class Event {
     @JoinColumn(name = "edition_id", nullable = false)
     private Edition edition;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "responsible_user_id", nullable = false)
+    private User responsibleUser;
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     @Builder.Default
     private Set<EventScore> scores = new HashSet<>();
@@ -72,19 +76,27 @@ public class Event {
     @Builder.Default
     private Set<EventRegistration> registrations = new HashSet<>();
 
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<Match> matches = new HashSet<>();
+
     @Override
     public String toString() {
         return "Event{" +
                 "id=" + id +
+                ", name='" + name + '\'' +
                 ", status=" + status +
                 ", type=" + type +
                 ", extraType=" + extraType +
-                ", modality=" + modality +
                 ", allowedParticipantType=" + allowedParticipantType +
+                ", modality=" + modality +
+                ", minParticipantsPerTeam=" + minParticipantsPerTeam +
+                ", maxParticipantsPerTeam=" + maxParticipantsPerTeam +
                 ", description='" + description + '\'' +
                 ", startedAt=" + startedAt +
                 ", endedAt=" + endedAt +
                 ", edition=" + edition +
+                ", responsibleUser=" + responsibleUser +
                 '}';
     }
 

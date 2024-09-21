@@ -1,20 +1,25 @@
 package com.bristotartur.cedupscore_api.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "TB_EVENT_SCORE")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@SuperBuilder(toBuilder = true)
-public class EventScore extends Score {
+@Builder
+public class EventScore {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Integer score;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id", nullable = false)
@@ -24,17 +29,11 @@ public class EventScore extends Score {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    public EventScore(Long id, Integer score, Team team, Event event) {
-        super(id, score);
-        this.team = team;
-        this.event = event;
-    }
-
     @Override
     public String toString() {
-        return "SportScore{" +
-                "id=" + getId() +
-                ", score=" + getScore() +
+        return "EventScore{" +
+                "id=" + id +
+                ", score=" + score +
                 ", team=" + team +
                 ", event=" + event +
                 '}';
@@ -44,13 +43,13 @@ public class EventScore extends Score {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EventScore eventScore = (EventScore) o;
-        return Objects.equals(getId(), eventScore.getId());
+        EventScore that = (EventScore) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hashCode(id);
     }
 
 }

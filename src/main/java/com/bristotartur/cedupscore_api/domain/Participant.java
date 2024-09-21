@@ -47,14 +47,6 @@ public class Participant {
     @Builder.Default
     private Set<EventRegistration> eventRegistrations = new HashSet<>();
 
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<Goal> goals = new HashSet<>();
-
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<PenaltyCard> penaltyCards = new HashSet<>();
-
     @Override
     public String toString() {
         return "Participant{" +

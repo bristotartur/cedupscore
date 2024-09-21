@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
-
 @Configuration
 @RequiredArgsConstructor
 @Transactional
@@ -23,10 +21,9 @@ public class RootUserConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        var roles = Set.of(RoleType.SUPER_ADMIN, RoleType.EVENT_ADMIN);
 
         userService.signupUser(
-                new RequestUserDto("root", "root@gmail.com", "1234", roles)
+                new RequestUserDto("root", "root@gmail.com", "1234", RoleType.SUPER_ADMIN)
         );
     }
 

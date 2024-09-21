@@ -1,6 +1,5 @@
 package com.bristotartur.cedupscore_api.services;
 
-import com.bristotartur.cedupscore_api.domain.Role;
 import com.bristotartur.cedupscore_api.domain.User;
 import com.bristotartur.cedupscore_api.dtos.request.RequestUserDto;
 import com.bristotartur.cedupscore_api.dtos.response.ResponseUserDto;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +27,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final RoleService roleService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public Page<User> findAllUsers(Pageable pageable) {
@@ -37,7 +34,7 @@ public class UserService {
     }
 
     public Page<User> findUsersByRole(RoleType role, Pageable pageable) {
-        return userRepository.findByRole(role.name(), pageable);
+        return userRepository.findByRole(role, pageable);
     }
 
     public User findUserById(Long id) {
@@ -53,12 +50,7 @@ public class UserService {
     }
 
     public ResponseUserDto createUserResponseDto(User user) {
-        var roles = user.getRoles()
-                .stream()
-                .map(Role::getName)
-                .toList();
-
-        return userMapper.toUserResponseDto(user, roles);
+        return userMapper.toUserResponseDto(user);
     }
 
     public User signupUser(RequestUserDto dto) {
@@ -70,12 +62,8 @@ public class UserService {
             throw new ConflictException("Email já está em uso.");
         }
         var password = passwordEncoder.encode(dto.password());
-        var roles = dto.roles()
-                .stream()
-                .map(role -> roleService.findRoleByName(role.name()))
-                .collect(Collectors.toSet());
 
-        return userRepository.save(userMapper.toNewUser(dto, password, roles));
+        return userRepository.save(userMapper.toNewUser(dto, password));
     }
 
     public User replaceUser(Long id, RequestUserDto dto) {
@@ -88,12 +76,8 @@ public class UserService {
             throw new ConflictException("Email já está em uso.");
         }
         var password = passwordEncoder.encode(dto.password());
-        var roles = dto.roles()
-                .stream()
-                .map(role -> roleService.findRoleByName(role.name()))
-                .collect(Collectors.toSet());
 
-        return userRepository.save(userMapper.toExistingUser(id, dto, password, roles));
+        return userRepository.save(userMapper.toExistingUser(id, dto, password));
     }
 
     private void validateEmail(String email) {
