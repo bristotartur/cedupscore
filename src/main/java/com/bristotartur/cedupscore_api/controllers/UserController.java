@@ -24,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<Page<ResponseUserDto>> listAllUsers(Pageable pageable) {
         var users = userService.findAllUsers(pageable);
         var dtos = users.getContent()
@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/list-by")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<Page<ResponseUserDto>> listByRole(@RequestParam("role") RoleType role,
                                                             Pageable pageable) {
 
@@ -50,14 +50,13 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
     public ResponseEntity<ResponseUserDto> findUserById(@PathVariable Long id) {
         var user = userService.findUserById(id);
         return ResponseEntity.ok().body(userService.createUserResponseDto(user));
     }
 
     @GetMapping(path = "/find-by")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<ResponseUserDto> findUserByEmail(@RequestParam("email") String email) {
         var user = userService.findUserByEmail(email);
         return ResponseEntity.ok().body(userService.createUserResponseDto(user));
@@ -70,7 +69,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
     public ResponseEntity<ResponseUserDto> replaceUser(@PathVariable Long id,
                                                        @RequestBody @Valid RequestUserDto requestDto) {
 
