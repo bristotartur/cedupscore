@@ -3,6 +3,7 @@ package com.bristotartur.cedupscore_api.services;
 import com.bristotartur.cedupscore_api.domain.User;
 import com.bristotartur.cedupscore_api.dtos.request.RequestUserDto;
 import com.bristotartur.cedupscore_api.dtos.response.ResponseUserDto;
+import com.bristotartur.cedupscore_api.enums.Patterns;
 import com.bristotartur.cedupscore_api.enums.RoleType;
 import com.bristotartur.cedupscore_api.exceptions.BadRequestException;
 import com.bristotartur.cedupscore_api.exceptions.ConflictException;
@@ -16,14 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.regex.Pattern;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserService {
-
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -81,10 +78,7 @@ public class UserService {
     }
 
     private void validateEmail(String email) {
-        var pattern = Pattern.compile(EMAIL_REGEX);
-        var matcher = pattern.matcher(email);
-
-        if (!matcher.matches()) throw new BadRequestException("Email inválido.");
+        if (!Patterns.validateEmail(email)) throw new BadRequestException("Email inválido.");
     }
 
 }

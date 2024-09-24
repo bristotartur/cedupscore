@@ -3,18 +3,15 @@ package com.bristotartur.cedupscore_api.services;
 import com.bristotartur.cedupscore_api.domain.*;
 import com.bristotartur.cedupscore_api.enums.Modality;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
+import com.bristotartur.cedupscore_api.enums.Patterns;
 import com.bristotartur.cedupscore_api.enums.Status;
 import com.bristotartur.cedupscore_api.exceptions.BadRequestException;
 import com.bristotartur.cedupscore_api.exceptions.ConflictException;
 import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
 import org.springframework.stereotype.Component;
 
-import java.util.regex.Pattern;
-
 @Component
 public class ParticipantValidationService {
-
-    private static final String CPF_REGEX = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$";
 
     private static final String INVALID_CPF_MSG = "CPF inválido.";
     private static final String PARTICIPANT_INACTIVE_MSG = "O participante está inativo.";
@@ -30,10 +27,7 @@ public class ParticipantValidationService {
     private static final String CANNOT_REMOVE_REGISTRATION = "O participante não pode ser desinscrito.";
 
     public void validateCpf(String cpf) {
-        var pattern = Pattern.compile(CPF_REGEX);
-        var matcher = pattern.matcher(cpf);
-
-        if (!matcher.matches()) throw new BadRequestException(INVALID_CPF_MSG);
+        if (!Patterns.validateCpf(cpf)) throw new BadRequestException(INVALID_CPF_MSG);
     }
 
     public void validateParticipantAndTeamActive(Participant participant, Team team) {
@@ -65,9 +59,8 @@ public class ParticipantValidationService {
                 .stream()
                 .filter(registration -> registration.getEdition().equals(eventEdition))
                 .findFirst()
-                .orElseThrow(() ->
-                        new ConflictException(NOT_REGISTERED_IN_EDITION_MSG)
-                );
+                .orElseThrow(() -> new ConflictException(NOT_REGISTERED_IN_EDITION_MSG));
+
         if (!registrationInEdition.getTeam().equals(team)) {
             throw new UnprocessableEntityException(TEAM_MISMATCH_MSG);
         }

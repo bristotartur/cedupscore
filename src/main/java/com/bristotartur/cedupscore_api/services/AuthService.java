@@ -2,6 +2,8 @@ package com.bristotartur.cedupscore_api.services;
 
 import com.bristotartur.cedupscore_api.dtos.request.LoginRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.LoginResponseDto;
+import com.bristotartur.cedupscore_api.enums.Patterns;
+import com.bristotartur.cedupscore_api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,20 +20,21 @@ import java.time.Instant;
 @Transactional
 public class AuthService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public LoginResponseDto login(LoginRequestDto dto, JwtEncoder jwtEncoder) {
-        var user = userService.findUserByEmail(dto.email());
+        if (!Patterns.validateEmail(dto.email())) {
+            throw new BadCredentialsException("Usuário ou senha inválidos.");
+        }
+        var user = userRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new BadCredentialsException("Usuário ou senha inválidos."));
 
         if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
             throw new BadCredentialsException("Usuário ou senha inválidos.");
         }
         var expiresIn = 300L;
-        var userId = user.getId().toString();
-        var userRole = user.getRole().name();
-
-        var token = this.createToken(expiresIn, userId, userRole, jwtEncoder);
+        var token = this.createToken(expiresIn, user.getId().toString(), user.getRole().name(), jwtEncoder);
 
         return new LoginResponseDto(token, expiresIn);
     }
