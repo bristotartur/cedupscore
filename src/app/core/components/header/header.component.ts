@@ -1,19 +1,29 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { NavItemComponent } from '../nav-item/nav-item.component';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { UserService } from '../../../user/services/user.service';
+import { AlertPopupComponent } from '../../../shared/components/alert-popup/alert-popup.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     NgClass,
-    NavItemComponent
+    RouterLink,
+    NavItemComponent,
+    AlertPopupComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
+
+  private router = inject(Router);
+  userService = inject(UserService);
+
+  @ViewChild('userDetails', { static: true }) userDetails!: ElementRef<HTMLDetailsElement>;
+  @ViewChild(AlertPopupComponent) alertPopup!: AlertPopupComponent;
 
   title = 'Cedupscore';
   isMenuOpen = false;
@@ -29,13 +39,20 @@ export class HeaderComponent implements OnInit {
     { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '/recursos', isSelected: false }
   ];
 
-  constructor(private router: Router) {  }
-
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
     this.router.events.subscribe(() => {
       this.updateSelectedItem(this.router.url);
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClick(event: MouseEvent) {
+    const clickedInside = this.userDetails.nativeElement.contains(event.target as Node);
+
+    if (!clickedInside && this.userDetails.nativeElement.open) {
+      this.userDetails.nativeElement.open = false;
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -44,6 +61,12 @@ export class HeaderComponent implements OnInit {
 
     if (this.screenWidth > 768 && this.isMenuOpen) {
       this.isMenuOpen = false;
+    }
+  }
+
+  closeDetails(): void {
+    if (this.userDetails.nativeElement.hasAttribute('open')) {
+      this.userDetails.nativeElement.removeAttribute('open');
     }
   }
 
@@ -67,6 +90,19 @@ export class HeaderComponent implements OnInit {
       .findIndex(item => item.link == url);
 
     this.selectItem(index != -1 ? index : 0);
+  }
+
+  openChildModal(event: MouseEvent): void {
+    event.stopPropagation();
+
+    this.alertPopup.openModal();
+    this.closeDetails();
+  }
+
+  handleLogoutAccepted() {
+    localStorage.removeItem('accessToken');
+    this.userService.currentUserSignal.set(null);
+    this.router.navigate(['/']);
   }
 
 }

@@ -1,13 +1,23 @@
 @import '../../../../styles/variables.scss';
 
+:host {
+    &.is-visible { display: none; }
+}
+
 header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    
     width: 100vw;
     height: 13vh;
 
     background-color: $secondary-color;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
 }
 
 .header-container {
@@ -22,21 +32,80 @@ header {
     h1 {
         font-size: 32px;
         font-weight: bold;
+
+        cursor: pointer;
     }
 
-    .user-icon {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    details {
+        width: 150px;
+        position: relative;
+      
+        summary {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
 
-        width: 54px;
-        height: 54px;
+            cursor: pointer;
+          
+            .user-icon {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                width: 54px;
+                height: 54px;
+                
+                background-color: $neutral-color-2;
+                
+                border-radius: 50%;
+                
+                cursor: pointer;
+                
+                i { font-size: 24px; }
+            }
 
-        background-color: $neutral-color-2;
+            &::-webkit-details-marker { display: none; }
+        }
+      
+        ul {
+            width: 100%;
+            
+            border-radius: $default-radius;
+            padding: 5px;
+            
+            background-color: $background-color;
+            list-style: none;
 
-        border-radius: 50%;
+            position: absolute;
+            top: 55px;
+            left: 0px;
+            z-index: 20;
+            
+            li {
+                display: flex;
+                height: 34px;
+                border-radius: 7px;
+                cursor: pointer;
+                
+                a, span {
+                    display: flex;
+                    flex-grow: 1;
+                    align-items: center;
 
-        i { font-size: 24px; }
+                    padding-left: 5px;
+                    
+                    color: inherit;
+                    font-weight: 500;
+                    text-decoration: none;
+                }
+
+                &:hover { background-color: $neutral-color-2; }
+            }
+        }
+      
+        &[open] ul { display: block; }
+      
+        ul { display: none; }
     }
 }
 
@@ -46,8 +115,9 @@ nav {
     justify-content: space-between;
 
     width: 100vw;
-    height: 37%;
+    height: 39%;
 
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
     background-color: $neutral-color-3;
 
     position: relative;
@@ -82,6 +152,8 @@ nav {
         list-style: none;
 
         .close-btn {
+            width: 30px;
+
             margin-left: 22px;
             margin-bottom: 15px;
 
@@ -91,9 +163,7 @@ nav {
             cursor: pointer;
         }
 
-        &.closed {
-            display: none;
-        }
+        &.closed { display: none; }
 
         &.open {
             display: flex;
@@ -110,6 +180,44 @@ nav {
             top: 0;
             left: 0;
             z-index: 10;
+        }
+    }
+}
+
+@media screen and (max-width: 688px) {
+    .header-container {
+        h1 { font-size: 28px; }
+
+        details {
+            summary {
+                .user-icon {
+                    width: 48px;
+                    height: 48px;
+
+                    i { font-size: 20px; }
+                }
+            }
+
+            ul { top: 49px }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .header-container {
+        h1 { font-size: 24px; }
+
+        details {
+            summary {
+                .user-icon {
+                    width: 44px;
+                    height: 44px;
+
+                    i { font-size: 22px; }
+                }
+            }
+
+            ul { top: 46px }
         }
     }
 }
