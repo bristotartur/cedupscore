@@ -5,9 +5,11 @@ import { ParticipantListComponent } from './participant/features/participant-lis
 import { PunishmentsComponent } from './punishment/features/punishments/punishments.component';
 import { SportsComponent } from './sport/features/sports/sports.component';
 import { TasksComponent } from './task/features/tasks/tasks.component';
+import { LoginFormComponent } from './user/features/login-form/login-form.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
+    { path: 'login', component: LoginFormComponent },
     { path: 'placares', component: ScoreboardComponent },
     { path: 'tarefas' , component: TasksComponent },
     { path: 'esportes', component: SportsComponent },

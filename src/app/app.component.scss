@@ -1,1 +1,7 @@
 .wrapper { margin-top: 13vh; }
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        &.no-header { margin-top: 0vh; }
+    }
+}

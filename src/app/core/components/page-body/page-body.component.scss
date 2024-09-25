@@ -6,6 +6,10 @@
     align-items: center;
 
     margin-bottom: 80px;
+
+    &.user-form {
+        main { width: 650px; }
+    }
 }
 
 main {
@@ -43,7 +47,18 @@ main {
 }
 
 @media screen and (max-width: 768px) {
-    :host { margin: 0px; }
+    :host { 
+        margin: 0px;
+
+        &.user-form {
+            main {
+                width: 100vw;
+                height: 100vh;
+
+                padding: 50px 33px;
+            }
+        }
+    }
 
     main {
         width: 100vw;
@@ -55,5 +70,19 @@ main {
 }
 
 @media screen and (max-width: 688px) {
+    :host { 
+        &.user-form {
+            main { padding: 50px 16px; }
+        }
+    }
+
     main { padding: 16px 18px; }
+}
+
+@media screen and (max-width: 480px ) {
+    :host { 
+        &.user-form {
+            main { padding: 50px 8px; }
+        }
+    }
 }

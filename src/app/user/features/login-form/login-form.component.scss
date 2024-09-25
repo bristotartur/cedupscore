@@ -1,0 +1,82 @@
+@import '../../../../styles/variables.scss';
+
+app-page-body {
+    h2, form { width: 87%; }
+
+    h2 {
+        font-size: 40px;
+        font-weight: 600;
+
+        margin-top: 20px;
+        margin-bottom: 45px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+
+        margin-bottom: 50px;
+        border-bottom: 2px solid $neutral-color-3;
+        padding-bottom: 20px;
+
+        button {
+            width: 170px;
+            height: 44px;
+    
+            margin-top: 30px;
+            border: none;
+            border-radius: $default-radius;
+    
+            background-color: $neutral-color-3;
+    
+            color: $font-color;
+            font-size: 18px;
+            font-weight: 500;
+
+            cursor: pointer;
+    
+            &:hover { background-color: $neutral-color-4; }
+        }
+
+        .message-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 8px;
+
+            height: 50px;
+
+            i {
+                margin-top: 2px;
+                color: $accent-color;
+            }
+
+            span {
+                font-size: 16px;
+                color: $accent-color;
+            }
+        }
+    }
+
+    a {
+        color: $neutral-color-1;
+        font-size: 18px;
+        text-decoration: none;
+
+        &:hover { text-decoration: underline; }
+    }
+
+    &.requesting {
+        cursor: progress;
+
+        * { cursor: progress !important; }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    app-page-body {
+        form > button, a { font-size: 16px; }
+    }
+}
