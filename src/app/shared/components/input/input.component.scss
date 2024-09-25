@@ -1,0 +1,26 @@
+@import '../../../../styles/variables.scss';
+
+:host { width: 100% }
+
+input {
+    width: 100%;
+    height: 44px;
+
+    border: none;
+    border-radius: $default-radius;
+    padding: 0px 20px;
+
+    background-color: $neutral-color-3;
+
+    color: $font-color;
+    font-size: 20px;
+    font-weight: 500;
+
+    &:focus { outline: none; }
+
+    &::placeholder { color: $neutral-color-1; }
+}
+
+@media screen and (max-width: 480px) {
+    input, button, a { font-size: 18px; }
+}

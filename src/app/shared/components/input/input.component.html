@@ -1,0 +1,10 @@
+<input
+    #input
+    [type]="type"
+    [placeholder]="placeholder"
+    [autocomplete]="autocomplete"
+    [disabled]="isDisabled"
+    [(ngModel)]="inputValue"
+    (focus)="onTouched && onTouched()"
+    (input)="onChange && onChange(inputValue)"
+>
