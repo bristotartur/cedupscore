@@ -1,18 +1,39 @@
 import { Routes } from '@angular/router';
-import { ScoreboardComponent } from './edition/features/scoreboard/scoreboard.component';
-import { HomeComponent } from './home/features/home/home.component';
-import { ParticipantListComponent } from './participant/features/participant-list/participant-list.component';
-import { PunishmentsComponent } from './punishment/features/punishments/punishments.component';
-import { SportsComponent } from './sport/features/sports/sports.component';
-import { TasksComponent } from './task/features/tasks/tasks.component';
-import { LoginFormComponent } from './user/features/login-form/login-form.component';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'login', component: LoginFormComponent },
-    { path: 'placares', component: ScoreboardComponent },
-    { path: 'tarefas' , component: TasksComponent },
-    { path: 'esportes', component: SportsComponent },
-    { path: 'membros', component: ParticipantListComponent },
-    { path: 'recursos', component: PunishmentsComponent }
+    {
+        path: '',
+        loadChildren: () => import('./home/features/shell/home.routes')
+            .then((m) => m.routes)
+    },
+    {
+        path: '',
+        loadChildren: () => import('./user/features/shell/user.routes')
+            .then((m) => m.routes)
+    },
+    {
+        path: '',
+        loadChildren: () => import('./edition/features/shell/edition.routes')
+            .then((m) => m.routes)
+    },
+    {
+        path: '',
+        loadChildren: () => import('./task/features/shell/task.routes')
+            .then((m) => m.routes)
+    },
+    {
+        path: '',
+        loadChildren: () => import('./sport/features/shell/sport.routes')
+            .then((m) => m.routes)
+    },
+    {
+        path: '',
+        loadChildren: () => import('./participant/features/shell/participant.routes')
+            .then((m) => m.routes)
+    },
+    {
+        path: '',
+        loadChildren: () => import('./punishment/features/shell/punishment.routes')
+            .then((m) => m.routes)
+    }
 ];
