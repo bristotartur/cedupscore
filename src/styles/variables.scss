@@ -1,11 +1,16 @@
 $primary-color: #1C2632;
 $secondary-color: #2A3543;
 $background-color: #131A21;
+
 $neutral-color-1: #BBBBBB;
 $neutral-color-2: #D9D9D9;
 $neutral-color-3: #4A535F;
-$font-color: #FFFFFF;
+$neutral-color-4: #616874;
+
 $accent-color: #DC393A;
+$dark-accent-color: darken($accent-color, 11%);
+
+$font-color: #FFFFFF;
 
 $gold-1: #FFCD1A;
 $gold-2: #FF7715;
