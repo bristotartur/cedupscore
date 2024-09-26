@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 export const routes: Routes = [
     {
@@ -35,5 +36,14 @@ export const routes: Routes = [
         path: '',
         loadChildren: () => import('./punishment/features/shell/punishment.routes')
             .then((m) => m.routes)
-    }
+    },
+    {
+        path: 'not-found',
+        component: NotFoundComponent
+    },
+    {
+        path: '**',
+        redirectTo: '/not-found',
+        pathMatch: 'full'
+    },
 ];

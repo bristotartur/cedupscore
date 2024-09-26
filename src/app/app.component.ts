@@ -23,7 +23,7 @@ export class AppComponent {
   private changeDetector = inject(ChangeDetectorRef);
 
   showHeader: boolean = true;
-  noHeaderRoutes: string[] = ['/login'];
+  noHeaderRoutes: string[] = ['/login', '/not-found'];
 
   ngOnInit(): void {
     this.handleNavigationEvents();
@@ -35,7 +35,7 @@ export class AppComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        this.showHeader = !this.noHeaderRoutes.includes(event.url);
+        this.showHeader = !this.noHeaderRoutes.includes(event.urlAfterRedirects || event.url);
         this.changeDetector.detectChanges();
       });
   }
