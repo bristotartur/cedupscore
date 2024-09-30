@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface ParticipantRepository extends JpaRepository<Participant, Long>, JpaSpecificationExecutor<Participant> {
@@ -36,5 +37,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long>,
 
     @Query("SELECT p FROM Participant p WHERE p.cpf = :cpf")
     Optional<Participant> findByCpf(@Param("cpf") String cpf);
+
+    List<Participant> findByCpfIn(Set<String> cpfs);
 
 }

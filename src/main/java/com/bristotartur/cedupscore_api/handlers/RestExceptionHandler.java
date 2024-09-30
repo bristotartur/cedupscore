@@ -1,9 +1,6 @@
 package com.bristotartur.cedupscore_api.handlers;
 
-import com.bristotartur.cedupscore_api.exceptions.BadRequestException;
-import com.bristotartur.cedupscore_api.exceptions.ConflictException;
-import com.bristotartur.cedupscore_api.exceptions.NotFoundException;
-import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
+import com.bristotartur.cedupscore_api.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -100,6 +97,18 @@ public class RestExceptionHandler {
                 .details(e.getMessage())
                 .developerMessage(e.getClass().getName())
                 .build(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(InternalServerErrorException.class)
+    public ResponseEntity<ExceptionDetails> handleInternalServerErrorException(InternalServerErrorException e) {
+
+        return new ResponseEntity<>(ExceptionDetails.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .title("Internal Server Error.")
+                .details(e.getMessage())
+                .developerMessage(e.getClass().getName())
+                .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

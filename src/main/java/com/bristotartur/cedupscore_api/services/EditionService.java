@@ -44,6 +44,10 @@ public class EditionService {
                 .orElseThrow(() -> new NotFoundException("Edição não encontrada."));
     }
 
+    public List<Edition> findEditionByStatus(Status status) {
+        return editionRepository.findByStatus(status);
+    }
+
     public EditionResponseDto createEditionResponseDto(Edition edition) {
         var teamScores = teamScoreRepository.findAllByEdition(edition)
                 .stream()

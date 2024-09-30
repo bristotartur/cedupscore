@@ -1,5 +1,6 @@
 package com.bristotartur.cedupscore_api.domain;
 
+import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
 import com.bristotartur.cedupscore_api.enums.Gender;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import jakarta.persistence.*;
@@ -70,6 +71,14 @@ public class Participant {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public boolean compareTo(ParticipantRequestDto dto) {
+        if (dto == null) return false;
+        return Objects.equals(name, dto.getName()) &&
+                Objects.equals(cpf, dto.getCpf()) &&
+                Objects.equals(gender, dto.getGender()) &&
+                Objects.equals(type, dto.getType());
     }
 
 }

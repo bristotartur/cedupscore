@@ -3,7 +3,9 @@ package com.bristotartur.cedupscore_api.mappers;
 import com.bristotartur.cedupscore_api.domain.Participant;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.EditionRegistrationResponseDto;
+import com.bristotartur.cedupscore_api.dtos.response.ParticipantCSVUploadResponseDto;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantResponseDto;
+import com.bristotartur.cedupscore_api.dtos.response.RejectedParticipantResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -28,5 +30,10 @@ public interface ParticipantMapper {
                 .editionRegistrations(editionRegistrations)
                 .build();
     }
+
+    ParticipantCSVUploadResponseDto toParticipantCSVUploadResponseDto(Integer total, Integer added, Integer notAdded, Integer registered, Integer problems, Integer rejected, Integer notRegistered, List<RejectedParticipantResponseDto> participantsWithProblems);
+
+    @Mapping(target = "team", source = "teamId")
+    RejectedParticipantResponseDto toRejectedParticipantResponseDto(Participant participant, Long teamId, String message);
 
 }

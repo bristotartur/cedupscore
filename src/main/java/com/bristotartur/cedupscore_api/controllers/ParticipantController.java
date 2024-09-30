@@ -1,6 +1,7 @@
 package com.bristotartur.cedupscore_api.controllers;
 
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
+import com.bristotartur.cedupscore_api.dtos.response.ParticipantCSVUploadResponseDto;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantResponseDto;
 import com.bristotartur.cedupscore_api.enums.Gender;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/participants")
@@ -80,56 +82,85 @@ public class ParticipantController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
     public ResponseEntity<ParticipantResponseDto> saveParticipant(@RequestBody @Valid ParticipantRequestDto requestDto) {
         var participant = participantService.saveParticipant(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(participantService.createParticipantResponseDto(participant));
     }
 
+    @PostMapping(path = "upload/csv", consumes = {"multipart/form-data"})
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
+    public ResponseEntity<ParticipantCSVUploadResponseDto> uploadParticipantsByCSVFile(@RequestPart("file") MultipartFile file) {
+        if (file.isEmpty() || !file.getContentType().equals("text/csv")) {
+            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
+        }
+        return ResponseEntity.ok(participantService.uploadParticipantsCSVFile(file));
+    }
+
     @PostMapping(path = "/{id}/register-in-edition/{editionId}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
     public ResponseEntity<ParticipantResponseDto> registerInEdition(@PathVariable Long id,
                                                                     @PathVariable Long editionId,
                                                                     @RequestParam("team") Long teamId) {
-        var participant = participantService.registerParticipantInEdition(id, editionId, teamId);
+        var participant = participantService.findParticipantById(id);
+        var registeredParticipant = participantService.registerParticipantInEdition(participant, editionId, teamId);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(participantService.createParticipantResponseDto(participant));
+                .body(participantService.createParticipantResponseDto(registeredParticipant));
     }
 
     @PostMapping(path = "/{id}/register-in-event/{eventId}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
     public ResponseEntity<ParticipantResponseDto> registerInEvent(@PathVariable Long id,
                                                                   @PathVariable Long eventId,
                                                                   @RequestParam("team") Long teamId) {
-        var participant = participantService.registerParticipantInEvent(id, eventId, teamId);
+        var participant = participantService.findParticipantById(id);
+        var registeredParticipant = participantService.registerParticipantInEvent(participant, eventId, teamId);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(participantService.createParticipantResponseDto(participant));
+                .body(participantService.createParticipantResponseDto(registeredParticipant));
     }
 
     @DeleteMapping(path = "/{id}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
         participantService.deleteParticipant(id);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/{id}/remove-edition-registration/{registrationId}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
     public ResponseEntity<Void> deleteEditionRegistration(@PathVariable Long id, @PathVariable Long registrationId) {
         participantService.deleteEditionRegistration(id, registrationId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/{id}/remove-event-registration/{registrationId}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
     public ResponseEntity<Void> deleteEventRegistration(@PathVariable Long id, @PathVariable Long registrationId) {
         participantService.deleteEventRegistration(id, registrationId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(path = "/{id}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
     public ResponseEntity<ParticipantResponseDto> replaceParticipant(@PathVariable Long id,
                                                                      @RequestBody @Valid ParticipantRequestDto requestDto) {
         var participant = participantService.replaceParticipant(id, requestDto);
@@ -137,7 +168,9 @@ public class ParticipantController {
     }
 
     @PatchMapping(path = "/{id}/set")
-    @PreAuthorize("hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
     public ResponseEntity<ParticipantResponseDto> setParticipantActive(@PathVariable Long id,
                                                                        @RequestParam("is-active") Boolean isActive) {
         var participant = participantService.setParticipantActive(id, isActive);
