@@ -1,7 +1,9 @@
-<app-select-button 
-    [options]="options"
-    (option)="selectOption($event)"
-/>
+<div class="buttons-container">
+    <app-select-button
+        [options]="options"
+        (option)="selectOption($event)"
+    />
+</div>
 <app-page-body>
     <app-leaderboard 
         [columns]="['Pts', 'TG', 'EG']"

@@ -15,6 +15,8 @@ import { SelectButtonComponent } from '../../../shared/components/select-button/
 import { PaginationResponse } from '../../../shared/models/pagination-response.model';
 import { Team } from '../../../shared/models/team.model';
 import { Option } from '../../../shared/models/option.model';
+import { OptionsButtonComponent } from "../../../shared/components/options-button/options-button.component";
+import { UserService } from '../../../user/services/user.service';
 
 
 @Component({
@@ -26,7 +28,8 @@ import { Option } from '../../../shared/models/option.model';
     SearchBarComponent,
     FilterComponent,
     CommonModule,
-    ParticipantPaginationComponent
+    ParticipantPaginationComponent,
+    OptionsButtonComponent
 ],
   templateUrl: './participant-list.component.html',
   styleUrl: './participant-list.component.scss'
@@ -35,12 +38,17 @@ export class ParticipantListComponent implements OnInit {
 
   private participantService = inject(ParticipantService);
   private editionService = inject(EditionService);
+  userService = inject(UserService);
 
   participantsPage$ = new BehaviorSubject<PaginationResponse<Participant> | null>(null);
   teams$ = new BehaviorSubject<Team[]>([]);
   editions$!: Observable<Edition[]>;
 
   editionsOptions: Option[] = [{ name: 'Geral', value: '' }];
+  buttonOptions: Option[] = [
+    { name: 'Inscrever participante', value: '/participants/register' },
+    { name: 'Inscrever participantes por CSV', value: '/participants/register' },
+  ];
   filter: SearchFilter = { edition: '', team: '', gender: '', type: '', status: '', order: '' };
   
   searchValue: string = '';

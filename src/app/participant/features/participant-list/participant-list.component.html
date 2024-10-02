@@ -1,9 +1,14 @@
-<app-select-button 
-    name="Edição"
-    [disabled]="currentSearchType == 'cpf'"
-    [options]="editionsOptions"
-    (option)="onEditionChange($event)" 
-/>
+<div class="buttons-container">
+    <app-select-button
+        name="Edição"
+        [disabled]="currentSearchType == 'cpf'"
+        [options]="editionsOptions"
+        (option)="onEditionChange($event)"
+    />
+    @if (userService.currentUserSignal()) {
+        <app-options-button [options]="buttonOptions"/>
+    }
+</div>
 <app-page-body>
     <section id="search-section">
         <app-search-bar 

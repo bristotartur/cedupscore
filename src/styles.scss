@@ -17,3 +17,28 @@ body {
 }
 
 abbr { text-decoration: none; }
+
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 900px;
+}
+
+@media screen and (max-width: 992px) {
+    .buttons-container { width: 80vw; }
+}
+
+@media screen and (max-width: 768px) {
+    .buttons-container { width: 90vw; }
+}
+
+@media screen and (max-width: 688px) {
+    .buttons-container { width: 94vw; }
+}
+
+@media screen and (max-width: 480px) {
+    .buttons-container { width: 92vw; }
+}

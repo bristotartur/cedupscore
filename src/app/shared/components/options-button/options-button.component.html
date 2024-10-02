@@ -1,0 +1,15 @@
+<button (click)="showOptions()">
+    <i class="fa-solid fa-plus"></i>
+</button>
+<div 
+    #container
+    [ngClass]="{ 'list-container': true,'is-visible': isOptionsVisible }"
+>
+    <ul [ngClass]="{ 'is-visible': isOptionsVisible }">
+        @for (option of options; track $index) {
+            <li>
+                <a [routerLink]="option.value.toString()">{{ option.name }}</a>
+            </li>
+        }
+    </ul>
+</div>

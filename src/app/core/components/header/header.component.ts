@@ -86,8 +86,9 @@ export class HeaderComponent implements OnInit {
   }
 
   updateSelectedItem(url: string): void {
+    const urlRoot = url.split('/').slice(0, 2).join('/');
     const index = this.navItems
-      .findIndex(item => item.link == url);
+      .findIndex(item => item.link == urlRoot);
 
     this.selectItem(index != -1 ? index : 0);
   }
