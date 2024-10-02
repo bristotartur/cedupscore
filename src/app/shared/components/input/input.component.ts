@@ -1,10 +1,14 @@
 import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NgControl } from '@angular/forms';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    NgxMaskDirective
+  ],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss'
 })
@@ -18,6 +22,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() autocomplete: string = 'off';
   @Input() isFirst: boolean = false;
+  @Input() mask!: string;
 
   inputValue: string = '';
 

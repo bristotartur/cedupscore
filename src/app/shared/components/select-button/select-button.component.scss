@@ -65,6 +65,12 @@
         select, i { color: $neutral-color-1; }
     }
 
+    &.simplified.fit { 
+        width: 100% !important;
+
+        select { width: 100% !important; }
+    }
+
     &:not(.disabled) { cursor: pointer; }
 }
 

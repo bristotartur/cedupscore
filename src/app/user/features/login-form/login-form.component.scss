@@ -67,12 +67,6 @@ app-page-body {
 
         &:hover { text-decoration: underline; }
     }
-
-    &.requesting {
-        cursor: progress;
-
-        * { cursor: progress !important; }
-    }
 }
 
 @media screen and (max-width: 480px) {

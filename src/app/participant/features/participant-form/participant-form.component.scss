@@ -1,0 +1,135 @@
+@import '../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttons-container.form {
+    button {
+        width: 100px;
+        height: 40px;
+
+        border: none;
+        border-radius: $default-radius;
+
+        background-color: $primary-color;
+
+        color: $font-color;
+        font-size: 17px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        &:hover { background-color: $secondary-color; }
+    }
+}
+
+app-page-body {
+    h2, form { width: 87%; }
+
+    h2 {
+        font-size: 32px;
+        font-weight: 600;
+
+        margin-top: 20px;
+        margin-bottom: 45px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+
+        .select-box {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+
+            width: 100%;
+
+            .attributes-container {
+                display: flex;
+                flex-direction: row;
+                gap: 20px;
+            }
+
+            .gender-container,
+            .type-container,
+            .team-container { width: 50%; }
+
+            .team-container { padding-right: 10px; }
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            button {
+                width: 170px;
+                height: 44px;
+        
+                border: none;
+                border-radius: $default-radius;
+        
+                background-color: $neutral-color-3;
+        
+                color: $font-color;
+                font-size: 18px;
+                font-weight: 500;
+    
+                cursor: pointer;
+        
+                &:hover { background-color: $neutral-color-4; }
+            }
+
+            .message-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 8px;
+    
+                width: 100%;
+                height: 50px;
+    
+                i {
+                    margin-top: 2px;
+                    color: $accent-color;
+                }
+    
+                span {
+                    font-size: 16px;
+                    color: $accent-color;
+    
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                    overflow: hidden; 
+                    white-space: normal; 
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 688px) {
+    app-page-body {
+        h2 { font-size: 28px; }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .buttons-container.form {
+        button {
+            height: 32px;
+            font-size: 14px;
+        }
+    }
+
+    app-page-body {
+        h2 { font-size: 24px; }
+    }
+}

@@ -25,6 +25,9 @@ abbr { text-decoration: none; }
     justify-content: space-between;
 
     width: 900px;
+    height: 70px;
+
+    &.form { width: 650px; }
 }
 
 @media screen and (max-width: 992px) {
@@ -32,13 +35,18 @@ abbr { text-decoration: none; }
 }
 
 @media screen and (max-width: 768px) {
-    .buttons-container { width: 90vw; }
+    .buttons-container, .buttons-container.form { 
+        width: 90vw; 
+    }
 }
 
 @media screen and (max-width: 688px) {
-    .buttons-container { width: 94vw; }
+    .buttons-container, .buttons-container.form { width: 94vw; }
 }
 
 @media screen and (max-width: 480px) {
-    .buttons-container { width: 92vw; }
+    .buttons-container, .buttons-container.form { 
+        width: 95vw; 
+        height: 52px;
+    }
 }

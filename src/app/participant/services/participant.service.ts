@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { PaginationResponse } from '../../shared/models/pagination-response.model';
 import { handleError } from '../../shared/utils/common-utils';
 import { Participant } from '../models/participant.model';
+import { ParticipantRegistration } from '../models/participant-registration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,13 @@ export class ParticipantService {
 
   findParticipantByCpf(cpf: string): Observable<Participant> {
     return this.httpClient.get<Participant>(`${this.url}/api/v1/participants/find?cpf=${cpf}`)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  registerParticipant(req: ParticipantRegistration): Observable<Participant> {
+    return this.httpClient.post<Participant>(`${this.url}/api/v1/participants`, req)
       .pipe(
         catchError(handleError)
       );

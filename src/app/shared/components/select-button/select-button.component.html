@@ -2,7 +2,8 @@
     'select-container': true, 
     'simplified': isSimplified,
     'disabled': isDisabled,
-    customClass: customClass !== '' 
+    'fit': customClass === 'fit', 
+    'fit-on-reduce': customClass === 'fit-on-reduce', 
 }">
     <select [disabled]="isDisabled" (change)="onOptionSelected($event)">
         @if (selectName) {

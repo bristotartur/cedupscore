@@ -1,0 +1,60 @@
+<div class="buttons-container form">
+    <button (click)="onClick()">Voltar</button>
+</div>
+<app-page-body
+    [ngClass]="{ 'common-form': true, 'requesting': isRequesting }"
+>
+    <h2>Inscrever participante</h2>
+    <form [formGroup]="form" method="post">
+       <app-input 
+            #nameInput type="text" formControlName="name" placeholder="nome(completo)" [isFirst]="true"
+        />
+       <app-input 
+            type="text" formControlName="cpf" placeholder="CPF" [mask]="mask"
+        />
+        <div class="select-box">
+            <div class="attributes-container">
+                <div class="gender-container">
+                    <app-select-button
+                        name="Gênero"
+                        customClass="fit"
+                        [simplified]="true"
+                        [options]="genderOptions"
+                        (option)="onGenderSelect($event)"
+                    />
+                </div>
+                <div class="type-container">
+                    <app-select-button
+                        name="Tipo"
+                        customClass="fit"
+                        [simplified]="true"
+                        [options]="participantTypeOptions"
+                        (option)="onTypeSelect($event)"
+                    />
+                </div>
+            </div>
+            <div class="team-container">
+                <app-select-button 
+                    name="Equipe"
+                    customClass="fit"
+                    [simplified]="true"
+                    [options]="teamsOptions"
+                    (option)="onTeamSelect($event)"
+                />
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="message-container">
+                @if (errorMessage) {
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>{{ errorMessage }}</span>
+                }
+            </div>
+            <button
+                type="submit" [disabled]="isRequesting" (click)="onSubmit()"
+            >
+                Inscrever
+            </button>
+        </div>
+    </form>
+</app-page-body>
