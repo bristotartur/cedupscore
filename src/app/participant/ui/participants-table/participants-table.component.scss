@@ -1,0 +1,119 @@
+@import '../../../../styles/variables.scss';
+
+:host { width: 100%; }
+
+.wrapper {
+    max-height: 500px;
+
+    border-radius: $default-radius;
+    padding: 0px 20px 30px 20px;
+
+    background-color: $neutral-color-3;
+
+    overflow: hidden;
+
+    .table-container {
+        max-height: 500px;
+        min-height: 140px;
+        overflow: auto;
+
+        &.empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            span {
+                color: $neutral-color-2;
+                font-size: 18px;
+            }
+        }
+
+        table {
+            min-width: 100%;
+
+            border-collapse: collapse;
+
+            color: $font-color;
+            font-size: 16px;
+
+            thead {
+                background-color: $neutral-color-3;
+
+                position: sticky;
+                top: 0;
+                z-index: 1;
+
+                tr {
+                    th {
+                        padding: 20px 10px 10px 4px;
+
+                        text-align: start;
+
+                        &:last-child { padding-left: 15px; }
+
+                        &::after {
+                            content: '';
+
+                            display: block;
+
+                            height: 1px;
+                            width: 100%;
+
+                            background-color: $neutral-color-1;
+
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                        }
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        max-width: 160px;
+                        width: fit-content;
+                        white-space: nowrap;
+
+                        padding: 10px 10px 10px 4px;
+
+                        input {
+                            width: 160px;
+
+                            border: none;
+                            padding-right: 10px;
+                            background-color: transparent;
+
+                            color: inherit;
+                            font-size: inherit;
+                        }
+
+                        &:last-child { 
+                            max-width: none;
+                            padding-left: 15px;
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .wrapper {
+        .table-container {
+            table {
+                tbody {
+                    tr {
+                        td {
+                            input { width: 130px; }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -7,6 +7,20 @@
     box-sizing: border-box;
 
     font-family: 'Inter', sans-serif;
+
+    ::-webkit-scrollbar {
+        width: 5px; 
+        height: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background-color: $neutral-color-4;
+        border-radius: 6px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover { background-color: $neutral-color-1; }
+    
+    ::-webkit-scrollbar-track { background: transparent; }
 }
 
 body { 
