@@ -3,6 +3,6 @@ export interface ParticipantWithProblem {
     cpf: string,
     gender?: string,
     type?: string,
-    team?: string,
+    teamName?: string,
     message: string
 }

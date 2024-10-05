@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -6,6 +6,9 @@ import { PaginationResponse } from '../../shared/models/pagination-response.mode
 import { handleError } from '../../shared/utils/common-utils';
 import { Participant } from '../models/participant.model';
 import { ParticipantRegistration } from '../models/participant-registration.model';
+import { RegistrationReport } from '../models/registration-report.model';
+import { ParticipantWithProblem } from '../models/participant-with-problem.model';
+import { InactivationReport } from '../models/inactivation-report.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +34,37 @@ export class ParticipantService {
       .pipe(
         catchError(handleError)
       );
+  }
+
+  uploadRegistrarionCSVFile(file: File): Observable<RegistrationReport> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.httpClient.post<RegistrationReport>(`${this.url}/api/v1/participants/upload/registration-csv`, formData)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  uploadInactivationCSVFile(file: File): Observable<InactivationReport> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.httpClient.post<InactivationReport>(`${this.url}/api/v1/participants/upload/inactivation-csv`, formData)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  downloadReportCSVFile(type: string, participants: ParticipantWithProblem[]): Observable<HttpResponse<Blob>> {
+    return this.httpClient.post(
+      `${this.url}/api/v1/participants/generate/csv?type=${type}`, participants, {
+        observe: 'response',
+        responseType: 'blob' 
+      }
+    ).pipe(
+      catchError(handleError)
+    );
   }
 
 }

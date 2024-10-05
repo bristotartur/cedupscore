@@ -74,10 +74,6 @@
     &:not(.disabled) { cursor: pointer; }
 }
 
-@media screen and (max-width: 992px) {
-    :host { width: 80vw; }
-}
-
 @media screen and (max-width: 844px) {
     :host {
         &:has(div.simplified) { width: 100%; }
@@ -92,10 +88,6 @@
         }
     }
 }
-@media screen and (max-width: 768px) {
-    :host { width: 95vw; }
-}
-
 
 @media screen and (max-width: 480px) {
     .select-container {

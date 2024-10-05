@@ -17,7 +17,7 @@ export class ParticipantsTableComponent implements OnInit, OnChanges {
   headers: string[] = [];
 
   ngOnInit(): void {
-    this.setHeaders()
+    this.setHeaders();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -30,11 +30,14 @@ export class ParticipantsTableComponent implements OnInit, OnChanges {
   private setHeaders(): void {
     const allKeys = this.content.flatMap(item => 
       Object.entries(item)
-        .filter(([_, value]) => value !== null && value !== undefined)
+        .filter(([_, value]) => value !== undefined)
         .map(([key]) => key)
     );
     const uniqueKeys = Array.from(new Set(allKeys));
-    this.headers = uniqueKeys.map(key => this.mapKeyToHeader(key));
+
+    this.headers = uniqueKeys
+      .map(key => this.mapKeyToHeader(key))
+      .filter(key => key);
   }
   
   private mapKeyToHeader(key: string): string {
@@ -43,7 +46,7 @@ export class ParticipantsTableComponent implements OnInit, OnChanges {
       case 'cpf': return 'CPF';
       case 'gender': return 'Gênero';
       case 'type': return 'Tipo';
-      case 'team': return 'Equipe';
+      case 'teamName': return 'Equipe';
       case 'message': return 'Motivo do erro';
       default: return '';
     }
@@ -51,8 +54,11 @@ export class ParticipantsTableComponent implements OnInit, OnChanges {
 
   getItemValues(item: ParticipantWithProblem): string[] {
     return Object.entries(item)
-      .filter(([_, value]) => value !== null && value !== undefined)
-      .map(([_, value]) => String(value));
+      .filter(([key, value]) => value !== undefined && key !== 'teamId')
+      .map(([_, value]) => {
+        if (!value) return 'N/A'
+        return String(value)
+      });
   }
 
 }

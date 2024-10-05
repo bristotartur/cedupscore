@@ -5,7 +5,7 @@ import { ExceptionResponse } from "../models/exception-response.model";
 
 export function handleError(err: HttpErrorResponse): Observable<never> {
   let exceptionResponse: ExceptionResponse = {
-    title: err.error.title || 'Server Error.',
+    title: err.error.title || 'Error.',
     status: err.status,
     details: err.error.details || 'Sem detalhes disponíveis.',
     developerMessage: err.error.developerMessage || 'Sem mensagem do desenvolvedor.',

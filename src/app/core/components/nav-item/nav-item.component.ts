@@ -22,6 +22,7 @@ export class NavItemComponent {
   @Output() select = new EventEmitter<void>();
 
   onClick(): void {
+    document.documentElement.scrollTop = 0;
     this.select.emit();
   }
 

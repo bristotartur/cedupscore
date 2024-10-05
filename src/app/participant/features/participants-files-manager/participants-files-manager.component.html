@@ -1,0 +1,130 @@
+<div class="buttons-container">
+    <button (click)="onClick()">Voltar</button>
+    <app-select-button 
+        [options]="modeOptions"
+        (option)="onSwitchMode($event)"
+    />
+</div>
+<app-page-body [ngClass]="{ 'requesting': isRequesting }">
+    <section id="report">
+        <h2>{{ reportTitle }}</h2>
+        <div 
+            [ngClass]="{ 'report-container': true, 'single-row': mode == 'inactivation' }"
+        >
+            @switch (mode) {
+                @case ('registration') {
+                    <div class="row">
+                        <div class="group">
+                            <span class="small">Total: {{ registrationReport$.value.total }}</span>
+                            <span class="medium">Adicionados: {{ registrationReport$.value.added }}</span>
+                        </div>
+                        <div class="group">
+                            <span class="large">Não adicionados: {{ registrationReport$.value.notAdded }}</span>
+                            <span>Inscritos: {{ registrationReport$.value.registered }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="group">
+                            <span class="small">Problemas: {{ registrationReport$.value.problems }}</span>
+                            <span class="small">Rejeitados: {{ registrationReport$.value.rejected }}</span>
+                        </div>
+                        <div class="group">
+                            <span id="last" class="large">Não inscritos: {{ registrationReport$.value.notRegistered }}</span>
+                        </div>
+                    </div>
+                }
+                @case ('inactivation') {
+                    <div class="row">
+                        <div class="group">
+                            <span class="small">Total: {{ inactivationReport$.value.total }}</span>
+                            <span class="medium">Desativados: {{ inactivationReport$.value.inactivated }}</span>
+                        </div>
+                        <div class="group">
+                            <span class="large">Não desativados: {{ inactivationReport$.value.notInactivated }}</span>
+                            <span class="medium">Problemas: {{ inactivationReport$.value.problems }}</span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </section>
+    <section id="report-table">
+        <div class="wrapper">
+            <div class="section-header">
+                <h2>Lista de problemas</h2>
+                @if (!isReportEmpty) {
+                    <button (click)="showPopup($event, 'removeReportPopup')">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                }
+            </div>
+            @switch (mode) {
+                @case ('registration') {
+                    <app-participants-table
+                        [content]="registrationReport$.value.participantsWithProblems"
+                    />
+                }
+                @case ('inactivation') {
+                    <app-participants-table
+                        [content]="inactivationReport$.value.participantsWithProblems"
+                    />
+                }
+            }
+        </div>
+        <div class="message-container">
+            @if (mode == 'registration' && registrationErrorMessage) {
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <span>{{ registrationErrorMessage }}</span>
+            }
+            @else if (mode == 'inactivation' && inactivationErrorMessage) {
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <span>{{ inactivationErrorMessage }}</span>
+            }
+        </div>
+        <div class="buttons-container">
+            <div class="custom-file-container">
+                <div class="label-container">
+                    <label for="file-input">Escolher arquivo</label>
+                </div>
+                <input
+                    type="file" id="file-input" accept=".csv" (change)="onFileSelected($event)"
+                >
+                <span>{{ currentFileName }}</span>
+            </div>
+            <div class="buttons-wrapper">
+                <abbr
+                    [title]="(canUpload) ? '' : 'Escolha um arquivo primeiro para poder enviá-lo'"
+                >
+                    <button
+                        [ngClass]="{ 'disabled': !canUpload }" [disabled]="!canUpload" (click)="showPopup($event, 'uploadFilePopup')"
+                    >
+                        Enviar arquivo
+                    </button>
+                </abbr>
+                <abbr
+                    [title]="(canDownload) ? '' : 'Gere um relatório primeiro para poder baixá-lo'"
+                >
+                    <button
+                        [ngClass]="{ 'disabled': !canDownload }" [disabled]="!canDownload" (click)="onDownloadFile()"
+                    >
+                        Baixar relatório
+                    </button>
+                </abbr>
+            </div>
+        </div>
+    </section>
+</app-page-body>
+<app-alert-popup 
+    #removeReportPopup
+    title="Limpar relatório?"
+    message="Ao limpar o relatório, você não poderá mais visualizá-lo e ele não estará mais disponível para download. Deseja continuar?"
+    buttonMessage="Limpar"
+    (accepted)="handleRemoveReport()"
+/>
+<app-alert-popup 
+    #uploadFilePopup
+    title="Enviar novo arquio?"
+    message="Ao enviar um novo arquivo, o relatório atual será pertido e um novo será gerado em seu lugar. Deseja continuar?"
+    buttonMessage="Enviar"
+    (accepted)="submitFile()"
+/>
