@@ -33,7 +33,7 @@ public class AuthService {
         if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
             throw new BadCredentialsException("Usuário ou senha inválidos.");
         }
-        var expiresIn = 300L;
+        var expiresIn = 3600L;
         var token = this.createToken(expiresIn, user.getId().toString(), user.getRole().name(), jwtEncoder);
 
         return new LoginResponseDto(token, expiresIn);

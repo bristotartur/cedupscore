@@ -1,47 +1,47 @@
-nome,cpf,genero,tipo,equipe
-artur da rosa bristot,079.630.479-37,MALE,STUDENT,4
-joana almeida,031.572.848-90,FEMALE,TEACHER,3
-miguel santos,211.965.334-71,MALE,PARENT,1
-sophia mendes,123.456.789-00,FEMALE,STUDENT,4
-bernardo oliveira,987.654.321-00,MALE,STUDENT_PARENT,2
-isabella rodrigues,456.789.123-11,FEMALE,TEACHER_PARENT,3
-lucas costa,147.258.369-12,MALE,STUDENT,1
-helena pereira,852.963.741-13,FEMALE,STUDENT_PARENT,4
-enzo freitas,951.753.842-14,MALE,PARENT,2
-laura fernandes,369.258.147-15,FEMALE,TEACHER,3
-nicolas cardoso,741.852.963-16,MALE,TEACHER_PARENT,1
-alice ribeiro,963.147.258-17,FEMALE,STUDENT,2
-gabriel souza,321.654.987-18,MALE,STUDENT_PARENT,3
-valentina lima,654.321.987-19,FEMALE,PARENT,4
-theo marques,789.456.123-20,MALE,TEACHER,2
-julia barros,159.753.486-21,FEMALE,STUDENT,3
-arthur gomes,753.951.852-22,MALE,TEACHER_PARENT,1
-luiza correia,987.321.654-23,FEMALE,STUDENT_PARENT,2
-henrique alves,852.741.963-24,MALE,STUDENT,4
-manuela machado,963.258.147-25,FEMALE,PARENT,3
-gustavo ferreira,456.123.789-26,MALE,STUDENT_PARENT,2
-mariana ramos,147.369.258-27,FEMALE,TEACHER,1
-pedro dias,258.741.369-28,MALE,STUDENT,4
-ana cavalcanti,951.456.123-29,FEMALE,STUDENT_PARENT,2
-caio azevedo,357.159.486-30,MALE,PARENT,3
-lorena araujo,753.258.159-31,FEMALE,TEACHER_PARENT,4
-daniel morais,852.963.741-32,MALE,STUDENT,1
-beatriz coelho,456.987.123-33,FEMALE,TEACHER,3
-matheus teixeira,123.654.987-34,MALE,PARENT,2
-laura martins,147.951.258-35,FEMALE,STUDENT_PARENT,4
-davi fonseca,369.123.789-36,MALE,STUDENT,3
-heloisa reis,951.852.753-37,FEMALE,PARENT,1
-rafael nunes,789.123.456-38,MALE,STUDENT_PARENT,2
-elisa batista,963.456.789-39,FEMALE,TEACHER_PARENT,4
-guilherme pinto,321.789.654-40,MALE,STUDENT,3
-camila marques,753.321.654-41,FEMALE,PARENT,2
-benjamin mendes,852.159.753-42,MALE,STUDENT_PARENT,4
-clara antunes,147.456.123-43,FEMALE,TEACHER,1
-felipe xavier,258.963.147-44,MALE,STUDENT,2
-vitoria figueiredo,456.258.159-45,FEMALE,TEACHER_PARENT,3
-eduardo brito,789.951.456-46,MALE,PARENT,4
-giovanna melo,987.321.123-47,FEMALE,STUDENT_PARENT,2
-diego rocha,321.654.789-48,MALE,TEACHER,3
-luana amaral,852.951.753-49,FEMALE,STUDENT,1
-victor vieira,654.789.123-50,MALE,PARENT,2
-lara leal,123.789.654-51,FEMALE,STUDENT_PARENT,4
+nome,cpf,gênero,tipo,equipe
+artur da rosa bristot,079.630.479-37,Masculino,Aluno,Papa-Léguas
+sophia mendes,123.456.789-00,Feminino,Aluno,Twister
+joana almeida,031.572.848-90,Feminino,Professor,Papa-Léguas
+miguel santos,211.965.334-71,Masculino,Pai,Atômica
+bernardo oliveira,987.654.321-00,Masculino,Pai e aluno,Mestres de Obras
+isabella rodrigues,456.789.123-11,Feminino,Pai e professor,Papa-Léguas
+lucas costa,147.258.369-12,Masculino,Aluno,Atômica
+helena pereira,852.963.741-13,Feminino,Pai e aluno,Twister
+enzo freitas,951.753.842-14,Masculino,Pai,Mestres de Obras
+laura fernandes,369.258.147-15,Feminino,Professor,Papa-Léguas
+nicolas cardoso,741.852.963-16,Masculino,Pai e professor,Atômica
+alice ribeiro,963.147.258-17,Feminino,Aluno,Mestres de Obras
+gabriel souza,321.654.987-18,Masculino,Pai e aluno,Papa-Léguas
+valentina lima,654.321.987-19,Feminino,Pai,Twister
+theo marques,789.456.123-20,Masculino,Professor,Mestres de Obras
+julia barros,159.753.486-21,Feminino,Aluno,Papa-Léguas
+arthur gomes,753.951.852-22,Masculino,Pai e professor,Atômica
+luiza correia,987.321.654-23,Feminino,Pai e aluno,Mestres de Obras
+henrique alves,852.741.963-24,Masculino,Aluno,Twister
+manuela machado,963.258.147-25,Feminino,Pai,Papa-Léguas
+gustavo ferreira,456.123.789-26,Masculino,Pai e aluno,Mestres de Obras
+mariana ramos,147.369.258-27,Feminino,Professor,Atômica
+pedro dias,258.741.369-28,Masculino,Aluno,Twister
+ana cavalcanti,951.456.123-29,Feminino,Pai e aluno,Mestres de Obras
+caio azevedo,357.159.486-30,Masculino,Pai,Papa-Léguas
+lorena araujo,753.258.159-31,Feminino,Pai e professor,Twister
+daniel morais,852.963.741-32,Masculino,Aluno,Atômica
+beatriz coelho,456.987.123-33,Feminino,Professor,Papa-Léguas
+matheus teixeira,123.654.987-34,Masculino,Pai,Mestres de Obras
+laura martins,147.951.258-35,Feminino,Pai e aluno,Twister
+davi fonseca,369.123.789-36,Masculino,Aluno,Papa-Léguas
+heloisa reis,951.852.753-37,Feminino,Pai,Atômica
+rafael nunes,789.123.456-38,Masculino,Pai e aluno,Mestres de Obras
+elisa batista,963.456.789-39,Feminino,Pai e professor,Twister
+guilherme pinto,321.789.654-40,Masculino,Aluno,Papa-Léguas
+camila marques,753.321.654-41,Feminino,Pai,Mestres de Obras
+benjamin mendes,852.159.753-42,Masculino,Pai e aluno,Twister
+clara antunes,147.456.123-43,Feminino,Professor,Atômica
+felipe xavier,258.963.147-44,Masculino,Aluno,Mestres de Obras
+vitoria figueiredo,456.258.159-45,Feminino,Pai e professor,Papa-Léguas
+eduardo brito,789.951.456-46,Masculino,Pai,Twister
+giovanna melo,987.321.123-47,Feminino,Pai e aluno,Mestres de Obras
+diego rocha,321.654.789-48,Masculino,Professor,Papa-Léguas
+luana amaral,852.951.753-49,Feminino,Aluno,Atômica
+victor vieira,654.789.123-50,Masculino,Pai,Mestres de Obras
+lara leal,123.789.654-51,Feminino,Pai e aluno,Twister

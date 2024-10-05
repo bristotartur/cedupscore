@@ -26,11 +26,11 @@ public class ParticipantValidationService {
     private static final String EVENT_MISMATCH_MSG = "O participante não está inscrito no evento informado.";
     private static final String CANNOT_REMOVE_REGISTRATION = "O participante não pode ser desinscrito.";
 
-    public void validateCpf(String cpf) {
+    public void validateCpf(String cpf) throws BadRequestException {
         if (!Patterns.validateCpf(cpf)) throw new BadRequestException(INVALID_CPF_MSG);
     }
 
-    public void validateParticipantAndTeamActive(Participant participant, Team team) {
+    public void validateParticipantAndTeamActive(Participant participant, Team team) throws UnprocessableEntityException {
         if (!participant.getIsActive()) {
             throw new UnprocessableEntityException(PARTICIPANT_INACTIVE_MSG);
         }
@@ -39,7 +39,7 @@ public class ParticipantValidationService {
         }
     }
 
-    public void validateParticipantForEdition(Participant participant, Edition edition) {
+    public void validateParticipantForEdition(Participant participant, Edition edition) throws ConflictException, UnprocessableEntityException {
         if (!edition.getStatus().equals(Status.SCHEDULED)) {
             throw new UnprocessableEntityException(EDITION_REGISTRATION_NOT_ALLOWED_MSG);
         }
@@ -52,7 +52,7 @@ public class ParticipantValidationService {
                 });
     }
 
-    public void validateParticipantTeamForEvent(Participant participant, Team team, Event event) {
+    public void validateParticipantTeamForEvent(Participant participant, Team team, Event event) throws ConflictException, UnprocessableEntityException {
         var eventEdition = event.getEdition();
 
         var registrationInEdition = participant.getEditionRegistrations()
@@ -66,7 +66,7 @@ public class ParticipantValidationService {
         }
     }
 
-    public void validateParticipantForEvent(Participant participant, Event event, Integer registeredParticipants) {
+    public void validateParticipantForEvent(Participant participant, Event event, Integer registeredParticipants) throws ConflictException, UnprocessableEntityException {
         var max = event.getMaxParticipantsPerTeam();
 
         if (!event.getStatus().equals(Status.SCHEDULED) ||
@@ -85,7 +85,7 @@ public class ParticipantValidationService {
                 });
     }
 
-    public void validateEditionRegistrationToRemove(Participant participant, EditionRegistration registration) {
+    public void validateEditionRegistrationToRemove(Participant participant, EditionRegistration registration) throws UnprocessableEntityException {
         participant.getEditionRegistrations()
                 .stream()
                 .filter(r -> r.equals(registration))
@@ -97,7 +97,7 @@ public class ParticipantValidationService {
         if (!status.equals(Status.SCHEDULED)) throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION);
     }
 
-    public void validateEventRegistrationToRemove(Participant participant, EventRegistration registration) {
+    public void validateEventRegistrationToRemove(Participant participant, EventRegistration registration) throws ConflictException, UnprocessableEntityException {
         participant.getEventRegistrations()
                 .stream()
                 .filter(r -> r.equals(registration))
@@ -107,6 +107,17 @@ public class ParticipantValidationService {
         var status = registration.getEvent().getStatus();
 
         if (!status.equals(Status.SCHEDULED)) throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION);
+    }
+
+    public void validateParticipantToChangeStatus(Participant participant) throws UnprocessableEntityException {
+        participant.getEventRegistrations()
+                .stream()
+                .map(registration -> registration.getEvent().getStatus())
+                .filter(status -> status.equals(Status.IN_PROGRESS) || status.equals(Status.STOPPED))
+                .findFirst()
+                .ifPresent(status -> {
+                    throw new UnprocessableEntityException("O participante não pode ser desativado.");
+                });
     }
 
 }

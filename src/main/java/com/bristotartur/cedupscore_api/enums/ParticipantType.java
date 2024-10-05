@@ -1,11 +1,26 @@
 package com.bristotartur.cedupscore_api.enums;
 
+import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+
+@RequiredArgsConstructor
 public enum ParticipantType {
-    STUDENT,
-    TEACHER,
-    PARENT,
-    STUDENT_PARENT,
-    TEACHER_PARENT;
+    STUDENT("Aluno"),
+    TEACHER("Professor"),
+    PARENT("Pai"),
+    STUDENT_PARENT("Pai e aluno"),
+    TEACHER_PARENT("Pai e professor");
+
+    public final String value;
+
+    public static ParticipantType findTypeLike(String value) throws IllegalArgumentException {
+
+        return Arrays.stream(values())
+                .filter(gender -> value.equals(gender.value))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Tipo de participante inválido."));
+    }
 
     public static boolean compareTypes(ParticipantType type, ParticipantType comparedType) {
         if (type.equals(comparedType)) return true;
