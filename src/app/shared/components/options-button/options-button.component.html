@@ -1,5 +1,5 @@
 <button (click)="showOptions()">
-    <i class="fa-solid fa-plus"></i>
+    <i [class]="iconClass"></i>
 </button>
 <div 
     #container
@@ -8,7 +8,11 @@
     <ul [ngClass]="{ 'is-visible': isOptionsVisible }">
         @for (option of options; track $index) {
             <li>
-                <a [routerLink]="option.value.toString()" (click)="onClick()">{{ option.name }}</a>
+                @if (option.isLink) {
+                    <a [routerLink]="option.value.toString()" (click)="onClick()">{{ option.name }}</a>
+                } @else {
+                    <span (click)="onClick(option.value)">{{ option.name }}</span>
+                }
             </li>
         }
     </ul>

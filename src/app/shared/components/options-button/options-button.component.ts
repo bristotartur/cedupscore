@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { Option } from '../../models/option.model';
 import { RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
@@ -18,6 +18,9 @@ export class OptionsButtonComponent {
   @ViewChild('container') container!: ElementRef;
 
   @Input({ required: true }) options!: Option[];
+  @Input({ required: true }) iconClass!: string;
+
+  @Output() optionSelected = new EventEmitter<string | number>();
 
   isOptionsVisible: boolean = false;
   clicksCount: number = 0;
@@ -41,8 +44,9 @@ export class OptionsButtonComponent {
     this.clicksCount = 0;
   }
 
-  onClick(): void {
+  onClick(value?: string | number): void {
     document.documentElement.scrollTop = 0;
+    this.optionSelected.emit(value);
   }
 
 }

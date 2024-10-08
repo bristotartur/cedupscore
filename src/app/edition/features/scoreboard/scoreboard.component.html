@@ -1,6 +1,7 @@
 <div class="buttons-container">
     <app-select-button
         [options]="options"
+        [selectedValue]="(options.length > 0)? options[0].value : 1"
         (option)="selectOption($event)"
     />
 </div>

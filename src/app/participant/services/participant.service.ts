@@ -29,6 +29,20 @@ export class ParticipantService {
       );
   }
 
+  findParticipantById(id: number): Observable<Participant> {
+    return this.httpClient.get<Participant>(`${this.url}/api/v1/participants/${id}`)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  findParticipantForUpdate(id: number): Observable<Participant> {
+    return this.httpClient.get<Participant>(`${this.url}/api/v1/participants/${id}/for-update`)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
   registerParticipant(req: ParticipantRegistration): Observable<Participant> {
     return this.httpClient.post<Participant>(`${this.url}/api/v1/participants`, req)
       .pipe(
@@ -65,6 +79,13 @@ export class ParticipantService {
     ).pipe(
       catchError(handleError)
     );
+  }
+
+  updateParticipant(id: number, req: ParticipantRegistration): Observable<Participant> {
+    return this.httpClient.put<Participant>(`${this.url}/api/v1/participants/${id}`, req)
+      .pipe(
+        catchError(handleError)
+      );
   }
 
 }

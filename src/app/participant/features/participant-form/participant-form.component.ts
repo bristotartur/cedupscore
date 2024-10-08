@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { PageBodyComponent } from "../../../core/components/page-body/page-body.component";
 import { NgClass } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,14 +7,16 @@ import { SelectButtonComponent } from '../../../shared/components/select-button/
 import { Gender } from '../../../shared/enums/gender.enum';
 import { ParticipantType } from '../../../shared/enums/participant-type.enum';
 import { EditionService } from '../../../edition/services/edition.service';
-import { catchError, map, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, of, switchMap, take } from 'rxjs';
 import { Team } from '../../../shared/models/team.model';
 import { Option } from '../../../shared/models/option.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { ParticipantService } from '../../services/participant.service';
 import { ParticipantRegistration } from '../../models/participant-registration.model';
 import { ExceptionResponse } from '../../../shared/models/exception-response.model';
+import { Participant } from '../../models/participant.model';
+import { AlertPopupComponent } from '../../../shared/components/alert-popup/alert-popup.component';
 
 @Component({
   selector: 'app-participant-form',
@@ -25,20 +27,23 @@ import { ExceptionResponse } from '../../../shared/models/exception-response.mod
     NgxMaskDirective,
     PageBodyComponent,
     InputComponent,
-    SelectButtonComponent
+    SelectButtonComponent,
+    AlertPopupComponent
   ],
   templateUrl: './participant-form.component.html',
   styleUrl: './participant-form.component.scss',
   providers: [provideNgxMask()]
 })
-export class ParticipantFormComponent implements AfterViewInit {
+export class ParticipantFormComponent implements OnInit, AfterViewInit {
 
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
   private editionService = inject(EditionService);
   private participantService = inject(ParticipantService);
 
   @ViewChild(InputComponent) nameInput!: InputComponent;
+  @ViewChild('updatePopup') updatePopup!: AlertPopupComponent;
 
   protected form = this.formBuilder.group({
     name: ['', Validators.required],
@@ -48,6 +53,9 @@ export class ParticipantFormComponent implements AfterViewInit {
     team: [0, Validators.required]
   })
 
+  participant$ = new BehaviorSubject<Participant | null>(null);
+
+  isUpdateForm: boolean = false;
   teamsOptions: Option[] = [];
   isRequesting: boolean = false;
   mask: string = '000.000.000-00';
@@ -79,8 +87,34 @@ export class ParticipantFormComponent implements AfterViewInit {
     });
   }
 
+  ngOnInit(): void {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (!id || isNaN(+id)) return;
+
+    this.isUpdateForm = true;
+    this.participantService.findParticipantForUpdate(+id)
+      .subscribe({
+        next: (participant) => {
+            this.participant$.next(participant);
+            this.fillForm(participant);
+          },
+        error: () => this.router.navigate(['/**'])
+      });
+  }
+
   ngAfterViewInit(): void {
-    if (this.nameInput) this.nameInput.input.nativeElement.focus();
+    if (this.nameInput && !this.isUpdateForm) {
+      this.nameInput.input.nativeElement.focus();
+    }
+  }
+
+  private fillForm(participant: Participant): void {
+    this.form.patchValue({
+      name: participant.name.toLowerCase(),
+      cpf: participant.cpf,
+      gender: participant.gender,  
+      type: participant.type
+    });
   }
 
   private setTeamsOptions(teams: Team[]): void {
@@ -91,7 +125,15 @@ export class ParticipantFormComponent implements AfterViewInit {
 
   comeBack(): void {
     document.documentElement.scrollTop = 0;
-    this.router.navigate(['/participants']);
+
+    if (this.isUpdateForm) {
+      this.participant$.subscribe(participant => {
+        const id = participant?.id;
+        this.router.navigate([`/participants/${id}`]);
+      });
+    } else {
+      this.router.navigate(['/participants']);
+    }
   }
 
   onGenderSelect(value: string | number) {
@@ -112,24 +154,25 @@ export class ParticipantFormComponent implements AfterViewInit {
     }
   }
 
-  onSubmit(): void {
+  onSubmit(event: Event): void {
+    event.stopPropagation();
+    
     const cpf = this.form.get('cpf')!.value as string;
     this.form.patchValue({ cpf: this.formatCpf(cpf) });
 
     if (!this.checkForm()) return;
 
-    const request = this.prepareRequest();
+    if (this.isUpdateForm) {
+      this.updatePopup.openModal();
+    } else {
+      const request = this.prepareRequest();
+      this.registerParticipant(request);
+    }
+  }
 
-    this.isRequesting = true;
-    this.participantService.registerParticipant(request).subscribe({
-      next: () => {
-        this.router.navigate(['/participants']);
-      },
-      error: (err: ExceptionResponse) => {
-        this.isRequesting = false;
-        this.errorMessage = err.details;
-      }
-    })
+  onPopupAccepted(): void {
+    const request = this.prepareRequest();
+    this.updateParticipant(request);
   }
 
   private formatCpf(cpf: string) {
@@ -159,6 +202,42 @@ export class ParticipantFormComponent implements AfterViewInit {
       type: this.form.get('type')!.value as ParticipantType,
       teamId: this.form.get('team')!.value as number
     }
+  }
+
+  private registerParticipant(request: ParticipantRegistration) {
+    this.isRequesting = true;
+    this.participantService.registerParticipant(request).subscribe({
+      next: () => {
+        document.documentElement.scrollTop = 0;
+        this.router.navigate(['/participants']);
+      },
+      error: (err: ExceptionResponse) => {
+        this.isRequesting = false;
+        this.errorMessage = err.details;
+      }
+    });
+  }
+
+  private updateParticipant(request: ParticipantRegistration) {
+    let id = 0;
+
+    this.isRequesting = true;
+    this.participant$.pipe(
+      take(1),
+      switchMap(participant => {
+        id = participant?.id ?? 0;
+        return this.participantService.updateParticipant(id, request);
+      })
+    ).subscribe({
+      next: () => {
+        document.documentElement.scrollTop = 0;
+        this.router.navigate([`/participants/${id}`]);
+      },
+      error: (err: ExceptionResponse) => {
+        this.isRequesting = false;
+        this.errorMessage = err.details;
+      }
+    });
   }
 
 }

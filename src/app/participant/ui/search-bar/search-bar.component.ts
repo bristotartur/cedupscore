@@ -36,7 +36,7 @@ export class SearchBarComponent implements OnInit {
     this.inputValue.valueChanges.pipe(
       debounceTime(500)
     ).subscribe(value => {
-      this.inputValueChange.emit(this.formatValue(value ?? ''));
+      this.inputValueChange.emit(this.formatValue(value?.trim() ?? ''));
     });
   }
   
