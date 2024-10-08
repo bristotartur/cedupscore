@@ -41,4 +41,8 @@ export class OptionsButtonComponent {
     this.clicksCount = 0;
   }
 
+  onClick(): void {
+    document.documentElement.scrollTop = 0;
+  }
+
 }

@@ -89,7 +89,8 @@ export class ParticipantFormComponent implements AfterViewInit {
     })
   }
 
-  onClick(): void {
+  comeBack(): void {
+    document.documentElement.scrollTop = 0;
     this.router.navigate(['/participants']);
   }
 

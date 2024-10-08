@@ -39,6 +39,15 @@
 
         &:focus { outline: none; }
 
+        &:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 1000px $neutral-color-3 inset !important;
+            -webkit-text-fill-color: $font-color !important;
+            
+            font-size: 19px !important;
+            font-weight: 500 !important; 
+            caret-color: $font-color !important; 
+        }
+        
         &::placeholder { color: $neutral-color-1; }
 
         &::-webkit-search-cancel-button { -webkit-appearance: none; }
@@ -57,6 +66,8 @@
             height: 46px; 
             margin-left: 14px;
             font-size: 16px;
+
+            &:-webkit-autofill { font-size: 16px; }
 
             &::placeholder { font-size: 16px; }
         }

@@ -69,7 +69,7 @@ export class ParticipantPaginationComponent implements OnInit {
         ? registrations.find(reg => reg.editionId === this.editionId)
         : registrations.reduce((prev, current) => prev.id > current.id ? prev : current);
 
-      return registration ? registration.team.name : '';
+      return (registration) ? registration.team.name : '';
     })
     .filter(teamName => teamName !== '');
   }

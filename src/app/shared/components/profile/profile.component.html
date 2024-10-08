@@ -1,0 +1,11 @@
+<div class="profile-icon">
+    <i class="fa-solid fa-user"></i>
+</div>
+<span id="name">{{ name }}</span>
+<span>{{ type }}</span>
+<div class="extras">
+    @for (extra of extras; track $index) {
+        <span>{{ extra }}</span>
+    }
+</div>
+

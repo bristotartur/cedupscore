@@ -2,6 +2,8 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { ParticipantType } from "../enums/participant-type.enum";
 import { Observable, throwError } from "rxjs";
 import { ExceptionResponse } from "../models/exception-response.model";
+import { RoleType } from "../enums/role-type.enum";
+import { Gender } from "../enums/gender.enum";
 
 export function handleError(err: HttpErrorResponse): Observable<never> {
   let exceptionResponse: ExceptionResponse = {
@@ -39,6 +41,15 @@ export function transformParticipantType(value: ParticipantType): string {
   }
 }
 
+export function transformGenderType(value: Gender) {
+  switch (value) {
+    case Gender.MALE: return 'Masculino';
+    case Gender.FEMALE: return 'Feminino';
+
+    default: return 'Indefinido';
+  }
+}
+
 export function reduceName(name: string, limit: number): string {
   if (name.length < limit) return name;
 
@@ -62,4 +73,14 @@ export function checkEmail(email: string): boolean {
   const pattern = /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
 
   return pattern.test(email);
+}
+
+export function transformRoleType(value: RoleType) {
+  switch(value) {
+    case RoleType.SUPER_ADMIN: return 'Super administrador';
+    case RoleType.EDITION_ADMIN:return 'Administrador de edição';
+    case RoleType.EVENT_ADMIN: return 'Administrador de evento';
+
+    default: return 'Cargo desconhecido';
+  }
 }

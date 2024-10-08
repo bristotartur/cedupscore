@@ -82,7 +82,8 @@ export class ParticipantsFilesManagerComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  onClick(): void {
+  comeBack(): void {
+    document.documentElement.scrollTop = 0;
     this.router.navigate(['/participants']);
   }
 
@@ -245,7 +246,6 @@ export class ParticipantsFilesManagerComponent implements OnInit {
       next: (response: HttpResponse<Blob>) => {
         const blob = response.body!;
         const contentDisposition = response.headers.get('Content-Disposition');
-        console.log(contentDisposition);
         const filename = contentDisposition?.split('filename=')[1]?.trim() || 'relatorio-de-registros.csv';
 
         const url = window.URL.createObjectURL(blob);

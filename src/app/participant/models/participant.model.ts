@@ -7,6 +7,6 @@ export interface Participant {
     name: string,
     type: ParticipantType,
     gender: Gender,
-    isActive: boolean
+    isActive: boolean,
     editionRegistrations: EditionRegistration[]
 }
