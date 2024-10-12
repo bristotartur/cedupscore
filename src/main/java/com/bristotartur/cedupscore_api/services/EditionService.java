@@ -11,10 +11,11 @@ import com.bristotartur.cedupscore_api.mappers.ScoreMapper;
 import com.bristotartur.cedupscore_api.repositories.EditionRepository;
 import com.bristotartur.cedupscore_api.repositories.TeamScoreRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,8 +46,8 @@ public class EditionService {
                 .orElseThrow(() -> new NotFoundException("Edição não encontrada."));
     }
 
-    public List<Edition> findEditionByStatus(Status status) {
-        return editionRepository.findByStatus(status);
+    public List<Edition> findEditionByStatus(Status... statuses) {
+        return editionRepository.findByStatus(Arrays.asList(statuses));
     }
 
     public List<Edition> findByStatusDifferentThen(Status... statuses) {
@@ -65,9 +66,9 @@ public class EditionService {
     }
 
     public Edition openNewEdition() {
-        var currentDate = LocalDate.now();
-        this.checkYear(currentDate.getYear());
+        this.checkEditionsForCreation();
 
+        var currentDate = LocalDateTime.now();
         var edition = editionRepository.save(Edition.builder()
                 .startDate(currentDate)
                 .closingDate(currentDate)
@@ -87,10 +88,10 @@ public class EditionService {
         var edition = this.findEditionById(id);
 
         if (!edition.getStatus().equals(Status.SCHEDULED)) {
-            throw new UnprocessableEntityException("A edição não pode ser removida.");
+            throw new UnprocessableEntityException("A edição não pode ser removida, pois já foi iniciada.");
         }
         if (!edition.getEvents().isEmpty()) {
-            throw new UnprocessableEntityException("A edição não pode ser removida.");
+            throw new UnprocessableEntityException("A edição não pode ser removida, pois já possui tarefas ou esportes relacionados.");
         }
         editionRepository.delete(edition);
     }
@@ -101,20 +102,23 @@ public class EditionService {
         Status.checkStatus(edition.getStatus(), status);
 
         if (edition.getStatus().equals(Status.SCHEDULED) && status.equals(Status.IN_PROGRESS)) {
-            edition.setStartDate(LocalDate.now());
-            edition.setClosingDate(LocalDate.now());
+            edition.setStartDate(LocalDateTime.now());
+            edition.setClosingDate(LocalDateTime.now());
         }
         if (status.equals(Status.ENDED) || status.equals(Status.CANCELED)) {
-            edition.setClosingDate(LocalDate.now());
+            edition.setClosingDate(LocalDateTime.now());
         }
         edition.setStatus(status);
         return editionRepository.save(edition);
     }
 
-    private void checkYear(int year) {
-        editionRepository.findByYear(year).ifPresent(e -> {
-            throw new ConflictException("Já existe uma edição no ano '%d'.".formatted(year));
-        });
+    private void checkEditionsForCreation() {
+        this.findByStatusDifferentThen(Status.ENDED, Status.CANCELED)
+                .stream()
+                .findFirst()
+                .ifPresent(e -> {
+                    throw new ConflictException("Para abrir uma nova edição é necessário encerrar a edição anterior.");
+                });
     }
 
 }

@@ -12,6 +12,8 @@ import org.mapstruct.Mapping;
 public interface ScoreMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "tasksWon", constant = "0")
+    @Mapping(target = "sportsWon", constant = "0")
     TeamScore toNewTeamScore(Integer score, Edition edition, Team team);
 
     @Mapping(target = "id", source = "score.id")

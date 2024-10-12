@@ -19,7 +19,8 @@ public interface EditionRepository extends JpaRepository<Edition, Long> {
     @Query("SELECT e FROM Edition e WHERE YEAR(e.startDate) = :year")
     Optional<Edition> findByYear(@Param("year") Integer year);
 
-    List<Edition> findByStatus(@Param("status") Status status);
+    @Query("SELECT e FROM Edition e WHERE e.status IN :statuses")
+    List<Edition> findByStatus(@Param("statuses") List<Status> status);
 
     @Query("SELECT e FROM Edition e WHERE e.status NOT IN :statuses")
     List<Edition> findByStatusNotIn(@Param("statuses") List<Status> statuses);

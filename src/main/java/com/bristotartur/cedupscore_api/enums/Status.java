@@ -28,10 +28,10 @@ public enum Status {
         var message = "Status inválido.";
 
         switch (originalStatus) {
-            case SCHEDULED, STOPPED -> {
-                if (newStatus.equals(ENDED) || newStatus.equals(OPEN_FOR_EDITS)) throw new UnprocessableEntityException(message);
+            case SCHEDULED -> {
+                if (!newStatus.equals(IN_PROGRESS)) throw new UnprocessableEntityException(message);
             }
-            case IN_PROGRESS -> {
+            case IN_PROGRESS, STOPPED -> {
                 if (newStatus.equals(SCHEDULED) || newStatus.equals(OPEN_FOR_EDITS)) throw new UnprocessableEntityException(message);
             }
             case ENDED -> {

@@ -4,7 +4,7 @@ import com.bristotartur.cedupscore_api.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -27,10 +27,10 @@ public class Edition {
     private Status status;
 
     @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    private LocalDate closingDate;
+    private LocalDateTime closingDate;
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
     @Builder.Default

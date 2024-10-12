@@ -260,8 +260,10 @@ public class ParticipantCSVService {
                 var team = this.getTeamById(teams, teamId);
 
                 participantValidator.validateParticipantAndTeamActive(participant, team);
-                participantValidator.validateParticipantForEdition(participant, currentEdition);
-
+                participantValidator.validateParticipantForEdition(participant, currentEdition)
+                    .ifPresent(r -> {
+                        throw new ConflictException("O participante já está inscrito na edição.");
+                    });
                 registrations.add(registrationMapper.toNewEditionRegistration(participant, currentEdition, team));
             } catch (NoSuchElementException e) {
                 var team = this.getTeamById(teams, teamId);

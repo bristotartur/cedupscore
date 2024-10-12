@@ -5,9 +5,8 @@ import com.bristotartur.cedupscore_api.domain.Participant;
 import com.bristotartur.cedupscore_api.enums.Gender;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import jakarta.persistence.criteria.JoinType;
-import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Objects;
+import org.springframework.data.jpa.domain.Specification;
 
 public final class ParticipantSpecifications {
 
@@ -79,6 +78,20 @@ public final class ParticipantSpecifications {
 
             var isActive = status.equals("active");
             return criteria.equal(root.get("isActive"), isActive);
+        };
+    }
+
+    public static Specification<Participant> hasEditionRegistrationCount(int count) {
+        return (root, query, criteria) -> {
+            if (count < 0) return null;
+        
+            var subquery = query.subquery(Long.class);
+            var subRoot = subquery.from(EditionRegistration.class);
+        
+            subquery.select(criteria.count(subRoot.get("id")));
+            subquery.where(criteria.equal(subRoot.get("participant"), root));
+        
+            return criteria.equal(subquery, (long) count);
         };
     }
 

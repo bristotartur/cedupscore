@@ -41,7 +41,7 @@ public class ParticipantValidationService {
         }
     }
 
-    public Optional<EditionRegistration> validateParticipantForEdition(Participant participant, Edition edition) throws ConflictException, UnprocessableEntityException {
+    public Optional<EditionRegistration> validateParticipantForEdition(Participant participant, Edition edition) throws UnprocessableEntityException {
         var type = participant.getType();
         var status = edition.getStatus();
 

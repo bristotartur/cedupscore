@@ -94,10 +94,11 @@ public class ParticipantService {
     public Participant saveParticipant(ParticipantRequestDto dto) {
         participantValidator.validateCpf(dto.cpf());
 
-        var existingParticipant = participantRepository.findByCpf(dto.cpf());
-        if (existingParticipant.isPresent()) {
-            throw new UnprocessableEntityException("O CPF fornecido já está em uso.");
-        }
+        participantRepository.findByCpf(dto.cpf()).stream()
+                .findFirst()
+                .ifPresent(p -> {
+                    throw new UnprocessableEntityException("O CPF fornecido já está em uso.");
+                });
         var participant = participantMapper.toNewParticipant(dto);
         participant.setName(participant.getName().toUpperCase(Locale.ROOT));
 
@@ -156,7 +157,7 @@ public class ParticipantService {
             throw new UnprocessableEntityException("O participante não pode ser removido.");
         }
         var edition = registrations.iterator().next().getEdition();
-        
+
         if (!edition.getStatus().equals(Status.SCHEDULED)) {
             throw new UnprocessableEntityException("O participante não pode ser removido.");
         }
@@ -190,11 +191,13 @@ public class ParticipantService {
         var isActive = participant.getIsActive();
 
         participantValidator.validateCpf(dto.cpf());
-        
-        var existingParticipant = participantRepository.findByCpf(dto.cpf());
-        if (existingParticipant.isPresent() && !participant.equals(existingParticipant.get())) {
-            throw new UnprocessableEntityException("O CPF fornecido já está em uso.");
-        }
+        participantRepository.findByCpf(dto.cpf()).stream()
+                .findFirst()
+                .ifPresent(p -> {
+                    if (!p.equals(participant)) {
+                        throw new UnprocessableEntityException("O CPF fornecido já está em uso.");
+                    }
+                });
         var newParticipant = participantMapper.toExistingParticipant(id, dto, isActive);
         newParticipant.setName(newParticipant.getName().toUpperCase(Locale.ROOT));
 
