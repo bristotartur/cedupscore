@@ -63,7 +63,15 @@ dialog {
                 &#cancel {
                     border-bottom-left-radius: $default-radius;
 
+                    &.fit { width: 100%; }
+
                     &:hover { background-color: $neutral-color-4; }
+
+                    &.error { 
+                        background-color: $dark-accent-color;
+                        
+                        &:hover { background-color: $accent-color; }
+                    }
                 }
                 
                 &#ok {

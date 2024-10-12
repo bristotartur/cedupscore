@@ -78,8 +78,7 @@ export class ParticipantFormComponent implements OnInit, AfterViewInit {
     this.editionService.listEditions().pipe(
       map(editions => editions[0]?.teamsScores || []),
       map(scores => scores.map(score => score.team)), 
-      catchError(error => {
-        console.error('Erro ao carregar as edições', error);
+      catchError(() => {
         return of([]);
       })
     ).subscribe(teams => {
@@ -208,8 +207,7 @@ export class ParticipantFormComponent implements OnInit, AfterViewInit {
     this.isRequesting = true;
     this.participantService.registerParticipant(request).subscribe({
       next: () => {
-        document.documentElement.scrollTop = 0;
-        this.router.navigate(['/participants']);
+        this.comeBack()
       },
       error: (err: ExceptionResponse) => {
         this.isRequesting = false;

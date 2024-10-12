@@ -1,5 +1,5 @@
 <div class="row _1">
-    <span>{{ adjustedName }}</span>
+    <span id="name">{{ adjustedName }}</span>
     <span class="dimmed">{{ type }}</span>
     <span>{{ adjuestedTeamName }}</span>
 </div>
@@ -7,7 +7,7 @@
     <span>
         Status: <span class="dimmed">{{ status }}</span>
     </span>
-    <a href="#">
+    <a [routerLink]="participantUrl" (click)="onClick()">
         Mais detalhes <i class="fa-solid fa-caret-down"></i>
     </a>
 </div>

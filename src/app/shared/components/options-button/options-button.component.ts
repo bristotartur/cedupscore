@@ -44,7 +44,9 @@ export class OptionsButtonComponent {
     this.clicksCount = 0;
   }
 
-  onClick(value?: string | number): void {
+  onClick(event?: Event, value?: string | number): void {
+    if (event) event.stopPropagation();
+
     document.documentElement.scrollTop = 0;
     this.optionSelected.emit(value);
   }

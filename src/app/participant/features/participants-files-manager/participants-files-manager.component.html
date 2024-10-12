@@ -2,6 +2,7 @@
     <button (click)="comeBack()">Voltar</button>
     <app-select-button 
         [options]="modeOptions"
+        [selectedValue]="modeOptions[0].value"
         (option)="onSwitchMode($event)"
     />
 </div>

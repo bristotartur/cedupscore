@@ -46,8 +46,8 @@ export class ParticipantListComponent implements OnInit {
 
   editionsOptions: Option[] = [{ name: 'Geral', value: '' }];
   buttonOptions: Option[] = [
-    { name: 'Inscrever participante', value: '/participants/register' },
-    { name: 'Importar/Exportar CSV', value: '/participants/files' },
+    { name: 'Inscrever participante', value: '/participants/register', isLink: true },
+    { name: 'Importar/Exportar CSV', value: '/participants/files', isLink: true },
   ];
   filter: SearchFilter = { edition: '', team: '', gender: '', type: '', status: '', order: '' };
   

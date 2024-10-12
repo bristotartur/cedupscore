@@ -11,7 +11,7 @@
                 @if (option.isLink) {
                     <a [routerLink]="option.value.toString()" (click)="onClick()">{{ option.name }}</a>
                 } @else {
-                    <span (click)="onClick(option.value)">{{ option.name }}</span>
+                    <span (click)="onClick($event, option.value)">{{ option.name }}</span>
                 }
             </li>
         }

@@ -6,7 +6,7 @@
         (option)="onEditionChange($event)"
     />
     @if (userService.currentUserSignal()) {
-        <app-options-button [options]="buttonOptions"/>
+        <app-options-button iconClass="fa-solid fa-plus" [options]="buttonOptions"/>
     }
 </div>
 <app-page-body>

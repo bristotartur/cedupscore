@@ -16,6 +16,7 @@
         <app-select-button
             [simplified]="true"
             [options]="options"
+            [selectedValue]="options[0].value"
             (option)="selectOption($event)"
         />
     </abbr>

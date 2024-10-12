@@ -1,9 +1,10 @@
+import { NgClass } from '@angular/common';
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-alert-popup',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   templateUrl: './alert-popup.component.html',
   styleUrl: './alert-popup.component.scss'
 })
@@ -14,6 +15,9 @@ export class AlertPopupComponent {
   @Input({ required: true }) title!: string;
   @Input({ required: true }) message!: string;
   @Input({ required: true }) buttonMessage!: string;
+
+  @Input() hasOnlyMessage: boolean = false;
+  @Input() customClass: string = '';
 
   @Output() accepted = new EventEmitter();
 

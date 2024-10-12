@@ -5,8 +5,16 @@
             <p>{{ message }}</p>
         </div>
         <div class="btn-container">
-            <button id="cancel" (click)="onClick()">Cancelar</button>
-            <button id="ok" (click)="onClick(true)">{{ buttonMessage }}</button>
+            <button 
+                id="cancel"  
+                [ngClass]="{ 'fit': hasOnlyMessage,'error': customClass == 'error' }" 
+                (click)="onClick()"
+            >
+                {{ (hasOnlyMessage) ? buttonMessage : 'Cancelar' }}
+            </button>
+            @if (!hasOnlyMessage) {
+                <button id="ok" (click)="onClick(true)">{{ buttonMessage }}</button>
+            }
         </div>
     </div>
 </dialog>

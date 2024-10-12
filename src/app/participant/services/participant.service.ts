@@ -81,8 +81,38 @@ export class ParticipantService {
     );
   }
 
+  deleteParticipant(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.url}/api/v1/participants/${id}`)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  registerParticipantInEdition(id: number, editionId: number, teamId: number): Observable<Participant> {
+    return this.httpClient.post<Participant>(
+      `${this.url}/api/v1/participants/${id}/register-in-edition/${editionId}?team=${teamId}`, null
+    ).pipe(
+      catchError(handleError)
+    );
+  }
+
+  unregisterParticipantInEdition(id: number, registrationId: number): Observable<void> {
+    return this.httpClient.delete<void>(
+      `${this.url}/api/v1/participants/${id}/remove-edition-registration/${registrationId}`
+    ).pipe(
+      catchError(handleError)
+    );
+  }
+
   updateParticipant(id: number, req: ParticipantRegistration): Observable<Participant> {
     return this.httpClient.put<Participant>(`${this.url}/api/v1/participants/${id}`, req)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  setStatus(id: number, status: boolean): Observable<Participant> {
+    return this.httpClient.patch<Participant>(`${this.url}/api/v1/participants/${id}/set-status?is-active=${status}`, null)
       .pipe(
         catchError(handleError)
       );
