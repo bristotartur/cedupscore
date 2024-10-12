@@ -1,0 +1,150 @@
+@import '../../../../styles/variables.scss';
+
+dialog {
+    border: none;
+
+    background-color: transparent;
+
+    position: fixed;
+    top: 44%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 15px;
+
+        width: 450px;
+        height: 100%;
+
+        border-radius: $default-radius;
+        background-color: $background-color;
+
+        color: $font-color;
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            padding: 10px;
+
+            h2 {
+                width: 82%;
+                margin: 20px 0px; 
+                text-align: center;
+            }
+
+            p {
+                margin-top: 18px;
+                padding: 0px 18px;
+
+                color: $neutral-color-2;
+                font-size: 18px;
+                text-align: justify;
+            }
+
+            button {
+                width: 90%;
+                height: 60px;
+
+                border: none;
+                border-radius: $default-radius;
+                background-color: $primary-color;
+
+                color: inherit;
+                font-size: 18px;
+                font-weight: 600;
+
+                cursor: pointer;
+
+                &.selected { background-color: $neutral-color-1; }
+
+                &:not(.selected) {
+                    &:hover { background-color: $secondary-color; }
+                }
+            }
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            padding: 10px 0px 40px 0px;
+
+            button {
+                width: 50%;
+                height: 46px;
+
+                border: none;
+                border-radius: $default-radius;
+                background-color: $neutral-color-3;
+
+                color: inherit;
+                font-size: 18px;
+                font-weight: 600;
+
+                cursor: pointer;
+
+                &.disabled {
+                    color: $neutral-color-1;
+                    cursor: default;
+                }
+
+                &:not(.disabled) {
+                    &:hover { background-color: $neutral-color-4; }
+                }
+            }
+        }
+    }
+
+    &::backdrop { background-color: rgba(0, 0, 0, 0.2); }
+}
+
+@media screen and (max-width: 688px) {
+    dialog {
+        .wrapper {
+            width: 400px;
+
+            .options-container {
+                button { height: 50px; }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    dialog {
+        .wrapper {
+            width: 86vw;
+            gap: 8px;
+
+            .options-container {
+                h2 {
+                    margin: 15px 0px;
+                    font-size: 20px;
+                }
+
+                button {
+                    width: 92%;
+                    height: 44px;
+                    font-size: 15px;
+                }
+            }
+
+            .btn-container {
+                padding: 8px 0px 34px 0px;
+
+                button { 
+                    height: 38px;
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+}

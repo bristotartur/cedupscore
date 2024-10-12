@@ -1,0 +1,22 @@
+<dialog #modal>
+    <div class="wrapper">
+        <div class="options-container">
+            <h2>{{ title }}</h2>
+            @for (option of options; track $index) {
+                <button
+                    [ngClass]="{ 'selected' : option.value == selectedValue }"
+                    (click)="onOptionSelected(option.value)"
+                >
+                    {{ option.name }}
+                </button>
+            }
+        </div>
+        <div class="btn-container">
+            <button
+                [ngClass]="{ 'disabled': !selectedValue }"
+                (click)="onClick()">
+                    {{ buttonMessage }}
+            </button>
+        </div>
+    </div>
+</dialog>
