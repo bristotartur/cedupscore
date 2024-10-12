@@ -1,7 +1,7 @@
 package com.bristotartur.cedupscore_api.controllers;
 
-import com.bristotartur.cedupscore_api.dtos.request.RequestUserDto;
-import com.bristotartur.cedupscore_api.dtos.response.ResponseUserDto;
+import com.bristotartur.cedupscore_api.dtos.request.UserRequestDto;
+import com.bristotartur.cedupscore_api.dtos.response.UserResponseDto;
 import com.bristotartur.cedupscore_api.enums.RoleType;
 import com.bristotartur.cedupscore_api.services.UserService;
 import jakarta.validation.Valid;
@@ -24,8 +24,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
-    public ResponseEntity<Page<ResponseUserDto>> listAllUsers(Pageable pageable) {
+    @PreAuthorize(
+            "hasAuthority('SCOPE_SUPER_ADMIN')"
+    )
+    public ResponseEntity<Page<UserResponseDto>> listAllUsers(Pageable pageable) {
         var users = userService.findAllUsers(pageable);
         var dtos = users.getContent()
                 .stream()
@@ -36,8 +38,10 @@ public class UserController {
     }
 
     @GetMapping(path = "/list-by")
-    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
-    public ResponseEntity<Page<ResponseUserDto>> listByRole(@RequestParam("role") RoleType role,
+    @PreAuthorize(
+            "hasAuthority('SCOPE_SUPER_ADMIN')"
+    )
+    public ResponseEntity<Page<UserResponseDto>> listByRole(@RequestParam("role") RoleType role,
                                                             Pageable pageable) {
 
         var users = userService.findUsersByRole(role, pageable);
@@ -50,28 +54,32 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ResponseUserDto> findUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
         var user = userService.findUserById(id);
         return ResponseEntity.ok().body(userService.createUserResponseDto(user));
     }
 
     @GetMapping(path = "/find-by")
-    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
-    public ResponseEntity<ResponseUserDto> findUserByEmail(@RequestParam("email") String email) {
+    @PreAuthorize(
+            "hasAuthority('SCOPE_SUPER_ADMIN')"
+    )
+    public ResponseEntity<UserResponseDto> findUserByEmail(@RequestParam("email") String email) {
         var user = userService.findUserByEmail(email);
         return ResponseEntity.ok().body(userService.createUserResponseDto(user));
     }
 
     @PostMapping(path = "/signup")
-    public ResponseEntity<ResponseUserDto> signupUser(@RequestBody @Valid RequestUserDto requestDto) {
+    public ResponseEntity<UserResponseDto> signupUser(@RequestBody @Valid UserRequestDto requestDto) {
         var user = userService.signupUser(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUserResponseDto(user));
     }
 
     @PutMapping(path = "/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_SUPER_ADMIN')")
-    public ResponseEntity<ResponseUserDto> replaceUser(@PathVariable Long id,
-                                                       @RequestBody @Valid RequestUserDto requestDto) {
+    @PreAuthorize(
+            "hasAuthority('SCOPE_SUPER_ADMIN')"
+    )
+    public ResponseEntity<UserResponseDto> replaceUser(@PathVariable Long id,
+                                                       @RequestBody @Valid UserRequestDto requestDto) {
 
         var user = userService.replaceUser(id, requestDto);
         return ResponseEntity.ok().body(userService.createUserResponseDto(user));

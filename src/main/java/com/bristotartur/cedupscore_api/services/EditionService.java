@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -46,6 +47,10 @@ public class EditionService {
 
     public List<Edition> findEditionByStatus(Status status) {
         return editionRepository.findByStatus(status);
+    }
+
+    public List<Edition> findByStatusDifferentThen(Status... statuses) {
+        return editionRepository.findByStatusNotIn(Arrays.asList(statuses));
     }
 
     public EditionResponseDto createEditionResponseDto(Edition edition) {

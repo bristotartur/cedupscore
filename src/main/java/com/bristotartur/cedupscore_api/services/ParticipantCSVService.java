@@ -148,11 +148,11 @@ public class ParticipantCSVService {
     }
 
     private Edition getCurrentEdition() {
-        return editionService.findEditionByStatus(Status.SCHEDULED)
+        return editionService.findByStatusDifferentThen(Status.ENDED, Status.CANCELED)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new UnprocessableEntityException(
-                        "No momento nenhum participante pode ser inscrito, pois não há nenhuma edição agendada."
+                        "No momento nenhum participante pode ser inscrito, pois não há nenhuma edição agendada ou em andamento."
                 ));
     }
 

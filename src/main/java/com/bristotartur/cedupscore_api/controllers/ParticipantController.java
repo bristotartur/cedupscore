@@ -46,7 +46,7 @@ public class ParticipantController {
         var participants = participantService.findAllParticipants(name, editionId, teamId, gender, participantType, status, order, pageable);
         var dtos = participants.getContent()
                 .stream()
-                .map(participantService::createParticipantResponseDto)
+                .map(participant -> participantService.createParticipantResponseDto(participant, false))
                 .toList();
 
         return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
@@ -58,7 +58,7 @@ public class ParticipantController {
         var participants = participantService.findParticipantsFromEvent(eventId, pageable);
         var dtos = participants.getContent()
                 .stream()
-                .map(participantService::createParticipantResponseDto)
+                .map(participant -> participantService.createParticipantResponseDto(participant, false))
                 .toList();
 
         return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
@@ -71,7 +71,7 @@ public class ParticipantController {
         var participants = participantService.findParticipantsFromEventByTeam(teamId, eventId, pageable);
         var dtos = participants.getContent()
                 .stream()
-                .map(participantService::createParticipantResponseDto)
+                .map(participant -> participantService.createParticipantResponseDto(participant, false))
                 .toList();
 
         return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
@@ -80,13 +80,22 @@ public class ParticipantController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<ParticipantResponseDto> findParticipantById(@PathVariable Long id) {
         var participant = participantService.findParticipantById(id);
-        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant));
+        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant, false));
+    }
+    
+    @GetMapping(path = "/{id}/for-update")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+    )
+    public ResponseEntity<ParticipantResponseDto> findParticipantForUpdate(@PathVariable Long id) {
+        var participant = participantService.findParticipantById(id);
+        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant, true));
     }
 
     @GetMapping(path = "/find")
     public ResponseEntity<ParticipantResponseDto> findParticipantByCpf(@RequestParam("cpf") String cpf) {
         var participant = participantService.findParticipantByCpf(cpf);
-        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant));
+        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant, false));
     }
 
     @PostMapping
@@ -96,7 +105,7 @@ public class ParticipantController {
     public ResponseEntity<ParticipantResponseDto> saveParticipant(@RequestBody @Valid ParticipantRequestDto requestDto) {
         var participant = participantService.saveParticipant(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(participantService.createParticipantResponseDto(participant));
+                .body(participantService.createParticipantResponseDto(participant, false));
     }
 
     @PostMapping(path = "upload/registration-csv", consumes = {"multipart/form-data"})
@@ -147,7 +156,7 @@ public class ParticipantController {
         var registeredParticipant = participantService.registerParticipantInEdition(participant, editionId, teamId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(participantService.createParticipantResponseDto(registeredParticipant));
+                .body(participantService.createParticipantResponseDto(registeredParticipant, false));
     }
 
     @PostMapping(path = "/{id}/register-in-event/{eventId}")
@@ -161,7 +170,7 @@ public class ParticipantController {
         var registeredParticipant = participantService.registerParticipantInEvent(participant, eventId, teamId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(participantService.createParticipantResponseDto(registeredParticipant));
+                .body(participantService.createParticipantResponseDto(registeredParticipant, false));
     }
 
     @DeleteMapping(path = "/{id}")
@@ -198,17 +207,17 @@ public class ParticipantController {
     public ResponseEntity<ParticipantResponseDto> replaceParticipant(@PathVariable Long id,
                                                                      @RequestBody @Valid ParticipantRequestDto requestDto) {
         var participant = participantService.replaceParticipant(id, requestDto);
-        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant));
+        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant, false));
     }
 
-    @PatchMapping(path = "/{id}/set")
+    @PatchMapping(path = "/{id}/set-status")
     @PreAuthorize(
             "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
     )
     public ResponseEntity<ParticipantResponseDto> setParticipantActive(@PathVariable Long id,
-                                                                       @RequestParam("is-active") Boolean isActive) {
-        var participant = participantService.setParticipantActive(id, isActive);
-        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant));
+                                                                       @RequestParam("is-active") Boolean status) {
+        var participant = participantService.setParticipantStatus(id, status);
+        return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant, false));
     }
 
 }

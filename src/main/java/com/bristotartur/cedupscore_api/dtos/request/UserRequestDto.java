@@ -4,7 +4,7 @@ import com.bristotartur.cedupscore_api.enums.RoleType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record RequestUserDto(
+public record UserRequestDto(
         @NotBlank String name,
         @NotBlank String email,
         @NotBlank String password,

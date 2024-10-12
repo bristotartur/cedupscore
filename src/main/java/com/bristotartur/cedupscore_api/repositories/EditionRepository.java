@@ -2,7 +2,6 @@ package com.bristotartur.cedupscore_api.repositories;
 
 import com.bristotartur.cedupscore_api.domain.Edition;
 import com.bristotartur.cedupscore_api.enums.Status;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,5 +20,8 @@ public interface EditionRepository extends JpaRepository<Edition, Long> {
     Optional<Edition> findByYear(@Param("year") Integer year);
 
     List<Edition> findByStatus(@Param("status") Status status);
+
+    @Query("SELECT e FROM Edition e WHERE e.status NOT IN :statuses")
+    List<Edition> findByStatusNotIn(@Param("statuses") List<Status> statuses);
 
 }

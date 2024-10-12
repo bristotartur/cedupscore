@@ -81,23 +81,27 @@ public class ParticipantService {
                 .orElseThrow(() -> new NotFoundException("Participante não encontrado."));
     }
 
-    public ParticipantResponseDto createParticipantResponseDto(Participant participant) {
+    public ParticipantResponseDto createParticipantResponseDto(Participant participant, Boolean hasCpf) {
         var registrations = participant.getEditionRegistrations()
                 .stream()
                 .map(registration -> {
                     var teamDto = teamService.createTeamResponseDto(registration.getTeam());
                     return registrationMapper.toEditionRegistrationResponseDto(registration, teamDto);
                 }).toList();
-        return participantMapper.toParticipantResponseDto(participant, registrations);
+        return participantMapper.toParticipantResponseDto(participant, registrations, hasCpf);
     }
 
     public Participant saveParticipant(ParticipantRequestDto dto) {
         participantValidator.validateCpf(dto.cpf());
 
+        var existingParticipant = participantRepository.findByCpf(dto.cpf());
+        if (existingParticipant.isPresent()) {
+            throw new UnprocessableEntityException("O CPF fornecido já está em uso.");
+        }
         var participant = participantMapper.toNewParticipant(dto);
         participant.setName(participant.getName().toUpperCase(Locale.ROOT));
 
-        var currentEdition = editionService.findEditionByStatus(Status.SCHEDULED)
+        var currentEdition = editionService.findByStatusDifferentThen(Status.ENDED, Status.CANCELED)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new UnprocessableEntityException(
@@ -112,11 +116,17 @@ public class ParticipantService {
         var team = teamService.findTeamById(teamId);
 
         participantValidator.validateParticipantAndTeamActive(participant, team);
-        participantValidator.validateParticipantForEdition(participant, edition);
+        var registrationOptional = participantValidator.validateParticipantForEdition(participant, edition);
 
-        var registration = editionRegistrationRepository
-                .save(registrationMapper.toNewEditionRegistration(participant, edition, team));
+        if (registrationOptional.isPresent()) {
+            var existingRegistration = registrationOptional.get();
 
+            participant.getEditionRegistrations().remove(existingRegistration);
+            editionRegistrationRepository.delete(existingRegistration);
+        }
+        var registration = editionRegistrationRepository.save(
+                registrationMapper.toNewEditionRegistration(participant, edition, team)
+        );
         participant.getEditionRegistrations().add(registration);
         return participant;
     }
@@ -140,8 +150,14 @@ public class ParticipantService {
 
     public void deleteParticipant(Long id) {
         var participant = this.findParticipantById(id);
+        var registrations = participant.getEditionRegistrations();
 
-        if (!participant.getEditionRegistrations().isEmpty()) {
+        if (registrations.size() >= 2) {
+            throw new UnprocessableEntityException("O participante não pode ser removido.");
+        }
+        var edition = registrations.iterator().next().getEdition();
+        
+        if (!edition.getStatus().equals(Status.SCHEDULED)) {
             throw new UnprocessableEntityException("O participante não pode ser removido.");
         }
         participantRepository.delete(participant);
@@ -174,20 +190,24 @@ public class ParticipantService {
         var isActive = participant.getIsActive();
 
         participantValidator.validateCpf(dto.cpf());
-
+        
+        var existingParticipant = participantRepository.findByCpf(dto.cpf());
+        if (existingParticipant.isPresent() && !participant.equals(existingParticipant.get())) {
+            throw new UnprocessableEntityException("O CPF fornecido já está em uso.");
+        }
         var newParticipant = participantMapper.toExistingParticipant(id, dto, isActive);
         newParticipant.setName(newParticipant.getName().toUpperCase(Locale.ROOT));
 
         return participantRepository.save(newParticipant);
     }
 
-    public Participant setParticipantActive(Long id, Boolean isActive) {
+    public Participant setParticipantStatus(Long id, Boolean status) {
         var participant = this.findParticipantById(id);
 
-        if (isActive == participant.getIsActive()) return participant;
+        if (status == participant.getIsActive()) return participant;
 
         this.participantValidator.validateParticipantToChangeStatus(participant);
-        participant.setIsActive(isActive);
+        participant.setIsActive(status);
 
         return participantRepository.save(participant);
     }

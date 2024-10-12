@@ -1,8 +1,8 @@
 package com.bristotartur.cedupscore_api.services;
 
 import com.bristotartur.cedupscore_api.domain.User;
-import com.bristotartur.cedupscore_api.dtos.request.RequestUserDto;
-import com.bristotartur.cedupscore_api.dtos.response.ResponseUserDto;
+import com.bristotartur.cedupscore_api.dtos.request.UserRequestDto;
+import com.bristotartur.cedupscore_api.dtos.response.UserResponseDto;
 import com.bristotartur.cedupscore_api.enums.Patterns;
 import com.bristotartur.cedupscore_api.enums.RoleType;
 import com.bristotartur.cedupscore_api.exceptions.BadRequestException;
@@ -46,11 +46,11 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
 
-    public ResponseUserDto createUserResponseDto(User user) {
+    public UserResponseDto createUserResponseDto(User user) {
         return userMapper.toUserResponseDto(user);
     }
 
-    public User signupUser(RequestUserDto dto) {
+    public User signupUser(UserRequestDto dto) {
         this.validateEmail(dto.email());
 
         var isEmailInUse = userRepository.findByEmail(dto.email()).isPresent();
@@ -59,11 +59,10 @@ public class UserService {
             throw new ConflictException("Email já está em uso.");
         }
         var password = passwordEncoder.encode(dto.password());
-
         return userRepository.save(userMapper.toNewUser(dto, password));
     }
 
-    public User replaceUser(Long id, RequestUserDto dto) {
+    public User replaceUser(Long id, UserRequestDto dto) {
         this.findUserById(id);
         this.validateEmail(dto.email());
 
@@ -73,7 +72,6 @@ public class UserService {
             throw new ConflictException("Email já está em uso.");
         }
         var password = passwordEncoder.encode(dto.password());
-
         return userRepository.save(userMapper.toExistingUser(id, dto, password));
     }
 

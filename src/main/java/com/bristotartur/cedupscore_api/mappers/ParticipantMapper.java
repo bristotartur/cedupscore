@@ -29,10 +29,11 @@ public interface ParticipantMapper {
 
     Participant toExistingParticipant(Long id, ParticipantRequestDto dto, Boolean isActive);
 
-    default ParticipantResponseDto toParticipantResponseDto(Participant participant, List<EditionRegistrationResponseDto> editionRegistrations) {
+    default ParticipantResponseDto toParticipantResponseDto(Participant participant, List<EditionRegistrationResponseDto> editionRegistrations, Boolean hasCpf) {
         return ParticipantResponseDto.builder()
                 .id(participant.getId())
                 .name(participant.getName())
+                .cpf((hasCpf) ? participant.getCpf() : "")
                 .type(participant.getType())
                 .gender(participant.getGender())
                 .isActive(participant.getIsActive())

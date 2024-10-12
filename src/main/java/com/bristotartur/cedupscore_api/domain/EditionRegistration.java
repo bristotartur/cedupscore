@@ -2,7 +2,9 @@ package com.bristotartur.cedupscore_api.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +32,10 @@ public class EditionRegistration {
     @JoinColumn(name = "edition_id", nullable = false)
     private Edition edition;
 
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
     @Override
     public String toString() {
         return "EditionRegistration{" +
@@ -37,6 +43,7 @@ public class EditionRegistration {
                 ", participant=" + participant +
                 ", team=" + team +
                 ", edition=" + edition +
+                ", createdAt=" + createdAt +
                 '}';
     }
 

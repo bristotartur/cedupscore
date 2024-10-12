@@ -1,6 +1,6 @@
 package com.bristotartur.cedupscore_api.infra.security;
 
-import com.bristotartur.cedupscore_api.dtos.request.RequestUserDto;
+import com.bristotartur.cedupscore_api.dtos.request.UserRequestDto;
 import com.bristotartur.cedupscore_api.enums.RoleType;
 import com.bristotartur.cedupscore_api.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class RootUserConfig implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         userService.signupUser(
-                new RequestUserDto("root", "root@gmail.com", "1234", RoleType.SUPER_ADMIN)
+                new UserRequestDto("root", "root@gmail.com", "1234", RoleType.SUPER_ADMIN)
         );
     }
 

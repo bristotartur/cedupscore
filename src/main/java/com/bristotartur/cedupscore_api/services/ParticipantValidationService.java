@@ -10,6 +10,8 @@ import com.bristotartur.cedupscore_api.exceptions.ConflictException;
 import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class ParticipantValidationService {
 
@@ -17,7 +19,7 @@ public class ParticipantValidationService {
     private static final String PARTICIPANT_INACTIVE_MSG = "O participante está inativo.";
     private static final String TEAM_INACTIVE_MSG = "A equipe está inativa.";
     private static final String EDITION_REGISTRATION_NOT_ALLOWED_MSG = "O participante não pode ser inscrito na edição informada.";
-    private static final String ALREADY_REGISTERED_IN_EDITION_MSG = "O participante já está inscrito na edição informada.";
+    private static final String STUDENT_REGISTRATION_NOT_ALLOWED_MSG = "Alunos só podem ser inscritos em edições agendadas.";
     private static final String NOT_REGISTERED_IN_EDITION_MSG = "O participante não está inscrito na edição do evento.";
     private static final String TEAM_MISMATCH_MSG = "O participante não está inscrito na equipe informada.";
     private static final String EVENT_REGISTRATION_NOT_ALLOWED_MSG = "O participante não pode ser inscrito no evento informado.";
@@ -39,17 +41,20 @@ public class ParticipantValidationService {
         }
     }
 
-    public void validateParticipantForEdition(Participant participant, Edition edition) throws ConflictException, UnprocessableEntityException {
-        if (!edition.getStatus().equals(Status.SCHEDULED)) {
+    public Optional<EditionRegistration> validateParticipantForEdition(Participant participant, Edition edition) throws ConflictException, UnprocessableEntityException {
+        var type = participant.getType();
+        var status = edition.getStatus();
+
+        if (status.equals(Status.ENDED) || status.equals(Status.CANCELED)) {
             throw new UnprocessableEntityException(EDITION_REGISTRATION_NOT_ALLOWED_MSG);
         }
-        participant.getEditionRegistrations()
+        if (type.equals(ParticipantType.STUDENT) && !status.equals(Status.SCHEDULED)) {
+            throw new UnprocessableEntityException(STUDENT_REGISTRATION_NOT_ALLOWED_MSG);
+        }
+        return participant.getEditionRegistrations()
                 .stream()
                 .filter(registration -> registration.getEdition().equals(edition))
-                .findFirst()
-                .ifPresent(e -> {
-                    throw new ConflictException(ALREADY_REGISTERED_IN_EDITION_MSG);
-                });
+                .findFirst();
     }
 
     public void validateParticipantTeamForEvent(Participant participant, Team team, Event event) throws ConflictException, UnprocessableEntityException {
@@ -85,16 +90,26 @@ public class ParticipantValidationService {
                 });
     }
 
-    public void validateEditionRegistrationToRemove(Participant participant, EditionRegistration registration) throws UnprocessableEntityException {
+    public void validateEditionRegistrationToRemove(Participant participant, EditionRegistration registration) throws ConflictException, UnprocessableEntityException {
         participant.getEditionRegistrations()
                 .stream()
                 .filter(r -> r.equals(registration))
                 .findFirst()
                 .orElseThrow(() -> new ConflictException(EDITION_MISMATCH_MSG));
 
-        var status = registration.getEdition().getStatus();
+        var edition = registration.getEdition();
+        var status = edition.getStatus();
 
-        if (!status.equals(Status.SCHEDULED)) throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION);
+        if (status.equals(Status.ENDED) || status.equals(Status.CANCELED)) {
+            throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION);
+        }
+        participant.getEventRegistrations()
+                .stream()
+                .filter(r -> r.getEvent().getEdition().equals(edition))
+                .findFirst()
+                .ifPresent(r -> {
+                    throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION);
+                });
     }
 
     public void validateEventRegistrationToRemove(Participant participant, EventRegistration registration) throws ConflictException, UnprocessableEntityException {

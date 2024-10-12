@@ -16,6 +16,8 @@ public class ParticipantResponseDto extends RepresentationModel<ParticipantRespo
 
     public final String name;
 
+    public final String cpf;
+
     public final ParticipantType type;
 
     public final Gender gender;

@@ -1,4 +1,6 @@
 package com.bristotartur.cedupscore_api.dtos.response;
 
-public record EditionRegistrationResponseDto(Long id, Long editionId, TeamResponseDto team) {
+import java.time.LocalDateTime;
+
+public record EditionRegistrationResponseDto(Long id, Long editionId, LocalDateTime createdAt, TeamResponseDto team) {
 }
