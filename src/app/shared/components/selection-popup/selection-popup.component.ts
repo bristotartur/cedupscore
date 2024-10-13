@@ -59,6 +59,7 @@ export class SelectionPopupComponent {
     this.modal.nativeElement.close();
     this.isModalOpen = false;
     this.clicksCount = 0;
+    this.selectedValue = '';
   }
 
 }

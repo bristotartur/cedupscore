@@ -25,6 +25,9 @@ export class SelectButtonComponent implements OnInit, OnChanges {
   @Output() option = new EventEmitter<string | number>();
 
   ngOnInit(): void {
+    if (!this.selectName) {
+      this.selectName = this.options[0].name;
+    }
     if (!this.selectedValue) {
       this.selectedValue = '';
     }

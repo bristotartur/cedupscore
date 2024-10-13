@@ -22,6 +22,16 @@ button {
         color: $font-color;
         font-size: 24px;
     }
+
+    &.disabled {
+        cursor: default;
+
+        i { color: $neutral-color-1; }
+    }
+
+    &:not(.disabled) {
+        &:hover { background-color: $neutral-color-4; }
+    }
 }
 
 .list-container {
@@ -73,6 +83,13 @@ ul {
 }
 
 @media screen and (max-width: 480px) {
+    button {
+        height: 32px;
+        width: 32px;
+
+        i { font-size: 20px; }
+    }
+
     .list-container { width: 100px; }
 
     ul { 

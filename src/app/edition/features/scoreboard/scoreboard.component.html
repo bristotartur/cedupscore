@@ -1,9 +1,18 @@
 <div class="buttons-container">
     <app-select-button
         [options]="options"
-        [selectedValue]="(options.length > 0)? options[0].value : 1"
+        [name]="(options.length > 0)? options[0].name : ''"
+        [selectedValue]="(options.length > 0)? options[0].value : 0"
         (option)="selectOption($event)"
     />
+    @if (userService.currentUserSignal()) {
+        <app-options-button 
+            iconClass="fa-solid fa-gear"
+            [options]="buttonOptions"
+            [disabled]="selectedOption !== 0"
+            (optionSelected)="onButtonOptionSelected($event)"
+        />
+    }
 </div>
 <app-page-body>
     <app-leaderboard 
@@ -13,3 +22,25 @@
         [data]="(teamsData$ | async)!"
     />
 </app-page-body>
+<app-alert-popup 
+    #alertPopup
+    [title]="popupDetails.title"
+    [message]="popupDetails.message"
+    [buttonMessage]="popupDetails.buttonMessage"
+    (accepted)="popupDetails.action()"
+/>
+<app-alert-popup 
+    #errorPopup
+    title="ERRO!"
+    [message]="errorMessage"
+    buttonMessage="Ok"
+    [hasOnlyMessage]="true"
+    customClass="error"
+/>
+<app-selection-popup
+    #statusPopup
+    title="Selecione o status da edição"
+    buttonMessage="Atualizar"
+    [options]="statusOptions"
+    (optionSelected)="updateEditionStatus($event)"
+/>

@@ -19,6 +19,7 @@ export class OptionsButtonComponent {
 
   @Input({ required: true }) options!: Option[];
   @Input({ required: true }) iconClass!: string;
+  @Input('disabled') isDisabled: boolean = false; 
 
   @Output() optionSelected = new EventEmitter<string | number>();
 
@@ -40,15 +41,20 @@ export class OptionsButtonComponent {
   }
 
   showOptions(): void {
+    if (this.isDisabled) return;
+
     this.isOptionsVisible = !this.isOptionsVisible;
     this.clicksCount = 0;
   }
 
   onClick(event?: Event, value?: string | number): void {
     if (event) event.stopPropagation();
+    if (this.isDisabled) return;
 
-    document.documentElement.scrollTop = 0;
+    this.isOptionsVisible = false;
     this.optionSelected.emit(value);
+    
+    document.documentElement.scrollTop = 0;
   }
 
 }

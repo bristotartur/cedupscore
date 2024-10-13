@@ -108,7 +108,8 @@ dialog {
     dialog {
         .wrapper {
             width: 80vw;
-            height: 346px;
+            min-height: 300px;
+            max-height: 450px;
 
             .text-container {
                 h2 { font-size: 22px; }

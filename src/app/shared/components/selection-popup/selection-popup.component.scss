@@ -17,7 +17,7 @@ dialog {
         gap: 15px;
 
         width: 450px;
-        height: 100%;
+        min-height: 350px;
 
         border-radius: $default-radius;
         background-color: $background-color;

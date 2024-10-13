@@ -4,6 +4,7 @@ import { Observable, throwError } from "rxjs";
 import { ExceptionResponse } from "../models/exception-response.model";
 import { RoleType } from "../enums/role-type.enum";
 import { Gender } from "../enums/gender.enum";
+import { Status } from "../enums/status.enum";
 
 export function handleError(err: HttpErrorResponse): Observable<never> {
   let exceptionResponse: ExceptionResponse = {
@@ -23,7 +24,7 @@ export function handleError(err: HttpErrorResponse): Observable<never> {
   return throwError(() => exceptionResponse);
 }
 
-export function transformParticipantStatus(status: boolean | 'Ativo' | 'Inativo') {
+export function transformParticipantStatus(status: boolean | 'Ativo' | 'Inativo'): string {
   return (typeof(status) !== 'boolean') 
     ? status 
     : (status) ? 'Ativo' : 'Inativo';
@@ -41,7 +42,7 @@ export function transformParticipantType(value: ParticipantType): string {
   }
 }
 
-export function transformGenderType(value: Gender) {
+export function transformGenderType(value: Gender): string {
   switch (value) {
     case Gender.MALE: return 'Masculino';
     case Gender.FEMALE: return 'Feminino';
@@ -75,12 +76,38 @@ export function checkEmail(email: string): boolean {
   return pattern.test(email);
 }
 
-export function transformRoleType(value: RoleType) {
+export function transformRoleType(value: RoleType): string {
   switch(value) {
     case RoleType.SUPER_ADMIN: return 'Super administrador';
     case RoleType.EDITION_ADMIN:return 'Administrador de edição';
     case RoleType.EVENT_ADMIN: return 'Administrador de evento';
 
     default: return 'Cargo desconhecido';
+  }
+}
+
+export function transformStatus(status: Status, sufix: 'a' | 'o'): string {
+  switch(status) {
+    case Status.SCHEDULED: return `Agendad${sufix}`;
+    case Status.IN_PROGRESS: return 'Em andamento';
+    case Status.STOPPED: return `Parad${sufix}`;
+    case Status.CANCELED: return `Cancelad${sufix}`;
+    case Status.ENDED: return `Encerrad${sufix}`;
+    case Status.OPEN_FOR_EDITS: return `Abert${sufix} para edições`;
+
+    default: return 'Status desconhecido';
+  }
+}
+
+export function getPossibleStatuses(status: Status): Status[] {
+  switch(status) {
+    case Status.SCHEDULED: return [Status.IN_PROGRESS];
+    case Status.IN_PROGRESS: return [Status.STOPPED, Status.ENDED, Status.CANCELED];
+    case Status.STOPPED: return [Status.IN_PROGRESS, Status.ENDED, Status.CANCELED];
+    case Status.CANCELED: return [];
+    case Status.ENDED: return [Status.OPEN_FOR_EDITS];
+    case Status.OPEN_FOR_EDITS: return [Status.ENDED];
+
+    default: return [];
   }
 }

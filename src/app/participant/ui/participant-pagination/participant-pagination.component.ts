@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { Participant } from '../../models/participant.model';
 import { ParticipantCardComponent } from '../participant-card/participant-card.component'
 import { NgClass } from '@angular/common';
+import { EditionRegistration } from '../../../edition/models/edition-registration.model';
 
 @Component({
   selector: 'app-participant-pagination',
@@ -26,16 +27,16 @@ export class ParticipantPaginationComponent implements OnInit {
   teams: string[] = [];
 
   ngOnInit(): void {
-    this.pages = this.setPages();
-    this.teams = this.setTeams();
+    this.setPages();
+    this.setTeams();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['totalPages'] || changes['currentPage']) {
-      this.pages = this.setPages();
+      this.setPages();
     }
     if (changes['content'] || changes['editionId']) {
-      this.teams = this.setTeams();
+      this.setTeams();
     }
   }
 
@@ -45,33 +46,42 @@ export class ParticipantPaginationComponent implements OnInit {
     page = (page < 1) ? 1 : (page > total) ? total : page;
 
     this.currentPage = page;
-    this.pages = this.setPages();
+    this.setPages();
 
     this.pageChange.emit(this.currentPage);
   }
 
-  setPages(): number[] {
+  private setPages(): void {
     const total = this.totalPages;
   
     if (total <= 5) {
-      return Array.from({ length: total }, (_, i) => i + 1);
+      this.pages = Array.from({ length: total }, (_, i) => i + 1);
     }
     const startPage = Math.max(1, Math.min(this.currentPage - 2, total - 4));
     const endPage = Math.min(total, startPage + 4);
   
-    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+    this.pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   }
 
-  setTeams(): string[] {
-    return this.content.map(participant => {
+  private setTeams(): void {
+    this.teams = this.content.map(participant => {
       const registrations = participant.editionRegistrations;
-      let registration = (this.editionId) 
+      
+      const registration = (this.editionId) 
         ? registrations.find(reg => reg.editionId === this.editionId)
-        : registrations.reduce((prev, current) => prev.id > current.id ? prev : current);
-
+        : ((registrations.length > 0)
+            ? this.getLatestRegistration(registrations)
+            : null
+          );
       return (registration) ? registration.team.name : '';
     })
     .filter(teamName => teamName !== '');
+  }
+
+  private getLatestRegistration(registrations: EditionRegistration[]): EditionRegistration {
+    return registrations.sort((prev, current) => {
+      return new Date(current.createdAt).getTime() - new Date(prev.createdAt).getTime()
+    })[0];
   }
 
 }

@@ -10,16 +10,16 @@ import { RouterLink } from '@angular/router';
   templateUrl: './participant-card.component.html',
   styleUrl: './participant-card.component.scss'
 })
-export class ParticipantCardComponent implements OnInit{
+export class ParticipantCardComponent implements OnInit {
 
   @Input({ required: true }) id!: number;
   @Input({ required: true }) name!: string;
   @Input({ required: true }) team!: string;
 
-  @Input({ required: true, transform: transformParticipantStatus }) 
+  @Input({ required: true, transform: transformParticipantStatus })
   status!: string;
 
-  @Input({ required: true, transform: transformParticipantType }) 
+  @Input({ required: true, transform: transformParticipantType })
   type!: ParticipantType;
 
   screenWidth: number = 0;
@@ -43,7 +43,7 @@ export class ParticipantCardComponent implements OnInit{
     this.screenWidth = window.innerWidth;
     this.adjustName();
 
-    this.adjuestedTeamName = (this.screenWidth <= 586) 
+    this.adjuestedTeamName = (this.screenWidth <= 586)
       ? this.team.split(/[\s-]/)[0]
       : this.team;
   }
@@ -51,7 +51,7 @@ export class ParticipantCardComponent implements OnInit{
   private adjustName() {
     if (
       (this.screenWidth > 892 && this.screenWidth <= 982) ||
-      (this.screenWidth > 602 && this.screenWidth <= 768) 
+      (this.screenWidth > 602 && this.screenWidth <= 768)
     ) {
       this.adjustedName = reduceName(this.name, 25);
       return;

@@ -1,4 +1,4 @@
-<button (click)="showOptions()">
+<button  [ngClass]="{ 'disabled': isDisabled }" (click)="showOptions()">
     <i [class]="iconClass"></i>
 </button>
 <div 
