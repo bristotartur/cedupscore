@@ -10,7 +10,9 @@ public enum ParticipantType {
     TEACHER("Professor"),
     PARENT("Pai"),
     STUDENT_PARENT("Pai e aluno"),
-    TEACHER_PARENT("Pai e professor");
+    TEACHER_PARENT("Pai e professor"),
+    TEACHER_STUDENT("Professor e aluno"),
+    ALL("Todos");
 
     public final String value;
 
@@ -25,24 +27,15 @@ public enum ParticipantType {
     public static boolean compareTypes(ParticipantType type, ParticipantType comparedType) {
         if (type.equals(comparedType)) return true;
 
-        switch (type) {
-            case STUDENT -> {
-                if (comparedType.equals(STUDENT_PARENT)) return true;
-            }
-            case TEACHER -> {
-                if (comparedType.equals(TEACHER_PARENT)) return true;
-            }
-            case PARENT -> {
-                if (comparedType.equals(STUDENT_PARENT) || comparedType.equals(TEACHER_PARENT)) return true;
-            }
-            case STUDENT_PARENT -> {
-                if (comparedType.equals(STUDENT) || comparedType.equals(PARENT)) return true;
-            }
-            case TEACHER_PARENT -> {
-                if (comparedType.equals(TEACHER) || comparedType.equals(PARENT)) return true;
-            }
-        }
-        return false;
+        return switch (type) {
+            case STUDENT -> comparedType.equals(ParticipantType.STUDENT_PARENT) || comparedType.equals(ParticipantType.TEACHER_STUDENT);
+            case TEACHER -> comparedType.equals(ParticipantType.TEACHER_PARENT) || comparedType.equals(ParticipantType.TEACHER_STUDENT);
+            case PARENT -> comparedType.equals(ParticipantType.STUDENT_PARENT) || comparedType.equals(ParticipantType.TEACHER_PARENT);
+            case STUDENT_PARENT -> comparedType.equals(ParticipantType.STUDENT) || comparedType.equals(ParticipantType.PARENT);
+            case TEACHER_PARENT -> comparedType.equals(ParticipantType.TEACHER) || comparedType.equals(ParticipantType.PARENT);
+            case TEACHER_STUDENT -> comparedType.equals(ParticipantType.TEACHER) || comparedType.equals(ParticipantType.STUDENT);
+            case ALL -> true;
+        };
     }
 
 }
