@@ -1,0 +1,23 @@
+<div class="card-header">
+    <span id="name">{{ event.name }}</span>
+    <span id="status">{{ status }}</span>
+    <span id="date">{{ date }}</span>
+</div>
+<div class="card-body">
+    <table>
+        @for (team of teamsPostions; track $index) {
+            <tr>
+                <td id="position">
+                    <div [ngClass]="['position', '_' + team.position]"></div>
+                </td>
+                <td id="name">{{ team.name }}</td>
+                <td id="score">{{ team.score }}pts</td>
+            </tr>
+        }
+    </table>
+    <div>
+        <a [routerLink]="eventUrl">
+            {{ linkMessage }} <i class="fa-solid fa-caret-down"></i>
+        </a>
+    </div>
+</div>

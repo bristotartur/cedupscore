@@ -5,6 +5,9 @@ import { ExceptionResponse } from "../models/exception-response.model";
 import { RoleType } from "../enums/role-type.enum";
 import { Gender } from "../enums/gender.enum";
 import { Status } from "../enums/status.enum";
+import { TeamScore } from "../../edition/models/team-score.model";
+import { TeamPosition } from "../models/team-postion.model";
+import { EventScore } from "../models/event-score.model";
 
 export function handleError(err: HttpErrorResponse): Observable<never> {
   let exceptionResponse: ExceptionResponse = {
@@ -93,7 +96,7 @@ export function transformStatus(status: Status, sufix: 'a' | 'o'): string {
     case Status.STOPPED: return `Parad${sufix}`;
     case Status.CANCELED: return `Cancelad${sufix}`;
     case Status.ENDED: return `Encerrad${sufix}`;
-    case Status.OPEN_FOR_EDITS: return `Abert${sufix} para edições`;
+    case Status.OPEN_FOR_EDITS: return `Em edição`;
 
     default: return 'Status desconhecido';
   }
@@ -110,4 +113,46 @@ export function getPossibleStatuses(status: Status): Status[] {
 
     default: return [];
   }
+}
+
+export function transformDate(date: Date, type: 'full' | 'reduced'): string {
+  const currentYear = new Date().getFullYear();
+  const options: Intl.DateTimeFormatOptions = { day: '2-digit' };
+
+  if (date.getFullYear() !== currentYear) {
+    options.year = 'numeric';
+  }
+  switch (type) {
+    case 'full': {
+      options.month = 'short'
+      return date.toLocaleDateString('pt-BR', options);
+    }
+    case 'reduced': {
+      options.month = '2-digit'
+      return date.toLocaleDateString('pt-BR', options);
+    }
+  }
+}
+
+export function calculateTeamsPositions(teamsScores: TeamScore[] | EventScore[]): TeamPosition[] {
+  const sortedByScore = [...teamsScores].sort((a, b) => b.score - a.score);
+
+  let currentPos = 1;
+  let previousScore = teamsScores[0]?.score;
+  let tiedTeamsCount = 0;
+
+  return sortedByScore.map((score, index) => {
+    if (score.score === previousScore && index !== 0) {
+      tiedTeamsCount++;
+    } else if (index !== 0) {
+      currentPos += tiedTeamsCount + 1;
+      tiedTeamsCount = 0;
+    }
+    previousScore = score.score;
+
+    if ((score as TeamScore).sportsWon !== undefined) { 
+      return { position: currentPos, name: score.team.name };
+    }
+    return { position: currentPos, name: score.team.name, score: score.score };
+  });
 }
