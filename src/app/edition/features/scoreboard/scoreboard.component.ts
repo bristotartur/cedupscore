@@ -8,14 +8,13 @@ import { TeamScoreboard } from '../../models/team-scoreboard.model';
 import { SelectButtonComponent } from '../../../shared/components/select-button/select-button.component';
 import { BehaviorSubject, filter, from, map, Observable, switchMap, tap, toArray } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { TeamScore } from '../../models/team-score.model';
 import { Option } from '../../../shared/models/option.model';
 import { UserService } from '../../../user/services/user.service';
 import { OptionsButtonComponent } from '../../../shared/components/options-button/options-button.component';
 import { Status } from '../../../shared/enums/status.enum';
 import { ExceptionResponse } from '../../../shared/models/exception-response.model';
 import { SelectionPopupComponent } from '../../../shared/components/selection-popup/selection-popup.component';
-import { getPossibleStatuses, transformStatus } from '../../../shared/utils/common-utils';
+import { calculateTeamsPositions, getPossibleStatuses, transformStatus } from '../../../shared/utils/common-utils';
 import { AlertPopupComponent } from '../../../shared/components/alert-popup/alert-popup.component';
 
 const openPopupMessage = 'Ao abrir uma nova edição, esta passará a ser a edição atual do sistema, e todas as novas inscrições e eventos adicionados serão relacionados a ela. Deseja continuar?';
@@ -101,30 +100,11 @@ export class ScoreboardComponent implements OnInit {
   getTeamsPositions(edition: Edition): Observable<TeamPosition[]> {
     return from(edition.teamsScores).pipe(
       toArray(),
-      map(teamsScores => teamsScores.sort((a, b) => b.score - a.score)),
-      map(sortedTeams => this.calculateTeamsPositions(sortedTeams)),
+      map(sortedTeams => calculateTeamsPositions(sortedTeams)),
       tap(positions => {
         this.names = positions.map(pos => pos.name);
       })
     );
-  }
-
-  private calculateTeamsPositions(sortedTeams: TeamScore[]): TeamPosition[] {
-    let currentPos = 1;
-    let previousScore = sortedTeams[0]?.score;
-    let tiedTeamsCount = 0;
-
-    return sortedTeams.map((teamScore, index) => {
-      if (teamScore.score === previousScore && index !== 0) {
-        tiedTeamsCount++;
-      } else if (index !== 0) {
-        currentPos += tiedTeamsCount + 1;
-        tiedTeamsCount = 0;
-      }
-      previousScore = teamScore.score;
-
-      return { position: currentPos, name: teamScore.team.name };
-    });
   }
 
   getTeamScoreboard(edition: Edition): Observable<TeamScoreboard[]> {

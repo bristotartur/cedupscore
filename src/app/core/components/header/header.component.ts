@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
   currentItem!: { name: string, iconClass: string };
 
   navItems = [
-    { name: 'Geral', iconClass: 'fa-solid fa-house', link: '/', isSelected: true },
+    { name: 'Geral', iconClass: 'fa-solid fa-house', link: '/', isSelected: false },
     { name: 'Placar', iconClass: 'fa-solid fa-medal', link: '/scoreboards', isSelected: false },
     { name: 'Tarefas', iconClass: 'fa-solid fa-list-check', link: '/tasks', isSelected: false },
     { name: 'Esportes', iconClass: 'fa-solid fa-volleyball', link: '/sports', isSelected: false },
@@ -39,11 +39,14 @@ export class HeaderComponent implements OnInit {
     { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '/punishments', isSelected: false }
   ];
 
-  ngOnInit(): void {
-    this.screenWidth = window.innerWidth;
+  constructor() {
     this.router.events.subscribe(() => {
       this.updateSelectedItem(this.router.url);
     });
+  }
+
+  ngOnInit(): void {
+    this.screenWidth = window.innerWidth;
   }
 
   @HostListener('document:click', ['$event'])

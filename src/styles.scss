@@ -44,6 +44,17 @@ abbr { text-decoration: none; }
     &.form { width: 650px; }
 }
 
+.status-box {
+    width: fit-content;
+
+    border-radius: 20px;
+    background-color: $background-color;
+
+    padding: 8px 16px;
+
+    span { font-size: 18px; }
+}
+
 @media screen and (max-width: 992px) {
     .buttons-container { width: 80vw; }
 }
@@ -56,11 +67,21 @@ abbr { text-decoration: none; }
 
 @media screen and (max-width: 688px) {
     .buttons-container, .buttons-container.form { width: 94vw; }
+
+    .status-box {
+        span { font-size: 16px; }
+    }
 }
 
 @media screen and (max-width: 480px) {
     .buttons-container, .buttons-container.form { 
         width: 95vw; 
         height: 52px;
+    }
+
+    .status-box {
+        padding: 8px 12px;
+
+        span { font-size: 14px; }
     }
 }

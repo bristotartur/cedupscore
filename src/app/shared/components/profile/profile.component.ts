@@ -32,7 +32,7 @@ export class ProfileComponent implements OnChanges {
 
       this.type = transformParticipantType(this.content.type);
       this.extras = [];
-      this.extras.push(`Gênero ${gender}`, `Status: ${status}`);
+      this.extras.push(`Gênero: ${gender}`, `Status: ${status}`);
       return;
     } 
     if (this.isUser(this.content)) {

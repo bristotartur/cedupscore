@@ -115,8 +115,27 @@ export function getPossibleStatuses(status: Status): Status[] {
   }
 }
 
-export function transformDate(date: Date, type: 'full' | 'reduced'): string {
-  const currentYear = new Date().getFullYear();
+export function transformDate(date: Date, type: 'full' | 'reduced', status?: Status): string {
+  if (status && (status === Status.IN_PROGRESS || status === Status.STOPPED)) {
+    return 'Agora';
+  }
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+  const currentDay = currentDate.getDate();
+
+  if (date.getFullYear() === currentYear && date.getMonth() === currentMonth) {
+    if (date.getDate() === currentDay) return 'Hoje';
+
+    const yesterday = new Date(currentDate);
+    yesterday.setDate(currentDay - 1);
+
+    if (date.getDate() === yesterday.getDate()) return 'Ontem';
+  }
+  return getFormattedDate(date, currentYear, type)
+}
+
+function getFormattedDate(date: Date, currentYear: number, type: 'full' | 'reduced'): string {
   const options: Intl.DateTimeFormatOptions = { day: '2-digit' };
 
   if (date.getFullYear() !== currentYear) {

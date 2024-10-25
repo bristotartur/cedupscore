@@ -16,7 +16,7 @@
         }
     </table>
     <div>
-        <a [routerLink]="eventUrl">
+        <a [routerLink]="eventUrl" (click)="onClick()">
             {{ linkMessage }} <i class="fa-solid fa-caret-down"></i>
         </a>
     </div>

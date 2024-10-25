@@ -30,7 +30,7 @@ export class EventCardComponent {
 
   ngOnInit(): void {
     this.status = transformStatus(this.event.status, 'o');
-    this.date = transformDate(this.event.endedAt, 'full');
+    this.date = transformDate(new Date(this.event.endedAt), 'full', this.event.status);
     this.setPositions();
     this.names = this.teamsPostions.map(pos => pos.name);
     this.eventUrl = this.createUrl();
@@ -43,9 +43,11 @@ export class EventCardComponent {
 
     if (screenWidth < 480) {
       this.linkMessage = 'Detalhes';
+      this.date = transformDate(new Date(this.event.endedAt), 'reduced', this.event.status);
       this.reduceNames();
     } else {
       this.linkMessage = 'Mais detalhes';
+      this.date = transformDate(new Date(this.event.endedAt), 'full', this.event.status);
       this.restoreNames();
     }
   }
@@ -99,6 +101,10 @@ export class EventCardComponent {
       return `/tasks/${this.event.id}`
     }
     return `/sports/${this.event.id}`;
+  }
+
+  onClick(): void {
+    document.documentElement.scrollTop = 0;
   }
 
 }
