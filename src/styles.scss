@@ -55,6 +55,21 @@ abbr { text-decoration: none; }
     span { font-size: 18px; }
 }
 
+#output {
+    height: 400px;
+    overflow-y: auto;
+
+    border-radius: $default-radius;
+    padding: 20px;
+
+    background-color: $neutral-color-3;
+
+    font-size: 18px;
+    line-height: 1.6;
+
+    outline: none;
+}
+
 @media screen and (max-width: 992px) {
     .buttons-container { width: 80vw; }
 }

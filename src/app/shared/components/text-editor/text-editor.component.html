@@ -1,0 +1,40 @@
+<div class="toolbar">
+    <ul>
+        <li>
+            <abbr title="Negrito">
+                <button #boldBtn data-command="bold">
+                    <i class="fa-solid fa-bold"></i>
+                </button>
+            </abbr>
+        </li>
+        <li>
+            <abbr title="Itálico">
+                <button #italicBtn data-command="italic">
+                    <i class="fa-solid fa-italic"></i>
+                </button>
+            </abbr>
+        </li>
+        <li>
+            <abbr title="Sublinhado">
+                <button #underlineBtn data-command="underline">
+                    <i class="fa-solid fa-underline"></i>
+                </button>
+            </abbr>
+        </li>
+        <li>
+            <abbr title="Inserir lista ordenada">
+                <button #orderedListBtn data-command="insertOrderedList">
+                    <i class="fa-solid fa-list-ol"></i>
+                </button>
+            </abbr>
+        </li>
+        <li>
+            <abbr title="Inserir lista desordenada">
+                <button #unorderedListBtn data-command="insertUnorderedList">
+                    <i class="fa-solid fa-list-ul"></i>
+                </button>
+            </abbr>
+        </li>
+    </ul>
+</div>
+<div #output id="output" contenteditable="true"></div>
