@@ -5,7 +5,7 @@
     'fit': customClass === 'fit', 
     'fit-on-reduce': customClass === 'fit-on-reduce', 
 }">
-    <select 
+    <select
         [disabled]="isDisabled"
         [(ngModel)]="selectedValue"
         (change)="onOptionSelected($event)"

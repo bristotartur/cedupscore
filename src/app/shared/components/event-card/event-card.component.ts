@@ -1,7 +1,7 @@
 import { Component, HostListener, Input } from '@angular/core';
 import { TeamPosition } from '../../models/team-postion.model';
 import { NgClass } from '@angular/common';
-import { Event } from '../../models/event.model';
+import { EventModel } from '../../models/event.model';
 import { calculateTeamsPositions, transformDate, transformStatus } from '../../utils/common-utils';
 import { RouterLink } from '@angular/router';
 import { EventScore } from '../../models/event-score.model';
@@ -19,7 +19,7 @@ import { Status } from '../../enums/status.enum';
 })
 export class EventCardComponent {
 
-  @Input({ required: true }) event!: Event;
+  @Input({ required: true }) event!: EventModel;
 
   status!: string;
   date!: string;

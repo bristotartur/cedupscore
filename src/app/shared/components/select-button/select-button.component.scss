@@ -57,6 +57,10 @@
             min-width: 126px;
             background-color: $neutral-color-3;
             font-weight: 500;
+
+            &:focus {
+                outline: 2px solid lighten($neutral-color-4, 5%);
+            }
         }
     }
 

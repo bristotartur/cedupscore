@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   templateUrl: './select-button.component.html',
-  styleUrls: ['./select-button.component.scss']
+  styleUrl: './select-button.component.scss'
 })
 export class SelectButtonComponent implements OnInit, OnChanges {
 

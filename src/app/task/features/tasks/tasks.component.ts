@@ -3,7 +3,7 @@ import { PageBodyComponent } from '../../../core/components/page-body/page-body.
 import { EventCardComponent } from '../../../shared/components/event-card/event-card.component';
 import { SelectButtonComponent } from "../../../shared/components/select-button/select-button.component";
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
-import { Event } from '../../../shared/models/event.model';
+import { EventModel } from '../../../shared/models/event.model';
 import { EventService } from '../../../shared/services/event.service';
 import { Edition } from '../../../edition/models/edition.model';
 import { EditionService } from '../../../edition/services/edition.service';
@@ -32,13 +32,13 @@ export class TasksComponent implements OnInit {
   private editionService = inject(EditionService);
   userService = inject(UserService);
 
-  tasks$ = new BehaviorSubject<Event[] | null>(null);
+  tasks$ = new BehaviorSubject<EventModel[] | null>(null);
   latestEdition$ = new BehaviorSubject<Edition | null>(null);
   editions$!: Observable<Edition[]>;
   
   buttonOptions: Option[] = [{ name: 'Adicionar nova tarefa', value: '/tasks/register', isLink: true }];
   editionsOptions: Option[] = [];
-  inProgressTasks: Event[] = [];
+  inProgressTasks: EventModel[] = [];
   selectedOption: number = 1;
 
   constructor() {

@@ -1,0 +1,101 @@
+<div class="buttons-container">
+    <button (click)="comeBack()">Voltar</button>
+</div>
+<app-page-body
+    [ngClass]="{ 'requesting': isRequesting }"
+>
+    <h2>{{ isUpdateForm ? 'Atualizar tarefa' : 'Adicionar tarefa' }}</h2>
+    <form [formGroup]="form" method="post">
+        <abbr title="Nome da tarefa">
+            <app-input
+                #nameInput type="text" formControlName="name" placeholder="nome da tarefa" [isFirst]="true"
+            />
+        </abbr>
+        <div class="select-box">
+            <div class="first-line">
+                <div id="type-container">
+                    <abbr title="Tipo da tarefa">
+                        <app-select-button
+                            name="Tipo"
+                            customClass="fit"
+                            [simplified]="true"
+                            [options]="typeOptions"
+                            [selectedValue]="form.get('taskType')?.value ?? ''"
+                            (option)="onTypeSelect($event)"
+                        />
+                    </abbr>
+                </div>
+                <div id="modality-container">
+                    <abbr title="Modalidade da tarefa">
+                        <app-select-button
+                            name="Modalidade"
+                            customClass="fit"
+                            [simplified]="true"
+                            [options]="modalityOptions"
+                            [selectedValue]="form.get('modality')?.value ?? ''"
+                            (option)="onModalitySelect($event)"
+                        />
+                    </abbr>
+                </div>
+            </div>
+            <div id="participant-type-container">
+                <abbr title="Participantes permitidos">
+                    <app-select-button
+                        name="Participantes"
+                        customClass="fit"
+                        [simplified]="true"
+                        [options]="participantTypeOptions"
+                        [selectedValue]="form.get('allowedParticipantType')?.value ?? ''"
+                        (option)="onParticipantTypeSelect($event)"
+                    />
+                </abbr>
+            </div>
+        </div>
+        <div class="quantities-wrapper">
+            <h3>Participantes por equipe:</h3>
+            <div class="quantities-container">
+                <div id="min-container">
+                    <abbr title="Mínimo">
+                        <app-input
+                            type="number" formControlName="minParticipantsPerTeam" placeholder="mínimo"
+                        />
+                    </abbr>
+                </div>
+                <div id="max-container">
+                    <abbr title="Máximo">
+                        <app-input
+                            type="number" formControlName="maxParticipantsPerTeam" placeholder="máximo"
+                        />
+                    </abbr>
+                </div>
+            </div>
+        </div>
+        <div class="description-wrapper">
+            <h3>Descrição:</h3>
+            <app-text-editor 
+                [content]="taskOriginalDescription"
+                (contentChange)="onContentChange($event)"
+            />
+        </div>
+        <div class="wrapper">
+            <div class="message-container">
+                @if (errorMessage) {
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>{{ errorMessage }}</span>
+                }
+            </div>
+            <button
+                type="submit" [disabled]="isRequesting" (click)="onSubmit($event)"
+            >
+                {{ (isUpdateForm) ? 'Atualizar' : 'Criar tarefa' }}
+            </button>
+        </div>
+    </form>
+</app-page-body>
+<app-alert-popup
+    #updatePopup
+    title="Atualizar tarefa?"
+    message="Ao atualizar a tarefa, todos os seus dados serão substituídos pelos novos dados fornecidos. Deseja continuar?"
+    buttonMessage="Atualizar"
+    (accepted)="onPopupAccepted()"
+/>

@@ -108,13 +108,16 @@ app-page-body {
             }
         }
     }
-
-    .buttons-container {
-        button { height: 32px; }
-    }
 }
 
 @media screen and (max-width: 480px) {
+    .buttons-container {
+        button { 
+            height: 32px;
+            font-size: 14px;
+        }
+    }
+
     app-page-body {
         section#history-section {
             .wrapper {
