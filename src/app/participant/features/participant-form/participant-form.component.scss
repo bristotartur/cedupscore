@@ -6,26 +6,6 @@
     align-items: center;
 }
 
-.buttons-container.form {
-    button {
-        width: 100px;
-        height: 40px;
-
-        border: none;
-        border-radius: $default-radius;
-
-        background-color: $primary-color;
-
-        color: $font-color;
-        font-size: 17px;
-        font-weight: 700;
-
-        cursor: pointer;
-
-        &:hover { background-color: $secondary-color; }
-    }
-}
-
 app-page-body {
     h2, form { width: 87%; }
 
@@ -69,24 +49,6 @@ app-page-body {
             align-items: center;
             gap: 10px;
 
-            button {
-                width: 170px;
-                height: 44px;
-        
-                border: none;
-                border-radius: $default-radius;
-        
-                background-color: $neutral-color-3;
-        
-                color: $font-color;
-                font-size: 18px;
-                font-weight: 500;
-    
-                cursor: pointer;
-        
-                &:hover { background-color: $neutral-color-4; }
-            }
-
             .message-container {
                 display: flex;
                 flex-direction: row;
@@ -122,13 +84,6 @@ app-page-body {
 }
 
 @media screen and (max-width: 480px) {
-    .buttons-container.form {
-        button {
-            height: 32px;
-            font-size: 14px;
-        }
-    }
-
     app-page-body {
         h2 { font-size: 24px; }
     }

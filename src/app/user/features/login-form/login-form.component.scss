@@ -21,24 +21,7 @@ app-page-body {
         border-bottom: 2px solid $neutral-color-3;
         padding-bottom: 20px;
 
-        button {
-            width: 170px;
-            height: 44px;
-    
-            margin-top: 30px;
-            border: none;
-            border-radius: $default-radius;
-    
-            background-color: $neutral-color-3;
-    
-            color: $font-color;
-            font-size: 18px;
-            font-weight: 500;
-
-            cursor: pointer;
-    
-            &:hover { background-color: $neutral-color-4; }
-        }
+        button { margin-top: 30px; }
 
         .message-container {
             display: flex;

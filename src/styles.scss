@@ -32,6 +32,24 @@ body {
 
 abbr { text-decoration: none; }
 
+button {
+    width: 170px;
+    height: 44px;
+        
+    border: none;
+    border-radius: $default-radius;
+        
+    background-color: $neutral-color-3;
+        
+    color: $font-color;
+    font-size: 18px;
+    font-weight: 500;
+    
+    cursor: pointer;
+        
+    &:hover { background-color: $neutral-color-4; }
+}
+
 .buttons-container {
     display: flex;
     flex-direction: row;
@@ -40,6 +58,18 @@ abbr { text-decoration: none; }
 
     width: 900px;
     height: 70px;
+
+    button {
+        width: 100px;
+        height: 40px;
+
+        background-color: $primary-color;
+
+        font-size: 17px;
+        font-weight: 700;
+
+        &:hover { background-color: $secondary-color; }
+    }
 
     &.form { width: 650px; }
 }
@@ -92,6 +122,15 @@ abbr { text-decoration: none; }
     .buttons-container, .buttons-container.form { 
         width: 95vw; 
         height: 52px;
+
+        button:not(.dropdown) {
+            width: fit-content;
+            height: 32px;
+
+            padding: 0px 20px;
+
+            font-size: 14px;
+        }
     }
 
     .status-box {
