@@ -78,9 +78,13 @@ public interface EventMapper {
     Event toExistingSportEvent(SportEventRequestDto dto, Event event, String name, Edition edition, User responsibleUser);
 
     @Mapping(target = "taskType", source = "event.extraType")
+    @Mapping(target = "editionId", source = "event.edition.id")
+    @Mapping(target = "responsibleUserId", source = "event.responsibleUser.id")
     TaskEventResponseDto toTaskEventResponseDto(Event event, List<EventScoreResponseDto> scores);
 
     @Mapping(target = "sportType", source = "event.extraType")
+    @Mapping(target = "editionId", source = "event.edition.id")
+    @Mapping(target = "responsibleUserId", source = "event.responsibleUser.id")
     SportEventResponseDto toSportEventResponseDto(Event event, List<EventScoreResponseDto> scores);
 
 }

@@ -26,7 +26,11 @@ public abstract class EventResponseDto {
 
     public final LocalDateTime endedAt;
 
-    public EventResponseDto(Long id, String name, Status status, ParticipantType allowedParticipantType, Modality modality, Integer minParticipantsPerTeam, Integer maxParticipantsPerTeam, LocalDateTime startedAt, LocalDateTime endedAt) {
+    public final Long editionId;
+
+    public final Long responsibleUserId;
+
+    public EventResponseDto(Long id, String name, Status status, ParticipantType allowedParticipantType, Modality modality, Integer minParticipantsPerTeam, Integer maxParticipantsPerTeam, LocalDateTime startedAt, LocalDateTime endedAt, Long editionId, Long responsibleUserId) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -36,6 +40,8 @@ public abstract class EventResponseDto {
         this.maxParticipantsPerTeam = maxParticipantsPerTeam;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.editionId = editionId;
+        this.responsibleUserId = responsibleUserId;
     }
 
 }

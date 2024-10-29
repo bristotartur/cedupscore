@@ -25,11 +25,11 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public ResponseEntity<Page<EventResponseDto>> listEventsByType(@RequestParam(value = "type", required = false) String type,
-                                                                   Pageable pageable) {
-        var events = (type != null)
-                ? eventService.findAllEvents(EventType.findEventTypeLike(type), pageable)
-                : eventService.findAllEvents(pageable);
+    public ResponseEntity<Page<EventResponseDto>> listEvents(@RequestParam(value = "type", required = false) String type,
+                                                             @RequestParam(value = "edition", required = false) Long editionId,
+                                                             @RequestParam(value = "responsible-user", required = false) Long userId,
+                                                             Pageable pageable) {
+        var events = eventService.findAllEvents(type, editionId, userId, pageable);
         var dtos = events.getContent()
                 .stream()
                 .map(eventService::createEventResponseDto)

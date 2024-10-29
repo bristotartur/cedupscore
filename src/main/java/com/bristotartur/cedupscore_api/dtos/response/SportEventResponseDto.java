@@ -14,8 +14,8 @@ public class SportEventResponseDto extends EventResponseDto {
 
     public final List<EventScoreResponseDto> scores;
 
-    public SportEventResponseDto(Long id, String name, Status status, ParticipantType allowedParticipantType, Modality modality, Integer minParticipantsPerTeam, Integer maxParticipantsPerTeam, LocalDateTime startedAt, LocalDateTime endedAt, ExtraType sportType, List<EventScoreResponseDto> scores) {
-        super(id, name, status, allowedParticipantType, modality, minParticipantsPerTeam, maxParticipantsPerTeam, startedAt, endedAt);
+    public SportEventResponseDto(Long id, String name, Status status, ParticipantType allowedParticipantType, Modality modality, Integer minParticipantsPerTeam, Integer maxParticipantsPerTeam, LocalDateTime startedAt, LocalDateTime endedAt, Long editionId, Long responsibleUserId, ExtraType sportType, List<EventScoreResponseDto> scores) {
+        super(id, name, status, allowedParticipantType, modality, minParticipantsPerTeam, maxParticipantsPerTeam, startedAt, endedAt, editionId, responsibleUserId);
         this.sportType = sportType;
         this.scores = scores;
     }

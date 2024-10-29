@@ -38,7 +38,7 @@ public class EventValidationService {
         }
     }
 
-    public void validateEventToChangeStatus(Event event, Status newStatus, Boolean isForClosing) throws ConflictException {
+    public void validateEventToChangeStatus(Event event, Status newStatus, Boolean isForClosing) throws ConflictException, UnprocessableEntityException {
         var edition = event.getEdition();
         this.checkEdition(edition, true);
 
@@ -96,7 +96,7 @@ public class EventValidationService {
                     throw new  UnprocessableEntityException(message.formatted(extraType.value.toLowerCase(Locale.ROOT)));
                 }
             }
-            default -> throw new BadRequestException("O campo \"tipo\" não pode ser vazio.");
+            default -> throw new BadRequestException("O campo 'tipo' não pode ser vazio.");
         }
     }
 
@@ -203,10 +203,10 @@ public class EventValidationService {
 
                     throw new UnprocessableEntityException(message.formatted(score, complement));
                 });
-        this.checkDrawScores(type, possibleScores, teamToNewScoreMap);
+        this.checkTiedScores(type, possibleScores, teamToNewScoreMap);
     }
 
-    private void checkDrawScores(EventType type, List<Integer> possibleScores, Map<Team, Integer> teamToNewScoreMap) throws ConflictException {
+    private void checkTiedScores(EventType type, List<Integer> possibleScores, Map<Team, Integer> teamToNewScoreMap) throws ConflictException {
         var sortedTeams = teamToNewScoreMap.entrySet()
                 .stream()
                 .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))

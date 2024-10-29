@@ -16,8 +16,8 @@ public class TaskEventResponseDto extends EventResponseDto {
 
     public final List<EventScoreResponseDto> scores;
 
-    public TaskEventResponseDto(Long id, String name, Status status, ParticipantType allowedParticipantType, Modality modality, Integer minParticipantsPerTeam, Integer maxParticipantsPerTeam, LocalDateTime startedAt, LocalDateTime endedAt, ExtraType taskType, String description, List<EventScoreResponseDto> scores) {
-        super(id, name, status, allowedParticipantType, modality, minParticipantsPerTeam, maxParticipantsPerTeam, startedAt, endedAt);
+    public TaskEventResponseDto(Long id, String name, Status status, ParticipantType allowedParticipantType, Modality modality, Integer minParticipantsPerTeam, Integer maxParticipantsPerTeam, LocalDateTime startedAt, LocalDateTime endedAt, Long editionId, Long responsibleUserId, ExtraType taskType, String description, List<EventScoreResponseDto> scores) {
+        super(id, name, status, allowedParticipantType, modality, minParticipantsPerTeam, maxParticipantsPerTeam, startedAt, endedAt, editionId, responsibleUserId);
         this.taskType = taskType;
         this.description = description;
         this.scores = scores;
