@@ -50,7 +50,7 @@ public class ParticipantCSVService {
             case "registration" -> {
                 csvContent.append("nome,cpf,gênero,tipo,equipe,mensagem\n");
                 dtos.forEach(dto ->
-                        csvContent.append(formatCsvLine(
+                        csvContent.append(this.formatCsvLine(
                                 dto.getName(), dto.getCpf(), dto.getGender(), dto.getType(), dto.getTeamName(), dto.getMessage()
                         ))
                 );
@@ -59,7 +59,7 @@ public class ParticipantCSVService {
             case "inactivation" -> {
                 csvContent.append("nome,cpf,mensagem\n");
                 dtos.forEach(dto ->
-                        csvContent.append(formatCsvLine(dto.getName(), dto.getCpf(), dto.getMessage()))
+                        csvContent.append(this.formatCsvLine(dto.getName(), dto.getCpf(), dto.getMessage()))
                 );
                 yield csvContent.toString().getBytes(StandardCharsets.UTF_8);
             }
@@ -68,8 +68,9 @@ public class ParticipantCSVService {
     }
 
     private String formatCsvLine(String... values) {
+
         return Arrays.stream(values)
-            .map(value -> value == null ? "N/A" : value)
+            .map(value -> (value == null) ? "N/A" : value)
             .collect(Collectors.joining(",")) + "\n";
     }
 

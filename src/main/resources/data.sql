@@ -1,3 +1,9 @@
+-- USER
+INSERT INTO
+    tb_user (name, email, password, role)
+VALUES
+    ('root', 'root@gmail.com', '$2a$10$9WRGYEXt1RZW4fOuIHSGu.iTs17zvZGbiDOkWeC3nNsTUaH0E.Ece', 'SUPER_ADMIN');
+
 -- EDITION
 
 INSERT INTO
@@ -88,7 +94,13 @@ VALUES
     ('BIANCA COSTA', '789.543.678-67', 'FEMALE', 'STUDENT', false),
     ('RODRIGO PEREIRA', '890.654.789-78', 'MALE', 'STUDENT', true),
     ('JULIANA MARTINS', '901.765.890-89', 'FEMALE', 'TEACHER', true),
-    ('EDUARDO FERREIRA', '012.876.901-90', 'MALE', 'STUDENT', true);
+    ('EDUARDO FERREIRA', '012.876.901-90', 'MALE', 'STUDENT', true),
+
+    ('ARTUR DA ROSA BRISTOT', '079.630.479-37', 'MALE', 'STUDENT', true),
+    ('GABRIELA FERNANDES SANTANA', '010.640.489-52', 'FEMALE', 'STUDENT', true),
+    ('FELIPE ROSSETTO DA SILVA', '023.976.989-90', 'MALE', 'STUDENT', true),
+    ('JOÃO VITOR BIANCHINI DOS PASSOS', '456.218.349-34', 'MALE', 'STUDENT', true),
+    ('EDUARDO DOS SANTOS GOULART', '901.666.789-69', 'MALE', 'STUDENT', true);
 
 -- EDITION REGISTRATIONS
 
@@ -130,6 +142,12 @@ VALUES
     (28, 3, 1, '2023-04-08T13:40:03.252379'),
     (29, 3, 1, '2023-04-08T13:40:03.252379'),
     (30, 3, 1, '2023-04-08T13:40:03.252379'),
+
+    (51, 3, 1, '2023-04-08T13:40:03.252379'),
+    (52, 3, 1, '2023-04-08T13:40:03.252379'),
+    (53, 3, 1, '2023-04-08T13:40:03.252379'),
+    (54, 3, 1, '2023-04-08T13:40:03.252379'),
+    (55, 3, 1, '2023-04-08T13:40:03.252379'),
 
 -- Twister
     (31, 4, 1, '2023-04-08T13:40:03.252379'),
@@ -213,4 +231,75 @@ VALUES
     (47, 5, 2, NOW()),
     (48, 5, 2, NOW()),
     (49, 5, 2, NOW()),
-    (50, 5, 2, NOW());
+    (50, 5, 2, NOW()),
+
+    (51, 3, 2, NOW()),
+    (52, 3, 2, NOW()),
+    (53, 3, 2, NOW()),
+    (54, 3, 2, NOW()),
+    (55, 3, 2, NOW());
+    
+INSERT INTO 
+	tb_event (name, type, status, extra_type, allowed_participant_type, modality, min_participants_per_team, max_participants_per_team, description, started_at, ended_at, edition_id, responsible_user_id)
+VALUES 
+    ('Tentilhões de Darwin', 'TASK', 'ENDED', 'NORMAL', 'STUDENT', 'MIXED',  10, 10, 'bla bla bla', '2024-10-21T12:49:17.039397708', '2024-10-22T13:10:17.039436623', 2, 1),
+    ('Geometria Humana', 'TASK', 'ENDED', 'CULTURAL', 'STUDENT', 'MIXED',  20, 10000, 'bla bla bla', '2024-10-21T20:10:00.039397708', '2024-10-21T21:05:17.039436623', 2, 1),
+    ('Cores olímpicas', 'TASK', 'ENDED', 'NORMAL', 'STUDENT', 'MIXED',  1, 1, 'bla bla bla', '2024-10-21T12:49:17.039397708', '2024-10-22T13:10:17.039436623', 2, 1);
+
+INSERT INTO
+    tb_event_score (score, team_id, event_id)
+VALUES 
+    -- Tentilhões
+    (20, 1, 1),
+    (50, 2, 1),
+    (40, 3, 1),
+    (10, 4, 1),
+    (40, 5, 1),
+
+    -- Geometria
+    (90, 1, 2),
+    (80, 2, 2),
+    (100, 3, 2),
+    (70, 4, 2),
+    (50, 5, 2),
+
+    -- Cores
+    (50, 1, 3),
+    (50, 2, 3),
+    (50, 3, 3),
+    (10, 4, 3),
+    (50, 5, 3);
+
+INSERT INTO
+    tb_event_registration (participant_id, team_id, event_id)
+VALUES
+    (4, 1, 2),
+    (5, 1, 2),
+    (6, 1, 2),
+    (7, 1, 2),
+    (20, 1, 2),
+    
+    (14, 1, 2),
+    (15, 1, 2),
+    (16, 1, 2),
+    (18, 1, 2),
+    (19, 1, 2),
+    
+    (51, 3, 2),
+    (52, 3, 2),
+    (53, 3, 2),
+    (54, 3, 2),
+    (55, 3, 2),
+    
+    (34, 1, 2),
+    (35, 1, 2),
+    (36, 1, 2),
+    (38, 1, 2),
+    (39, 1, 2),
+    
+    (44, 1, 2),
+    (45, 1, 2),
+    (46, 1, 2),
+    (47, 1, 2),
+    (49, 1, 2);
+    

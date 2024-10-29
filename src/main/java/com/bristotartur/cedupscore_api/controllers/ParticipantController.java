@@ -1,12 +1,11 @@
 package com.bristotartur.cedupscore_api.controllers;
 
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantCSVDto;
+import com.bristotartur.cedupscore_api.dtos.request.ParticipantFilterDto;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantInactivationReport;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantRegistrationReport;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantResponseDto;
-import com.bristotartur.cedupscore_api.enums.Gender;
-import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import com.bristotartur.cedupscore_api.services.ParticipantCSVService;
 import com.bristotartur.cedupscore_api.services.ParticipantService;
 import jakarta.validation.Valid;
@@ -35,40 +34,9 @@ public class ParticipantController {
     private final ParticipantCSVService participantCSVService;
 
     @GetMapping
-    public ResponseEntity<Page<ParticipantResponseDto>> listAllParticipants(@RequestParam(value = "name", required = false) String name,
-                                                                            @RequestParam(value = "edition", required = false) Long editionId,
-                                                                            @RequestParam(value = "team", required = false) Long teamId,
-                                                                            @RequestParam(value = "gender", required = false) Gender gender,
-                                                                            @RequestParam(value = "type", required = false) ParticipantType participantType,
-                                                                            @RequestParam(value = "status", required = false) String status,
-                                                                            @RequestParam(value = "order", required = false) String order,
+    public ResponseEntity<Page<ParticipantResponseDto>> listAllParticipants(@ModelAttribute() ParticipantFilterDto filter,
                                                                             Pageable pageable) {
-        var participants = participantService.findAllParticipants(name, editionId, teamId, gender, participantType, status, order, pageable);
-        var dtos = participants.getContent()
-                .stream()
-                .map(participant -> participantService.createParticipantResponseDto(participant, false))
-                .toList();
-
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
-    }
-
-    @GetMapping(path = "/from-event/{eventId}")
-    public ResponseEntity<Page<ParticipantResponseDto>> listParticipantsFromEvent(@PathVariable Long eventId,
-                                                                                  Pageable pageable) {
-        var participants = participantService.findParticipantsFromEvent(eventId, pageable);
-        var dtos = participants.getContent()
-                .stream()
-                .map(participant -> participantService.createParticipantResponseDto(participant, false))
-                .toList();
-
-        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
-    }
-
-    @GetMapping(path = "/from-team/{teamId}/in-event/{eventId}")
-    public ResponseEntity<Page<ParticipantResponseDto>> listParticipantsFromEventByTeam(@PathVariable Long teamId,
-                                                                                        @PathVariable Long eventId,
-                                                                                        Pageable pageable) {
-        var participants = participantService.findParticipantsFromEventByTeam(teamId, eventId, pageable);
+        var participants = participantService.findAllParticipants(filter, pageable);
         var dtos = participants.getContent()
                 .stream()
                 .map(participant -> participantService.createParticipantResponseDto(participant, false))

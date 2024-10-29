@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.bristotartur.cedupscore_api.repositories.EventSpecifications.*;
 
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -171,6 +172,9 @@ public class EventService {
         eventValidator.validateEventToChangeStatus(event, status, false);
 
         event.setStatus(status);
+        event.setStartedAt(LocalDateTime.now());
+        event.setEndedAt(LocalDateTime.now());
+        
         return eventRepository.save(event);
     }
 
@@ -186,6 +190,7 @@ public class EventService {
         var idToScoreMap = eventValidator.validateEventScoresAndReturnScoresMap(event, scoresDtos);
 
 	    event.setStatus(status);
+	    event.setEndedAt(LocalDateTime.now());
         this.updateScores(event, idToScoreMap);
         
         return eventRepository.save(event);

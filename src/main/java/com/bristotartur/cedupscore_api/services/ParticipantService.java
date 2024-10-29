@@ -1,10 +1,9 @@
 package com.bristotartur.cedupscore_api.services;
 
 import com.bristotartur.cedupscore_api.domain.Participant;
+import com.bristotartur.cedupscore_api.dtos.request.ParticipantFilterDto;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantResponseDto;
-import com.bristotartur.cedupscore_api.enums.Gender;
-import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import com.bristotartur.cedupscore_api.enums.Status;
 import com.bristotartur.cedupscore_api.exceptions.NotFoundException;
 import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
@@ -41,32 +40,23 @@ public class ParticipantService {
     private final EventService eventService;
     private final ParticipantValidationService participantValidator;
 
-    public Page<Participant> findAllParticipants(String name, Long editionId, Long teamId, Gender gender, ParticipantType type, String status, String order, Pageable pageable) {
-        var sort = switch (order != null ? order : "") {
+    public Page<Participant> findAllParticipants(ParticipantFilterDto filter, Pageable pageable) {
+        var order = (filter.order() != null) ? filter.order() : "";
+        var sort = switch (order) {
             case "a-z" -> Sort.by("name").ascending();
             case "z-a" -> Sort.by("name").descending();
+
             default -> Sort.by("id").descending();
         };
-        var spec = Specification.where(hasName(name)
-                .and(fromEdition(editionId))
-                .and(fromTeam(teamId, editionId))
-                .and(hasGender(gender))
-                .and(hasType(type))
-                .and(hasStatus(status))
+        var spec = Specification.where(hasName(filter.name())
+                .and(fromEdition(filter.edition()))
+                .and(fromEvent(filter.event(), filter.edition()))
+                .and(fromTeam(filter.team(), filter.edition()))
+                .and(hasGender(filter.gender()))
+                .and(hasType(filter.type()))
+                .and(hasStatus(filter.status()))
         );
         return participantRepository.findAll(spec, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
-    }
-
-    public Page<Participant> findParticipantsFromEvent(Long eventId, Pageable pageable) {
-        var event = eventService.findEventById(eventId);
-        return participantRepository.findByEvent(event, pageable);
-    }
-
-    public Page<Participant> findParticipantsFromEventByTeam(Long teamId, Long eventId, Pageable pageable) {
-        var team = teamService.findTeamById(teamId);
-        var event = eventService.findEventById(eventId);
-
-        return participantRepository.findByTeamAndEvent(team, event, pageable);
     }
 
     public Participant findParticipantById(Long id) {
@@ -142,9 +132,9 @@ public class ParticipantService {
         var registeredParticipants = participantRepository.findByTeamAndEvent(team, event).size();
         participantValidator.validateParticipantForEvent(participant, event, registeredParticipants);
 
-        var registration = eventRegistrationRepository
-                .save(registrationMapper.toNewEventRegistration(participant, event, team));
-
+        var registration = eventRegistrationRepository.save(
+                registrationMapper.toNewEventRegistration(participant, event, team)
+        );
         participant.getEventRegistrations().add(registration);
         return participant;
     }

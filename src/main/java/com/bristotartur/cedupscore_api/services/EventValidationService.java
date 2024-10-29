@@ -113,7 +113,7 @@ public class EventValidationService {
         }
     }
 
-    public void checkEventForUpdate(EventRequestDto dto, Event event) {
+    public void checkEventForUpdate(EventRequestDto dto, Event event) throws ConflictException {
         var isAllowedParticipantTypeEqual = event.getAllowedParticipantType().equals(dto.getAllowedParticipantType());
         var isModalityEqual = event.getModality().equals(dto.getModality());
 

@@ -24,10 +24,31 @@ public final class ParticipantSpecifications {
 
         return (root, query, criteria) -> {
             if (editionId == null) return null;
+
             var registrationJoin = root.join("editionRegistrations", JoinType.LEFT);
             var editionJoin = registrationJoin.join("edition", JoinType.LEFT);
 
             return criteria.equal(editionJoin.get("id"), editionId);
+        };
+    }
+
+    public static Specification<Participant> fromEvent(Long eventId, Long editionId) {
+
+        return (root, query, criteria) -> {
+            if (eventId == null) return null;
+
+            var registrationJoin = root.join("eventRegistrations", JoinType.LEFT);
+            var eventJoin = registrationJoin.join("event", JoinType.LEFT);
+
+            if (editionId != null) {
+                var editionJoin = eventJoin.join("edition", JoinType.LEFT);
+
+                return criteria.and(
+                        criteria.equal(eventJoin.get("id"), eventId),
+                        criteria.equal(editionJoin.get("id"), editionId)
+                );
+            }
+            return criteria.equal(eventJoin.get("id"), eventId);
         };
     }
 
@@ -68,7 +89,7 @@ public final class ParticipantSpecifications {
     public static Specification<Participant> hasType(ParticipantType type) {
 
         return (root, query, criteria) -> (type != null)
-                ? criteria.like(criteria.upper(root.get("type")), "%" + type.name() + "%")
+                ? criteria.like(criteria.upper(root.get("type")), type.name())
                 : null;
     }
 
