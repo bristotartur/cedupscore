@@ -1,11 +1,11 @@
-<div class="table-container">
+<div [ngClass]="{ 'table-container': true, 'fit': fit }">
     <table id="table-1">
         <tbody>
-            @for (team of teamsPositions; track $index) {
+            @for (team of positions$.value; track $index) {
                 <tr>
                     <td>
                         <div [ngClass]="['position', '_' + team.position]">
-                            {{ team.position }}
+                            {{ (team.position === 0) ? '?' : team.position }}
                         </div>
                     </td>
                     <td>
@@ -16,7 +16,10 @@
             }
         </tbody>
     </table>
-    <table id="table-2">
+    <table 
+        id="table-2"
+        [ngClass]="{ 'fit': columns.length < 3, 'single-column': columns.length === 1}"
+    >
         <thead>
             <tr>
                 @for (column of columns; track $index) {

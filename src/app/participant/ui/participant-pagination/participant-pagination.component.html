@@ -1,5 +1,6 @@
 @for (participant of content; track $index) {
     <app-participant-card
+        [rootUrl]="rootUrl"
         [id]="participant.id"
         [name]="participant.name"
         [type]="participant.type"

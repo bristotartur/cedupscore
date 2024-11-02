@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { PageBodyComponent } from "../../../core/components/page-body/page-body.component";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ParticipantService } from '../../services/participant.service';
 import { BehaviorSubject, filter, first, map, switchMap, take, tap} from 'rxjs';
 import { Participant } from '../../models/participant.model';
@@ -56,15 +56,42 @@ export class ParticipantProfileComponent implements OnInit {
   currentEdition$ = new BehaviorSubject<Edition | null>(null);
   selectedRegistration$ = new BehaviorSubject<EditionRegistration | null>(null);
   
+  currentUrl: string = '';
+  previousLocation: string = ''
   buttonOptions!: Option[];
   latestRegistration!: EditionRegistration;
   registrationsOptions: Option[] = [];
   teamsOptions: Option[] = [];
   errorMessage: string = '';
 
-  ngOnInit(): void {
-    const id = this.activatedRoute.snapshot.paramMap.get('id')!;
+  constructor() {
+    this.currentUrl = this.router.url;
 
+    if (this.currentUrl.includes('tasks') || this.currentUrl.includes('sports')) {
+      this.previousLocation = this.currentUrl.split('/participants')[0];
+    } else {
+      this.previousLocation = '/participants';
+    }
+    const previousUrl = this.participantService.previousProfileUrl;
+
+    if (!previousUrl || previousUrl.includes('/update')) return;
+
+    this.router.events.subscribe(event => {
+      if (!(event instanceof NavigationEnd)) return;
+
+      this.participantService.previousProfileUrl = event.url;
+      this.previousLocation = event.url;
+    });
+  }
+
+  ngOnInit(): void {
+    let id: string;
+
+    if (this.currentUrl.includes('tasks') || this.currentUrl.includes('sports')) {
+      id = this.activatedRoute.snapshot.paramMap.get('participantId')!;
+    } else {
+      id = this.activatedRoute.snapshot.paramMap.get('id')!;
+    }
     this.loadParticipant(+id);
     
     this.editionService.listEditions().pipe(
@@ -81,10 +108,10 @@ export class ParticipantProfileComponent implements OnInit {
 
   comeBack(): void {
     document.documentElement.scrollTop = 0;
-    this.router.navigate(['/participants']);
+    this.router.navigateByUrl(this.previousLocation);
   }
 
-  onButtonOptionSelected(value: string | number) {
+  onButtonOptionSelected(value: string | number): void {
     switch(value) {
       case 'delete': 
         if (this.deletePopup) this.deletePopup.openModal(); 
@@ -197,9 +224,9 @@ export class ParticipantProfileComponent implements OnInit {
       take(1),
       map(edition => {
         const participant = this.participant$.value;
-        const registration = participant.editionRegistrations
-          .find(registration => registration.editionId === edition.id);
-  
+        const registration = participant.editionRegistrations.find(registration => {
+          registration.editionId === edition.id
+        });
         return { participant, registration };
       }),
       filter(({ registration }) => !!registration),

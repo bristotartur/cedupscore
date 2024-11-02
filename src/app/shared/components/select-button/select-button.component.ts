@@ -21,6 +21,7 @@ export class SelectButtonComponent implements OnInit, OnChanges {
   @Input('simplified') isSimplified: boolean = false;
   @Input() customClass: string = '';
   @Input() selectedValue!: string | number;
+  @Input() hasOutline: boolean = true;
 
   @Output() option = new EventEmitter<string | number>();
 

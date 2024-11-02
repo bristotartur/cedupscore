@@ -64,7 +64,6 @@ export class TextEditorComponent implements OnChanges, AfterViewInit {
 
   private onContentChange(): void {
     const content = this.output.nativeElement.innerHTML;
-    console.log(content);
     this.contentChange.emit(content);
   }
 

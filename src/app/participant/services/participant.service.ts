@@ -18,6 +18,8 @@ export class ParticipantService {
   private url = environment.api;
   private httpClient = inject(HttpClient);
 
+  previousProfileUrl: string = '';
+
   listParticipants(query?: string): Observable<PaginationResponse<Participant>> {
     return this.httpClient.get<PaginationResponse<Participant>>(`${this.url}/api/v1/participants${query}`);
   }

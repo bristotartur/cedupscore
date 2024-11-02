@@ -140,8 +140,8 @@ export class ParticipantListComponent implements OnInit {
       this.participantService.findParticipantByCpf(this.searchValue).pipe(
         map(participant => this.resetParticipantsPage([participant], 1)),
         catchError(() => {
-          this.participantsPage$.next(this.resetParticipantsPage([], 0))
-          return of(null)
+          this.participantsPage$.next(this.resetParticipantsPage([], 0));
+          return of(null);
         })
       ).subscribe(response => {
         if (response) {

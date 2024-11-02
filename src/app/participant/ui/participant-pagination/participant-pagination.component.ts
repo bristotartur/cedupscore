@@ -1,20 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Participant } from '../../models/participant.model';
 import { ParticipantCardComponent } from '../participant-card/participant-card.component'
 import { NgClass } from '@angular/common';
 import { EditionRegistration } from '../../../edition/models/edition-registration.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-participant-pagination',
   standalone: true,
   imports: [
-    ParticipantCardComponent,
-    NgClass
+    NgClass,
+    ParticipantCardComponent
   ],
   templateUrl: './participant-pagination.component.html',
   styleUrl: './participant-pagination.component.scss'
 })
 export class ParticipantPaginationComponent implements OnInit {
+
+  private router = inject(Router);
 
   @Input({ required: true }) totalPages!: number;
   @Input({ required: true }) content!: Participant[];
@@ -23,8 +26,13 @@ export class ParticipantPaginationComponent implements OnInit {
 
   @Output() pageChange = new EventEmitter<number>();
 
+  rootUrl: string = '';
   pages: number[] = [];
   teams: string[] = [];
+
+  constructor() {
+    this.rootUrl = this.router.url;
+  }
 
   ngOnInit(): void {
     this.setPages();

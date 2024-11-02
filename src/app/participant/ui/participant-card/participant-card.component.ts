@@ -15,6 +15,7 @@ export class ParticipantCardComponent implements OnInit {
   @Input({ required: true }) id!: number;
   @Input({ required: true }) name!: string;
   @Input({ required: true }) team!: string;
+  @Input({ required: true }) rootUrl!: string;
 
   @Input({ required: true, transform: transformParticipantStatus })
   status!: string;
@@ -22,20 +23,31 @@ export class ParticipantCardComponent implements OnInit {
   @Input({ required: true, transform: transformParticipantType })
   type!: ParticipantType;
 
+  root: string = '';
   screenWidth: number = 0;
   adjustedName: string = '';
   adjuestedTeamName: string = '';
   participantUrl!: string;
 
   ngOnInit(): void {
-    this.participantUrl = `/participants/${this.id}`;
+    this.createRoot();
+
+    this.participantUrl = `${this.root}${this.id}`;
     this.onResize();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['id']) this.participantUrl = `/participants/${this.id}`;
+    this.createRoot();
+
+    if (changes['id']) this.participantUrl = `${this.root}${this.id}`;
 
     if (changes['name'] || changes['team']) this.onResize();
+  }
+
+  private createRoot(): void {
+    this.root = (this.rootUrl.includes('participants'))
+      ? `${this.rootUrl}/`
+      : `${this.rootUrl}/participants/`
   }
 
   @HostListener('window:resize', ['$event'])

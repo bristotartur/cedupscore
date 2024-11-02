@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { SelectButtonComponent } from "../../../shared/components/select-button/select-button.component";
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -16,9 +16,11 @@ import { debounceTime } from 'rxjs';
   styleUrl: './search-bar.component.scss',
   providers: [provideNgxMask()]
 })
-export class SearchBarComponent implements OnInit {
+export class SearchBarComponent implements AfterViewInit {
   
   @ViewChild('searchBar') inputField!: ElementRef;
+
+  @Input('focus') shouldFocus = true;
 
   @Output('valueChange') inputValueChange = new EventEmitter<string>();
   @Output() searchTypeChange = new EventEmitter<'name' | 'cpf'>();
@@ -39,11 +41,11 @@ export class SearchBarComponent implements OnInit {
       this.inputValueChange.emit(this.formatValue(value?.trim() ?? ''));
     });
   }
-  
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.inputField.nativeElement.focus();
-    }, 100);
+
+  ngAfterViewInit(): void {
+      if (this.shouldFocus && this.inputField) {
+        this.inputField.nativeElement.focus();
+      }
   }
 
   selectOption(value: string | number): void {

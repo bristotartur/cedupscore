@@ -3,9 +3,10 @@
     'simplified': isSimplified,
     'disabled': isDisabled,
     'fit': customClass === 'fit', 
-    'fit-on-reduce': customClass === 'fit-on-reduce', 
+    'fit-on-reduce': customClass === 'fit-on-reduce',
 }">
     <select
+        [ngClass]="{ 'has-outline' : hasOutline }"
         [disabled]="isDisabled"
         [(ngModel)]="selectedValue"
         (change)="onOptionSelected($event)"

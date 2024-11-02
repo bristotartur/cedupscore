@@ -8,6 +8,9 @@ import { Status } from "../enums/status.enum";
 import { TeamScore } from "../../edition/models/team-score.model";
 import { TeamPosition } from "../models/team-postion.model";
 import { EventScore } from "../models/event-score.model";
+import { TaskType } from "../enums/task-type.enum";
+import { SportType } from "../enums/sport-type.enum";
+import { Modality } from "../enums/modality.enum";
 
 export function handleError(err: HttpErrorResponse): Observable<never> {
   let exceptionResponse: ExceptionResponse = {
@@ -89,13 +92,13 @@ export function transformRoleType(value: RoleType): string {
   }
 }
 
-export function transformStatus(status: Status, sufix: 'a' | 'o'): string {
+export function transformStatus(status: Status, suffix: 'a' | 'o'): string {
   switch(status) {
-    case Status.SCHEDULED: return `Agendad${sufix}`;
+    case Status.SCHEDULED: return `Agendad${suffix}`;
     case Status.IN_PROGRESS: return 'Em andamento';
-    case Status.STOPPED: return `Parad${sufix}`;
-    case Status.CANCELED: return `Cancelad${sufix}`;
-    case Status.ENDED: return `Encerrad${sufix}`;
+    case Status.STOPPED: return `Parad${suffix}`;
+    case Status.CANCELED: return `Cancelad${suffix}`;
+    case Status.ENDED: return `Encerrad${suffix}`;
     case Status.OPEN_FOR_EDITS: return `Em edição`;
 
     default: return 'Status desconhecido';
@@ -112,6 +115,14 @@ export function getPossibleStatuses(status: Status): Status[] {
     case Status.OPEN_FOR_EDITS: return [Status.ENDED];
 
     default: return [];
+  }
+}
+
+export function getAcceptableGender(modality: Modality): Gender | '' {
+  switch (modality) {
+    case Modality.MASCULINE: return Gender.MALE;
+    case Modality.FEMININE: return Gender.FEMALE;
+    case Modality.MIXED: return '';
   }
 }
 
@@ -153,7 +164,28 @@ function getFormattedDate(date: Date, currentYear: number, type: 'full' | 'reduc
   }
 }
 
+export function transformEventType(type: TaskType | SportType): string {
+  switch (type) {
+    case TaskType.NORMAL: return 'Normal';
+    case TaskType.COMPLETION: return 'Conclusão';
+    case TaskType.CULTURAL: return 'Cultural';
+    case SportType.BASKETBALL: return 'Basquete';
+    case SportType.CHESS: return 'Xadrez';
+    case SportType.FUTSAL: return 'Futsal';
+    case SportType.HANDBALL: return 'Handebol';
+    case SportType.TABLE_TENNIS: return 'Tênis de Mesa';
+    case SportType.VOLLEYBALL: return 'Vôlei';
+  }
+}
+
 export function calculateTeamsPositions(teamsScores: TeamScore[] | EventScore[]): TeamPosition[] {
+  const allScoresZero = teamsScores.every(score => score.score === 0);
+  
+  if (allScoresZero) {
+    return teamsScores.map(score => ({
+      position: 0, name: score.team.name, score: score.score
+    }));
+  }
   const sortedByScore = [...teamsScores].sort((a, b) => b.score - a.score);
 
   let currentPos = 1;

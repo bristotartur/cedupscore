@@ -6,6 +6,8 @@ import { PaginationResponse } from '../models/pagination-response.model';
 import { EventModel } from '../models/event.model';
 import { EventRequest } from '../models/event-request.model';
 import { handleError } from '../utils/common-utils';
+import { Status } from '../enums/status.enum';
+import { EventScoreRequest } from '../models/event-score-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,8 +45,29 @@ export class EventService {
       );
   }
 
+  deleteEvent(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.url}/api/v1/events/${id}`)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
   updateEvent(id: number, req: EventRequest): Observable<EventModel> {
     return this.httpClient.put<EventModel>(`${this.url}/api/v1/events/${id}`, req)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  updateEventStatus(id: number, status: Status): Observable<EventModel> {
+    return this.httpClient.patch<EventModel>(`${this.url}/api/v1/events/${id}/update?status=${status}`, null)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  closeEvent(id: number, scores: EventScoreRequest[]): Observable<EventModel> {
+    return this.httpClient.patch<EventModel>(`${this.url}/api/v1/events/${id}/close`, scores)
       .pipe(
         catchError(handleError)
       );

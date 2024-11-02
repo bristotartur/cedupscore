@@ -15,11 +15,10 @@
     }
 </div>
 <app-page-body>
-    <app-leaderboard 
+    <app-leaderboard
+        [scores]="scores$.value"
         [columns]="['Pts', 'TG', 'EG']"
         [legend]="['TG - Tarefas ganhas', 'EG - Esportes ganhos']"
-        [positions]="(postions$ | async)!"
-        [data]="(teamsData$ | async)!"
     />
 </app-page-body>
 <app-alert-popup 

@@ -18,6 +18,13 @@ export class EditionService {
     return this.httpClient.get<Edition[]>(`${this.url}/api/v1/editions`);
   }
 
+  findEditionByid(id: number): Observable<Edition> {
+    return this.httpClient.get<Edition>(`${this.url}/api/v1/editions/${id}`)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
   openNewEdition(): Observable<Edition> {
     return this.httpClient.post<Edition>(`${this.url}/api/v1/editions/open-edition`, null)
       .pipe(

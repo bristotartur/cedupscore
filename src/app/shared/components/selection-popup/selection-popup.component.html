@@ -14,8 +14,9 @@
         <div class="btn-container">
             <button
                 [ngClass]="{ 'disabled': !selectedValue }"
-                (click)="onClick()">
-                    {{ buttonMessage }}
+                (click)="onClick()"
+            >
+                {{ buttonMessage }}
             </button>
         </div>
     </div>
