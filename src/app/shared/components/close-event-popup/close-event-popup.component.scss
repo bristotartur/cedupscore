@@ -1,0 +1,138 @@
+@import '../../../../styles/variables.scss';
+
+dialog {
+    border: none;
+
+    background-color: transparent;
+
+    position: fixed;
+    top: 44%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 15px;
+
+        width: 450px;
+        min-height: 350px;
+
+        border-radius: $default-radius;
+        background-color: $background-color;
+
+        color: $font-color;
+
+        .teams-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            padding: 10px;
+
+            h2 {
+                width: 82%;
+                margin: 20px 0px; 
+                text-align: center;
+            }
+
+            .team {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                width: 90%;
+                height: 60px;
+
+                border: none;
+                border-radius: $default-radius;
+                background-color: $primary-color;
+                padding: 0px 3px 0px 22px;
+
+                color: inherit;
+                font-size: 18px;
+                font-weight: 600;
+            }
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            padding: 10px 0px 40px 0px;
+
+            button {
+                width: 50%;
+                height: 46px;
+
+                border: none;
+                border-radius: $default-radius;
+                background-color: $neutral-color-3;
+
+                color: inherit;
+                font-size: 18px;
+                font-weight: 600;
+
+                cursor: pointer;
+
+                &:disabled {
+                    color: $neutral-color-1;
+                    cursor: default;
+                }
+
+                &:not(:disabled) {
+                    &:hover { background-color: $neutral-color-4; }
+                }
+            }
+        }
+    }
+
+    &::backdrop { background-color: rgba(0, 0, 0, 0.2); }
+}
+
+@media screen and (max-width: 688px) {
+    dialog {
+        .wrapper {
+            width: 400px;
+
+            .teams-container {
+                .team { height: 50px; }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    dialog {
+        .wrapper {
+            width: 86vw;
+            gap: 8px;
+
+            .teams-container {
+                h2 {
+                    margin: 15px 0px;
+                    font-size: 20px;
+                }
+
+                .team {
+                    width: 92%;
+                    height: 44px;
+                    font-size: 15px;
+                }
+            }
+
+            .btn-container {
+                padding: 8px 0px 34px 0px;
+
+                button { 
+                    height: 38px;
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+}
