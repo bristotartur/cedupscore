@@ -94,6 +94,7 @@ public class EventService {
 
         eventValidator.checkEdition(edition, false);
         eventValidator.checkUser(user);
+        eventValidator.checkMinAndMaxParticipantsPerTeam(dto);
 
         var event = switch (dto) {
             case TaskEventRequestDto taskDto -> {

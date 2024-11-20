@@ -1,12 +1,14 @@
 package com.bristotartur.cedupscore_api.repositories;
 
 import com.bristotartur.cedupscore_api.domain.EditionRegistration;
+import com.bristotartur.cedupscore_api.domain.EventRegistration;
 import com.bristotartur.cedupscore_api.domain.Participant;
 import com.bristotartur.cedupscore_api.enums.Gender;
 import com.bristotartur.cedupscore_api.enums.ParticipantType;
 import jakarta.persistence.criteria.JoinType;
-
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 public final class ParticipantSpecifications {
 
@@ -52,6 +54,32 @@ public final class ParticipantSpecifications {
         };
     }
 
+    public static Specification<Participant> notFromEvent(Long eventId, Long editionId) {
+        return (root, query, criteria) -> {
+            if (eventId == null) return null;
+
+            query.distinct(true);
+
+            var subquery = query.subquery(Participant.class);
+            var subRoot = subquery.from(EventRegistration.class);
+            var subEvent = subRoot.join("event", JoinType.LEFT);
+
+            if (editionId != null) {
+                var subEdition = subEvent.join("edition", JoinType.LEFT);
+
+                subquery.select(subRoot.get("participant"))
+                        .where(criteria.and(
+                                criteria.equal(subEdition.get("id"), editionId),
+                                criteria.equal(subEvent.get("id"), eventId)
+                        ));
+            } else {
+                subquery.select(subRoot.get("participant"))
+                        .where(criteria.equal(subEvent.get("id"), eventId));
+            }
+            return criteria.not(criteria.in(root).value(subquery));
+        };
+    }
+
     public static Specification<Participant> fromTeam(Long teamId, Long editionId) {
 
         return (root, query, criteria) -> {
@@ -94,6 +122,7 @@ public final class ParticipantSpecifications {
     }
 
     public static Specification<Participant> hasStatus(String status) {
+
         return (root, query, criteria) -> {
             if (status == null) return null;
 
@@ -103,6 +132,7 @@ public final class ParticipantSpecifications {
     }
 
     public static Specification<Participant> hasEditionRegistrationCount(int count) {
+
         return (root, query, criteria) -> {
             if (count < 0) return null;
         
@@ -114,6 +144,16 @@ public final class ParticipantSpecifications {
         
             return criteria.equal(subquery, (long) count);
         };
+    }
+
+    public static Specification<Participant> withoutIds(List<Long> excludeIds) {
+
+        return ((root, query, criteria) -> {
+           if (excludeIds == null || excludeIds.isEmpty()) {
+               return criteria.conjunction();
+           }
+           return criteria.not(root.get("id").in(excludeIds));
+        });
     }
 
 }

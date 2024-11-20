@@ -7,6 +7,7 @@ import com.bristotartur.cedupscore_api.domain.Team;
 import com.bristotartur.cedupscore_api.domain.EditionRegistration;
 import com.bristotartur.cedupscore_api.domain.EventRegistration;
 import com.bristotartur.cedupscore_api.dtos.response.EditionRegistrationResponseDto;
+import com.bristotartur.cedupscore_api.dtos.response.EventRegistrationResponseDto;
 import com.bristotartur.cedupscore_api.dtos.response.TeamResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,5 +25,10 @@ public interface RegistrationMapper {
 
     @Mapping(target = "id", ignore = true)
     EventRegistration toNewEventRegistration(Participant participant, Event event, Team team);
+
+    @Mapping(target = "id", source = "registration.id")
+    @Mapping(target = "eventId", source = "registration.event.id")
+    @Mapping(target = "team", source = "teamDto")
+    EventRegistrationResponseDto toEventRegistrationResponseDto(EventRegistration registration, TeamResponseDto teamDto);
 
 }

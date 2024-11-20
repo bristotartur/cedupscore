@@ -5,8 +5,8 @@ import lombok.*;
 
 import java.util.Objects;
 
-@Entity
-@Table(name = "TB_FUTSAL_HANDBALL_EXTRA")
+//@Entity
+//@Table(name = "TB_FUTSAL_HANDBALL_EXTRA")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

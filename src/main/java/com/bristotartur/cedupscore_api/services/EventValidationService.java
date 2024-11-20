@@ -32,56 +32,6 @@ public class EventValidationService {
         }
     }
 
-    public void checkEventStatusForUpdate(Status eventStatus) throws UnprocessableEntityException {
-        if (eventStatus.equals(ENDED) || eventStatus.equals(CANCELED)) {
-            throw new UnprocessableEntityException("O evento não pode ser atualizado.");
-        }
-    }
-
-    public void validateEventToChangeStatus(Event event, Status newStatus, Boolean isForClosing) throws ConflictException, UnprocessableEntityException {
-        var edition = event.getEdition();
-        this.checkEdition(edition, true);
-
-        Status.checkStatus(event.getStatus(), newStatus);
-
-        if (!isForClosing && newStatus.equals(ENDED)) {
-            var message = "O status de um evento não pode ser diretamente definido como 'encerrado'.";
-            throw new UnprocessableEntityException(message);
-        }
-        if (isForClosing && (newStatus.equals(SCHEDULED) || newStatus.equals(CANCELED))) {
-            throw new UnprocessableEntityException("O evento não pode ser encerrado.");
-        }
-        if (event.getType().equals(TASK) || (!newStatus.equals(ENDED) && !newStatus.equals(CANCELED))) return;
-
-        event.getMatches().stream()
-                .filter(match -> {
-                    var importance = match.getImportance();
-                    var status = match.getStatus();
-
-                    return importance.equals(Importance.FINAL) && (status.equals(ENDED) || status.equals(CANCELED));
-                })
-                .findFirst()
-                .ifPresentOrElse(
-                        match -> {},
-                        () -> {
-                            throw new ConflictException("O evento não pode ser encerrado pois ainda há partidas a serem realizadas.");
-                        }
-                );
-    }
-
-    public void checkEdition(Edition edition, Boolean isForUpdate) throws ConflictException {
-        var status = edition.getStatus();
-        var message = "Eventos não podem mais ser %s na edição fornecida.";
-        var action = (isForUpdate) ? "atualizados" : "adicionados";
-
-        switch (status) {
-            case ENDED, CANCELED -> throw new ConflictException(message.formatted(action));
-            case OPEN_FOR_EDITS -> {
-                if (!isForUpdate) throw new ConflictException(message.formatted(action));
-            }
-        }
-    }
-
     public void checkExtraType(EventType type, ExtraType extraType) throws BadRequestException, UnprocessableEntityException {
         switch (extraType) {
             case NORMAL, COMPLETION, CULTURAL -> {
@@ -114,6 +64,8 @@ public class EventValidationService {
     }
 
     public void checkEventForUpdate(EventRequestDto dto, Event event) throws ConflictException {
+        this.checkMinAndMaxParticipantsPerTeam(dto, event);
+
         var isAllowedParticipantTypeEqual = event.getAllowedParticipantType().equals(dto.getAllowedParticipantType());
         var isModalityEqual = event.getModality().equals(dto.getModality());
 
@@ -136,7 +88,7 @@ public class EventValidationService {
         edition.getEvents().stream()
                 .filter(event -> event.getType().equals(SPORT))
                 .filter(event -> event.getExtraType().equals(type)
-                              && event.getModality().equals(modality))
+                        && event.getModality().equals(modality))
                 .findFirst()
                 .ifPresent(event -> {
                     if (event.getId().equals(eventId)) return;
@@ -147,10 +99,143 @@ public class EventValidationService {
                     );
                 });
     }
+
+    public void checkMinAndMaxParticipantsPerTeam(EventRequestDto dto, Event event) throws ConflictException, UnprocessableEntityException {
+        this.compareAllowedQuantities(dto, event);
+        this.checkMinAndMaxParticipantsPerTeam(dto);
+
+        var teamToRegistrations = event.getRegistrations()
+                .stream()
+                .collect(Collectors.groupingBy(EventRegistration::getTeam));
+
+        if (teamToRegistrations.isEmpty()) return;
+
+        teamToRegistrations.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().size() > dto.getMaxParticipantsPerTeam())
+                .findFirst()
+                .ifPresent(entry -> {
+                    var team = entry.getKey().getName();
+                    var message = "A quantidade de participantes da equipe %s inscritos no evento excede o novo limite estabelecido.";
+
+                    throw new ConflictException(message.formatted(team));
+                });
+    }
+
+    public void checkMinAndMaxParticipantsPerTeam(EventRequestDto dto) throws UnprocessableEntityException {
+        var min = dto.getMinParticipantsPerTeam();
+        var max = dto.getMaxParticipantsPerTeam();
+
+        var message = "A quantidade %s de participantes não pode ser negativa.";
+
+        if (min < 0) throw new UnprocessableEntityException(message.formatted("mínima"));
+        if (max < 0) throw new UnprocessableEntityException(message.formatted("máxima"));
+
+        if (min > max) {
+            throw new UnprocessableEntityException(
+                    "A quantidade mínima de participantes por equipe não pode ser maior que a quantidade máxima."
+            );
+        }
+    }
+
+    private void compareAllowedQuantities(EventRequestDto dto, Event event) throws UnprocessableEntityException {
+        var originalMin = event.getMinParticipantsPerTeam();
+        var originalMax = event.getMaxParticipantsPerTeam();
+        var newMin = dto.getMinParticipantsPerTeam();
+        var newMax = dto.getMaxParticipantsPerTeam();
+
+        if (originalMin.equals(newMin) && originalMax.equals(newMax)) return;
+
+        if (!event.getStatus().equals(SCHEDULED)) {
+            throw new UnprocessableEntityException(
+                    "A quantidade de participantes permitida não pode ser alterada pois o evento não está agendado."
+            );
+        }
+    }
+
+    public void checkEventStatusForUpdate(Status eventStatus) throws UnprocessableEntityException {
+        if (eventStatus.equals(ENDED) || eventStatus.equals(CANCELED)) {
+            throw new UnprocessableEntityException("O evento não pode ser atualizado.");
+        }
+    }
+
+    public void validateEventToChangeStatus(Event event, Status newStatus, Boolean isForClosing) throws ConflictException, UnprocessableEntityException {
+        var edition = event.getEdition();
+        this.checkEdition(edition, true);
+
+        Status.checkStatus(event.getStatus(), newStatus);
+
+        if (event.getStatus().equals(SCHEDULED) && newStatus.equals(IN_PROGRESS)) {
+            this.checkRegistrationsToStartEvent(event);
+        }
+        if (!isForClosing && newStatus.equals(ENDED)) {
+            var message = "O status de um evento não pode ser diretamente definido como 'encerrado'.";
+            throw new UnprocessableEntityException(message);
+        }
+        if (isForClosing && (newStatus.equals(SCHEDULED) || newStatus.equals(CANCELED))) {
+            throw new UnprocessableEntityException("O evento não pode ser encerrado.");
+        }
+        if (event.getType().equals(TASK) || (!newStatus.equals(ENDED) && !newStatus.equals(CANCELED))) return;
+
+        this.checkMatchesToCloseEvent(event.getMatches());
+    }
+
+    public void checkEdition(Edition edition, Boolean isForUpdate) throws ConflictException {
+        var status = edition.getStatus();
+        var message = "Eventos não podem mais ser %s na edição fornecida.";
+        var action = (isForUpdate) ? "atualizados" : "adicionados";
+
+        switch (status) {
+            case ENDED, CANCELED -> throw new ConflictException(message.formatted(action));
+            case OPEN_FOR_EDITS -> {
+                if (!isForUpdate) throw new ConflictException(message.formatted(action));
+            }
+        }
+    }
+
+    private void checkRegistrationsToStartEvent(Event event) throws UnprocessableEntityException {
+        var min = event.getMinParticipantsPerTeam();
+        var teamsCount = event.getScores().size();
+        var teamToRegistrations = event.getRegistrations()
+                .stream()
+                .collect(Collectors.groupingBy(EventRegistration::getTeam));
+
+        if (teamToRegistrations.isEmpty() || teamToRegistrations.size() < teamsCount) {
+            var message = "É necessário que todas as equipes possuam participantes inscritos para que o evento possa ser iniciado.";
+            throw new UnprocessableEntityException(message);
+        }
+        teamToRegistrations.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().size() < min)
+                .findFirst()
+                .ifPresent(entry -> {
+                    var team = entry.getKey().getName();
+                    var message = "O evento não pode ser iniciado pois a equipe %s possui uma quantidade de participantes inscritos inferior ao necessário.";
+
+                    throw new UnprocessableEntityException(message.formatted(team));
+                });
+    }
+
+    private void checkMatchesToCloseEvent(Set<Match> matches) throws ConflictException {
+        matches.stream()
+                .filter(match -> {
+                    var importance = match.getImportance();
+                    var status = match.getStatus();
+
+                    return importance.equals(Importance.FINAL) && (status.equals(ENDED) || status.equals(CANCELED));
+                })
+                .findFirst()
+                .ifPresentOrElse(
+                        match -> {},
+                        () -> {
+                            throw new ConflictException("O evento não pode ser encerrado pois ainda há partidas a serem realizadas.");
+                        }
+                );
+    }
     
     public void validateEventToClose(Event event) throws UnprocessableEntityException {
         var status = event.getStatus();
-        
+
     	if (status.equals(ENDED) || status.equals(CANCELED) || status.equals(OPEN_FOR_EDITS)) {
             throw new UnprocessableEntityException("O evento já foi encerrado.");
         }

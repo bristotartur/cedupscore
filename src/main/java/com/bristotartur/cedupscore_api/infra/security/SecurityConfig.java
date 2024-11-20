@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/signup").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/participants/exclude-ids").permitAll()
                         .requestMatchers("/api/v1/users/**").hasAnyAuthority("SCOPE_SUPER_ADMIN", "SCOPE_EDITION_ADMIN")
                         .requestMatchers("/api/v1/editions/**").hasAnyAuthority("SCOPE_SUPER_ADMIN", "SCOPE_EDITION_ADMIN")
                         .requestMatchers("/api/v1/teams/**").hasAnyAuthority("SCOPE_SUPER_ADMIN", "SCOPE_EDITION_ADMIN")

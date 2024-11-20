@@ -44,12 +44,12 @@ public class EventRegistration {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EventRegistration that = (EventRegistration) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && Objects.equals(participant, that.participant);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id, participant);
     }
 
 }

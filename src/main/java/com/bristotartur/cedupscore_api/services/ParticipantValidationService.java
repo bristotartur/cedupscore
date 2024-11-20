@@ -20,13 +20,13 @@ public class ParticipantValidationService {
     private static final String TEAM_INACTIVE_MSG = "A equipe está inativa.";
     private static final String EDITION_REGISTRATION_NOT_ALLOWED_MSG = "O participante não pode ser inscrito na edição informada.";
     private static final String STUDENT_REGISTRATION_NOT_ALLOWED_MSG = "Alunos só podem ser inscritos em edições agendadas.";
-    private static final String NOT_REGISTERED_IN_EDITION_MSG = "O participante não está inscrito na edição do evento.";
-    private static final String TEAM_MISMATCH_MSG = "O participante não está inscrito na equipe informada.";
-    private static final String EVENT_REGISTRATION_NOT_ALLOWED_MSG = "O participante não pode ser inscrito no evento informado.";
-    private static final String ALREADY_REGISTERED_IN_EVENT_MSG = "O participante já está inscrito no evento informado.";
+    private static final String NOT_REGISTERED_IN_EDITION_MSG = "O participante '%s' não está inscrito na edição do evento.";
+    private static final String TEAM_MISMATCH_MSG = "O participante '%s' não está inscrito na equipe informada.";
+    private static final String EVENT_REGISTRATION_NOT_ALLOWED_MSG = "O participante '%s' não pode ser inscrito no evento informado.";
+    private static final String ALREADY_REGISTERED_IN_EVENT_MSG = "O participante '%s' já está inscrito no evento informado.";
     private static final String EDITION_MISMATCH_MSG = "O participante não está inscrito na edição informada.";
-    private static final String EVENT_MISMATCH_MSG = "O participante não está inscrito no evento informado.";
-    private static final String CANNOT_REMOVE_REGISTRATION = "O participante não pode ser desinscrito.";
+    private static final String EVENT_MISMATCH_MSG = "O participante '%s' não está inscrito no evento informado.";
+    private static final String CANNOT_REMOVE_REGISTRATION = "O participante '%s' não pode ser desinscrito.";
 
     public void validateCpf(String cpf) throws BadRequestException {
         if (!Patterns.validateCpf(cpf)) throw new BadRequestException(INVALID_CPF_MSG);
@@ -64,10 +64,10 @@ public class ParticipantValidationService {
                 .stream()
                 .filter(registration -> registration.getEdition().equals(eventEdition))
                 .findFirst()
-                .orElseThrow(() -> new ConflictException(NOT_REGISTERED_IN_EDITION_MSG));
+                .orElseThrow(() -> new ConflictException(NOT_REGISTERED_IN_EDITION_MSG.formatted(participant.getName())));
 
         if (!registrationInEdition.getTeam().equals(team)) {
-            throw new UnprocessableEntityException(TEAM_MISMATCH_MSG);
+            throw new UnprocessableEntityException(TEAM_MISMATCH_MSG.formatted(participant.getName()));
         }
     }
 
@@ -75,18 +75,18 @@ public class ParticipantValidationService {
         var max = event.getMaxParticipantsPerTeam();
 
         if (!event.getStatus().equals(Status.SCHEDULED) ||
-            !(registeredParticipants <= max) ||
+            !(registeredParticipants < max) ||
             !Modality.compareCategory(event.getModality(), participant.getGender()) ||
             !ParticipantType.compareTypes(event.getAllowedParticipantType(), participant.getType())
         ) {
-            throw new UnprocessableEntityException(EVENT_REGISTRATION_NOT_ALLOWED_MSG);
+            throw new UnprocessableEntityException(EVENT_REGISTRATION_NOT_ALLOWED_MSG.formatted(participant.getName()));
         }
         participant.getEventRegistrations()
                 .stream()
                 .filter(registration -> registration.getEvent().equals(event))
                 .findFirst()
                 .ifPresent(e -> {
-                    throw new ConflictException(ALREADY_REGISTERED_IN_EVENT_MSG);
+                    throw new ConflictException(ALREADY_REGISTERED_IN_EVENT_MSG.formatted(participant.getName()));
                 });
     }
 
@@ -101,14 +101,14 @@ public class ParticipantValidationService {
         var status = edition.getStatus();
 
         if (status.equals(Status.ENDED) || status.equals(Status.CANCELED)) {
-            throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION);
+            throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION.formatted(participant.getName()));
         }
         participant.getEventRegistrations()
                 .stream()
                 .filter(r -> r.getEvent().getEdition().equals(edition))
                 .findFirst()
                 .ifPresent(r -> {
-                    throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION);
+                    throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION.formatted(participant.getName()));
                 });
     }
 
@@ -117,11 +117,13 @@ public class ParticipantValidationService {
                 .stream()
                 .filter(r -> r.equals(registration))
                 .findFirst()
-                .orElseThrow(() -> new ConflictException(EVENT_MISMATCH_MSG));
+                .orElseThrow(() -> new ConflictException(EVENT_MISMATCH_MSG.formatted(participant.getName())));
 
         var status = registration.getEvent().getStatus();
 
-        if (!status.equals(Status.SCHEDULED)) throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION);
+        if (!status.equals(Status.SCHEDULED)) {
+            throw new UnprocessableEntityException(CANNOT_REMOVE_REGISTRATION.formatted(participant.getName()));
+        }
     }
 
     public void validateParticipantToChangeStatus(Participant participant) throws UnprocessableEntityException {

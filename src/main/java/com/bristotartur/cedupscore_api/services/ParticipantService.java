@@ -1,6 +1,9 @@
 package com.bristotartur.cedupscore_api.services;
 
+import com.bristotartur.cedupscore_api.domain.EventRegistration;
 import com.bristotartur.cedupscore_api.domain.Participant;
+import com.bristotartur.cedupscore_api.domain.Team;
+import com.bristotartur.cedupscore_api.dtos.request.EventRegistrationRequestDto;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantFilterDto;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.ParticipantResponseDto;
@@ -21,7 +24,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Locale;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.bristotartur.cedupscore_api.repositories.ParticipantSpecifications.*;
 
@@ -51,10 +57,32 @@ public class ParticipantService {
         var spec = Specification.where(hasName(filter.name())
                 .and(fromEdition(filter.edition()))
                 .and(fromEvent(filter.event(), filter.edition()))
+                .and(notFromEvent(filter.notInEvent(), filter.edition()))
                 .and(fromTeam(filter.team(), filter.edition()))
                 .and(hasGender(filter.gender()))
                 .and(hasType(filter.type()))
                 .and(hasStatus(filter.status()))
+        );
+        return participantRepository.findAll(spec, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
+    }
+
+    public Page<Participant> findAllParticipants(ParticipantFilterDto filter, List<Long> excludeIds, Pageable pageable) {
+        var order = (filter.order() != null) ? filter.order() : "";
+        var sort = switch (order) {
+            case "a-z" -> Sort.by("name").ascending();
+            case "z-a" -> Sort.by("name").descending();
+
+            default -> Sort.by("id").descending();
+        };
+        var spec = Specification.where(hasName(filter.name())
+                .and(fromEdition(filter.edition()))
+                .and(fromEvent(filter.event(), filter.edition()))
+                .and(notFromEvent(filter.notInEvent(), filter.edition()))
+                .and(fromTeam(filter.team(), filter.edition()))
+                .and(hasGender(filter.gender()))
+                .and(hasType(filter.type()))
+                .and(hasStatus(filter.status()))
+                .and(withoutIds(excludeIds))
         );
         return participantRepository.findAll(spec, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
     }
@@ -78,7 +106,23 @@ public class ParticipantService {
                     var teamDto = teamService.createTeamResponseDto(registration.getTeam());
                     return registrationMapper.toEditionRegistrationResponseDto(registration, teamDto);
                 }).toList();
+
         return participantMapper.toParticipantResponseDto(participant, registrations, hasCpf);
+    }
+
+    public ParticipantResponseDto createParticipantResponseDto(Participant participant, EventRegistration eventRegistration, Boolean hasCpf) {
+        var eventRegistrationDto = registrationMapper.toEventRegistrationResponseDto(
+                eventRegistration,
+                teamService.createTeamResponseDto(eventRegistration.getTeam())
+        );
+        var registrations = participant.getEditionRegistrations()
+                .stream()
+                .map(registration -> {
+                    var teamDto = teamService.createTeamResponseDto(registration.getTeam());
+                    return registrationMapper.toEditionRegistrationResponseDto(registration, teamDto);
+                }).toList();
+
+        return participantMapper.toParticipantResponseDto(participant, registrations, eventRegistrationDto, hasCpf);
     }
 
     public Participant saveParticipant(ParticipantRequestDto dto) {
@@ -139,6 +183,69 @@ public class ParticipantService {
         return participant;
     }
 
+    public List<Participant> registerAllParticipantsInEvent(List<EventRegistrationRequestDto> dtos, Long eventId) {
+        var event = eventService.findEventById(eventId);
+        var teamToParticipants = this.createTeamToParticipantsMap(dtos);
+
+        var registrations = new HashSet<EventRegistration>();
+        var teamToRegistrationCounts = event.getRegistrations()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        EventRegistration::getTeam, Collectors.counting())
+                );
+        teamToParticipants.forEach((team, participants) -> {
+            var registeredParticipantsCount = new AtomicInteger(teamToRegistrationCounts.getOrDefault(team, 0L).intValue());
+
+            participants.forEach(participant -> {
+                participantValidator.validateParticipantAndTeamActive(participant, team);
+                participantValidator.validateParticipantTeamForEvent(participant, team, event);
+                participantValidator.validateParticipantForEvent(participant, event, registeredParticipantsCount.get());
+
+                registeredParticipantsCount.incrementAndGet();
+                registrations.add(registrationMapper.toNewEventRegistration(participant, event, team));
+            });
+        });
+        return eventRegistrationRepository.saveAll(registrations)
+                .stream()
+                .map(EventRegistration::getParticipant).toList();
+    }
+
+    private Map<Team, List<Participant>> createTeamToParticipantsMap(List<EventRegistrationRequestDto> dtos) {
+        var participantIds = dtos.stream()
+                .map(EventRegistrationRequestDto::participantId).collect(Collectors.toSet());
+        var teamsIds = dtos.stream()
+                .map(EventRegistrationRequestDto::teamId).collect(Collectors.toSet());
+
+        var participants = participantRepository.findAllById(participantIds);
+        var teams = teamService.findAllTeamsById(teamsIds);
+
+        var idToParticipants = participants.stream()
+                .collect(Collectors.toMap(Participant::getId, Function.identity()));
+        var idToTeams = teams.stream()
+                .collect(Collectors.toMap(Team::getId, Function.identity()));
+
+        return dtos.stream()
+                .collect(Collectors.groupingBy(
+                        dto -> this.getTeamById(idToTeams, dto.teamId()),
+                        Collectors.mapping(
+                                dto -> this.getParticipantById(idToParticipants, dto.participantId()),
+                                Collectors.toList()
+                        )
+                ));
+    }
+
+    private Team getTeamById(Map<Long, Team> idToTeams, Long teamId) {
+
+        return Optional.ofNullable(idToTeams.get(teamId))
+                .orElseThrow(() -> new NotFoundException("Equipe não encontrada."));
+    }
+
+    private Participant getParticipantById(Map<Long, Participant> idToParticipants, Long participantId) {
+
+        return Optional.ofNullable(idToParticipants.get(participantId))
+                .orElseThrow(() -> new NotFoundException("Participante não encontrado."));
+    }
+
     public void deleteParticipant(Long id) {
         var participant = this.findParticipantById(id);
         var registrations = participant.getEditionRegistrations();
@@ -174,6 +281,16 @@ public class ParticipantService {
 
         participant.getEventRegistrations().remove(registration);
         eventRegistrationRepository.delete(registration);
+    }
+
+    public void deleteAllEventRegistrationsById(Long eventId, List<Long> registrationsIds) {
+        var event = eventService.findEventById(eventId);
+        var eventStatus = event.getStatus();
+
+        if (!eventStatus.equals(Status.SCHEDULED)) {
+            throw new UnprocessableEntityException("Nenhum participante pode ser desinscrito, pois o evento não está mais agendado.");
+        }
+        eventRegistrationRepository.deleteAllById(registrationsIds);
     }
 
     public Participant replaceParticipant(Long id, ParticipantRequestDto dto) {

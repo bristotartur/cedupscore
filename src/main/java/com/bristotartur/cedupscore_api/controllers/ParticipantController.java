@@ -1,5 +1,7 @@
 package com.bristotartur.cedupscore_api.controllers;
 
+import com.bristotartur.cedupscore_api.domain.Participant;
+import com.bristotartur.cedupscore_api.dtos.request.EventRegistrationRequestDto;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantCSVDto;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantFilterDto;
 import com.bristotartur.cedupscore_api.dtos.request.ParticipantRequestDto;
@@ -34,13 +36,26 @@ public class ParticipantController {
     private final ParticipantCSVService participantCSVService;
 
     @GetMapping
-    public ResponseEntity<Page<ParticipantResponseDto>> listAllParticipants(@ModelAttribute() ParticipantFilterDto filter,
+    public ResponseEntity<Page<ParticipantResponseDto>> listAllParticipants(@ModelAttribute ParticipantFilterDto filter,
+                                                                            @RequestParam(required = false, name = "not-in-event") Long notInEvent,
                                                                             Pageable pageable) {
-        var participants = participantService.findAllParticipants(filter, pageable);
-        var dtos = participants.getContent()
-                .stream()
-                .map(participant -> participantService.createParticipantResponseDto(participant, false))
-                .toList();
+        var updatedFilter = (notInEvent != null) ? filter.withUpdatedNotInEvent(notInEvent) : filter;
+
+        var participants = participantService.findAllParticipants(updatedFilter, pageable);
+        var dtos = this.generateParticipantResponseDtoList(participants.getContent(), updatedFilter);
+
+        return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
+    }
+
+    @PostMapping(path = "/exclude-ids")
+    public ResponseEntity<Page<ParticipantResponseDto>> listAllParticipantsExcludingIds(@ModelAttribute ParticipantFilterDto filter,
+                                                                                        @RequestParam(required = false, name = "not-in-event") Long notInEvent,
+                                                                                        @RequestBody List<Long> excludeIds,
+                                                                                        Pageable pageable) {
+        var updatedFilter = (notInEvent != null) ? filter.withUpdatedNotInEvent(notInEvent) : filter;
+
+        var participants = participantService.findAllParticipants(updatedFilter, excludeIds, pageable);
+        var dtos = this.generateParticipantResponseDtoList(participants.getContent(), updatedFilter);
 
         return ResponseEntity.ok().body(new PageImpl<>(dtos, pageable, participants.getTotalElements()));
     }
@@ -129,7 +144,7 @@ public class ParticipantController {
 
     @PostMapping(path = "/{id}/register-in-event/{eventId}")
     @PreAuthorize(
-            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EVENT_ADMIN')"
     )
     public ResponseEntity<ParticipantResponseDto> registerInEvent(@PathVariable Long id,
                                                                   @PathVariable Long eventId,
@@ -139,6 +154,21 @@ public class ParticipantController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(participantService.createParticipantResponseDto(registeredParticipant, false));
+    }
+
+    @PostMapping(path = "/register-in-event/{eventId}")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EVENT_ADMIN')"
+    )
+    public ResponseEntity<List<ParticipantResponseDto>> registerAllInEvent(@PathVariable Long eventId,
+                                                                           @RequestBody @Valid List<EventRegistrationRequestDto> requestDtos) {
+        var participants = participantService.registerAllParticipantsInEvent(requestDtos, eventId);
+        var dtos = participants
+                .stream()
+                .map(participant -> participantService.createParticipantResponseDto(participant, false))
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(dtos);
     }
 
     @DeleteMapping(path = "/{id}")
@@ -161,10 +191,20 @@ public class ParticipantController {
 
     @DeleteMapping(path = "/{id}/remove-event-registration/{registrationId}")
     @PreAuthorize(
-            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EDITION_ADMIN')"
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EVENT_ADMIN')"
     )
     public ResponseEntity<Void> deleteEventRegistration(@PathVariable Long id, @PathVariable Long registrationId) {
         participantService.deleteEventRegistration(id, registrationId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(path = "/remove-event-registrations")
+    @PreAuthorize(
+            "hasAnyAuthority('SCOPE_SUPER_ADMIN', 'SCOPE_EVENT_ADMIN')"
+    )
+    public ResponseEntity<Void> deleteAllEventRegistrations(@RequestParam("event") Long eventId,
+                                                            @RequestBody List<Long> registrationsIds) {
+        participantService.deleteAllEventRegistrationsById(eventId, registrationsIds);
         return ResponseEntity.noContent().build();
     }
 
@@ -186,6 +226,23 @@ public class ParticipantController {
                                                                        @RequestParam("is-active") Boolean status) {
         var participant = participantService.setParticipantStatus(id, status);
         return ResponseEntity.ok().body(participantService.createParticipantResponseDto(participant, false));
+    }
+
+    private List<ParticipantResponseDto> generateParticipantResponseDtoList(List<Participant> participants, ParticipantFilterDto filter) {
+
+        return participants.stream()
+                .map(participant -> {
+                    var eventId = filter.event();
+                    if (eventId != null) {
+                        return participant.getEventRegistrations().stream()
+                                .filter(registration -> registration.getEvent().getId().equals(eventId))
+                                .findFirst()
+                                .map(registration -> participantService.createParticipantResponseDto(participant, registration, false))
+                                .orElseGet(() -> participantService.createParticipantResponseDto(participant, false));
+                    }
+                    return participantService.createParticipantResponseDto(participant, false);
+                })
+                .toList();
     }
 
 }
