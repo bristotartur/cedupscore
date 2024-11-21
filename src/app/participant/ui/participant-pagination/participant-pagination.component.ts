@@ -23,7 +23,9 @@ export class ParticipantPaginationComponent implements OnInit {
   @Input({ required: true }) content!: Participant[];
   @Input({ alias: 'edition', required: true }) editionId!: number | '';
   @Input() currentPage: number = 1;
+  @Input() mode: 'view' | 'registration' = 'view';
 
+  @Output() onCardSelected = new EventEmitter<{ id: number, action: 'add' | 'remove' }>();
   @Output() pageChange = new EventEmitter<number>();
 
   rootUrl: string = '';
@@ -48,7 +50,7 @@ export class ParticipantPaginationComponent implements OnInit {
     }
   }
 
-  emitPageChange(page: number) {
+  emitPageChange(page: number): void {
     const total = this.totalPages;
     
     page = (page < 1) ? 1 : (page > total) ? total : page;

@@ -21,6 +21,7 @@ export class SearchBarComponent implements AfterViewInit {
   @ViewChild('searchBar') inputField!: ElementRef;
 
   @Input('focus') shouldFocus = true;
+  @Input('searchType') selectedSearchType: 'name' | 'cpf' = 'name';
 
   @Output('valueChange') inputValueChange = new EventEmitter<string>();
   @Output() searchTypeChange = new EventEmitter<'name' | 'cpf'>();
@@ -51,13 +52,17 @@ export class SearchBarComponent implements AfterViewInit {
   selectOption(value: string | number): void {
     switch(value) {
       case 'name':
+        this.selectedSearchType = value
         this.placeholder = 'Pesquisar por nome';
         this.mask = null;
+
         this.emitSearchChange(value);
         break;
-      case 'cpf':
+        case 'cpf':
+        this.selectedSearchType = value
         this.placeholder = 'Pesquisar por CPF';
         this.mask = '000.000.000-00';
+        
         this.emitSearchChange(value);
         break;
     }

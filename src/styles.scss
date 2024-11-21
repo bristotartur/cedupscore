@@ -8,6 +8,9 @@
 
     font-family: 'Inter', sans-serif;
 
+    transition: width .15s, height .15s;
+    transition-timing-function: ease;
+
     ::-webkit-scrollbar {
         width: 5px; 
         height: 5px;
@@ -98,6 +101,11 @@ button {
     line-height: 1.6;
 
     outline: none;
+
+    ul, ol {
+        padding-inline-start: 25px;
+        margin: 0;
+    }
 }
 
 @media screen and (max-width: 992px) {

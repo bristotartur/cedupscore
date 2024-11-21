@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { reduceName, transformParticipantStatus, transformParticipantType } from '../../../shared/utils/common-utils';
 import { ParticipantType } from '../../../shared/enums/participant-type.enum';
 import { RouterLink } from '@angular/router';
@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './participant-card.component.html',
   styleUrl: './participant-card.component.scss'
 })
-export class ParticipantCardComponent implements OnInit {
+export class ParticipantCardComponent implements OnInit, OnChanges {
 
   @Input({ required: true }) id!: number;
   @Input({ required: true }) name!: string;
@@ -23,11 +23,18 @@ export class ParticipantCardComponent implements OnInit {
   @Input({ required: true, transform: transformParticipantType })
   type!: ParticipantType;
 
+  @Input() mode: 'view' | 'registration' = 'view';
+  @Input() isSelected: boolean = false;
+
+  @Output() onSelect = new EventEmitter<{ id: number, action: 'add' | 'remove' }>()
+
   root: string = '';
   screenWidth: number = 0;
   adjustedName: string = '';
   adjuestedTeamName: string = '';
   participantUrl!: string;
+  buttonMessage: 'Adicionar' | 'Remover' = 'Adicionar';
+  abbrMessage: string = '';
 
   ngOnInit(): void {
     this.createRoot();
@@ -42,6 +49,14 @@ export class ParticipantCardComponent implements OnInit {
     if (changes['id']) this.participantUrl = `${this.root}${this.id}`;
 
     if (changes['name'] || changes['team']) this.onResize();
+
+    if (this.isSelected) {
+      this.buttonMessage = 'Remover';
+      this.abbrMessage = 'Remover da lista de seleção'
+    } else {
+      this.buttonMessage = 'Adicionar';
+      this.abbrMessage = 'Adicionar a lista de seleção'
+    }
   }
 
   private createRoot(): void {
@@ -83,8 +98,13 @@ export class ParticipantCardComponent implements OnInit {
     this.adjustedName = reduceName(this.name, 50);
   }
 
-  onClick(): void {
+  onLinkClick(): void {
     document.documentElement.scrollTop = 0;
+  }
+
+  onButtonClick(): void {
+    const action = (this.isSelected) ? 'remove' : 'add';
+    this.onSelect.emit({ id: this.id, action: action });
   }
 
 }

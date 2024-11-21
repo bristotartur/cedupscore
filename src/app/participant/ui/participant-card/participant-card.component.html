@@ -7,7 +7,16 @@
     <span>
         Status: <span class="dimmed">{{ status }}</span>
     </span>
-    <a [routerLink]="participantUrl" (click)="onClick()">
-        Mais detalhes <i class="fa-solid fa-caret-down"></i>
-    </a>
+    @switch (mode) {
+        @case ('view') {
+            <a [routerLink]="participantUrl" (click)="onLinkClick()">
+                Mais detalhes <i class="fa-solid fa-caret-down"></i>
+            </a>
+        }
+        @case ('registration') {
+            <abbr [title]="abbrMessage">
+                <button (click)="onButtonClick()">{{ buttonMessage }}</button>
+            </abbr>
+        }
+    }
 </div>

@@ -48,7 +48,7 @@ import { EventScoreRequest } from '../../../shared/models/event-score-request.mo
     OptionsButtonComponent,
     SelectionPopupComponent,
     CloseEventPopupComponent
-],
+  ],
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.scss'
 })
@@ -308,7 +308,7 @@ export class TaskDetailsComponent implements OnInit, AfterViewInit {
     this.buttonOptions = [{ name: 'Editar', value: `/tasks/${id}/update`, isLink: true }];
 
     if (status === Status.SCHEDULED) {
-      this.buttonOptions.push({ name: 'Inscrever participantes', value: `/tasks/${id}/register-participants`, isLink: true });
+      this.buttonOptions.push({ name: 'Inscrever participantes', value: `/tasks/${id}/registration`, isLink: true });
     }
     if (status !== Status.CANCELED) {
       this.buttonOptions.push({ name: 'Atualizar status', value: 'updateStatus' });

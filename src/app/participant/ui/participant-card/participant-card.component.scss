@@ -76,7 +76,18 @@
 
             i { margin-left: 5px; }
 
+            
             &:hover { text-decoration: underline; }
+        }
+
+        button {
+            width: fit-content;
+            height: fit-content;
+
+            &:hover { 
+                background-color: $neutral-color-3; 
+                text-decoration: underline;
+            }
         }
     }
 }
@@ -118,5 +129,8 @@
             &.dimmed { font-size: 14px; }
         }
 
+        &._2 {
+            button { font-size: 15px; }
+        }
     }
 }

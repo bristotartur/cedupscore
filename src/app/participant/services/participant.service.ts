@@ -9,6 +9,7 @@ import { ParticipantRegistration } from '../models/participant-registration.mode
 import { RegistrationReport } from '../models/registration-report.model';
 import { ParticipantWithProblem } from '../models/participant-with-problem.model';
 import { InactivationReport } from '../models/inactivation-report.model';
+import { EventRegistration } from '../models/event-registration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,10 @@ export class ParticipantService {
 
   previousProfileUrl: string = '';
 
-  listParticipants(query?: string): Observable<PaginationResponse<Participant>> {
+  listParticipants(query?: string, excludeIds?: number[]): Observable<PaginationResponse<Participant>> {
+    if (excludeIds) {
+      return this.httpClient.post<PaginationResponse<Participant>>(`${this.url}/api/v1/participants/exclude-ids${query}`, excludeIds);
+    }
     return this.httpClient.get<PaginationResponse<Participant>>(`${this.url}/api/v1/participants${query}`);
   }
 
@@ -50,6 +54,22 @@ export class ParticipantService {
       .pipe(
         catchError(handleError)
       );
+  }
+
+  registerParticipantsInEvent(eventId: number, registrations: EventRegistration[]): Observable<Participant[]> {
+    return this.httpClient.post<Participant[]>(`${this.url}/api/v1/participants/register-in-event/${eventId}`, registrations)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  removeEventRegistrations(eventId: number, registrationsIds: number[]): Observable<void> {
+    return this.httpClient.delete<void>(
+      `${this.url}/api/v1/participants/remove-event-registrations?event=${eventId}`,
+      { body: registrationsIds }
+    ).pipe(
+      catchError(handleError)
+    );
   }
 
   uploadRegistrarionCSVFile(file: File): Observable<RegistrationReport> {

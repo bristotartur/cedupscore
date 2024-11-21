@@ -6,6 +6,8 @@
         [type]="participant.type"
         [team]="teams[$index]"
         [status]="participant.isActive"
+        [mode]="mode"
+        (onSelect)="onCardSelected.emit($event)"
     />
 } @empty {
     <div class="message">

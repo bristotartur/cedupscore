@@ -34,9 +34,9 @@ export class HeaderComponent implements OnInit {
     { name: 'Geral', iconClass: 'fa-solid fa-house', link: '/', isSelected: false },
     { name: 'Placar', iconClass: 'fa-solid fa-medal', link: '/scoreboards', isSelected: false },
     { name: 'Tarefas', iconClass: 'fa-solid fa-list-check', link: '/tasks', isSelected: false },
-    { name: 'Esportes', iconClass: 'fa-solid fa-volleyball', link: '/sports', isSelected: false },
+    // { name: 'Esportes', iconClass: 'fa-solid fa-volleyball', link: '/sports', isSelected: false },
     { name: 'Membros', iconClass: 'fa-solid fa-person', link: '/participants', isSelected: false },
-    { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '/punishments', isSelected: false }
+    // { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '/punishments', isSelected: false }
   ];
 
   constructor() {
