@@ -37,6 +37,7 @@ export class ProfileComponent implements OnChanges {
     } 
     if (this.isUser(this.content)) {
       this.type = transformRoleType(this.content.role);
+      this.extras = [`Email: ${this.content.email}`];
       return;
     }
   }

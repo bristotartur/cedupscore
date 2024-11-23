@@ -1,0 +1,19 @@
+<app-page-body class="user-profile">
+    @if (user$) {
+        <app-profile 
+            [content]="(user$ | async)!"
+        />
+    }
+    @else {
+        <div class="message-container">
+            <span>Você não está autenticado no sistema. Realize o login para visualizar seu perfil.</span>
+            <a routerLink="/login">Entrar</a>
+        </div>
+    }
+    @if (isSuperAdmin) {
+        <section id="user-management">
+            <a [routerLink]="userUpdateLink">Editar perfil</a>
+            <a routerLink="/users">Gerenciar usuários</a>
+        </section>
+    }
+</app-page-body>

@@ -1,0 +1,119 @@
+@import '../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 70px;
+}
+
+app-page-body {
+    .message-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+
+        margin-top: 200px;
+        width: 80%;
+
+        span {
+            color: $neutral-color-2;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        a {
+            color: $neutral-color-2;
+            font-size: 18px;
+            text-decoration: none;
+
+            &:hover { 
+                color: $font-color; 
+                text-decoration: underline; 
+            }
+        }
+    }
+
+    section {
+        display: flex;
+        width: 100%;
+
+        &#user-management {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            border-top: 2px solid $neutral-color-3;
+            padding-top: 40px;
+
+            a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 190px;
+                height: 44px;
+
+                border: none;
+                border-radius: $default-radius;
+
+                background-color: $neutral-color-3;
+
+                color: $font-color;
+                font-size: 18px;
+                font-weight: 500;
+                text-decoration: none;
+
+                cursor: pointer;
+
+                &:hover { background-color: $neutral-color-4; }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    app-page-body {
+        .message-container { width: 82vw; };
+    }
+}
+
+@media screen and (max-width: 688px) {
+    app-page-body {
+        .message-container {
+            span { font-size: 18px; }
+
+            a { font-size: 16px; }
+        }
+
+        section#user-management {
+            a { 
+                width: 180px;
+                height: 36px;
+
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    :host { padding-top: 0px; }
+
+    app-page-body {
+        .message-container {
+            span { font-size: 16px; }
+
+            a { font-size: 15px; }
+        }
+
+        section#user-management {
+            a { 
+                width: 160px;
+                height: 34px;
+                font-size: 14px;
+            }
+        }
+    }
+}

@@ -36,7 +36,8 @@ export class HeaderComponent implements OnInit {
     { name: 'Tarefas', iconClass: 'fa-solid fa-list-check', link: '/tasks', isSelected: false },
     // { name: 'Esportes', iconClass: 'fa-solid fa-volleyball', link: '/sports', isSelected: false },
     { name: 'Membros', iconClass: 'fa-solid fa-person', link: '/participants', isSelected: false },
-    // { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '/punishments', isSelected: false }
+    // { name: 'Recursos', iconClass: 'fa-solid fa-exclamation', link: '/punishments', isSelected: false },
+    { name: 'Perfil', iconClass: 'fa-solid fa-user', link: '/profile', isSelected: false }
   ];
 
   constructor() {
@@ -89,7 +90,11 @@ export class HeaderComponent implements OnInit {
   }
 
   updateSelectedItem(url: string): void {
-    const urlRoot = url.split('/').slice(0, 2).join('/');
+    let urlRoot = url.split('/').slice(0, 2).join('/');
+
+    if (urlRoot === '/users') {
+      urlRoot = '/profile';
+    }
     const index = this.navItems
       .findIndex(item => item.link == urlRoot);
 
