@@ -1,0 +1,9 @@
+<div class="card-header">
+    <span id="name">{{ user.name }}</span>
+    <span id="type">{{ user.role | role : screenWidth }}</span>
+</div>
+<div class="link-container">
+    <a [routerLink]="userLink">
+        Mais detalhes <i class="fa-solid fa-caret-down"></i>
+    </a>
+</div>
