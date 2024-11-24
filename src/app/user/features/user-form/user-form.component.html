@@ -1,0 +1,47 @@
+<div class="buttons-container form">
+    <button (click)="comeBack()">Voltar</button>
+</div>
+<app-page-body class="common-form">
+    <h2>{{ (formMode === 'register') ? 'Cadastrar usuário' : 'Atualizar usuário' }}</h2>
+    <form [formGroup]="form" method="post">
+        <app-input 
+            #nameInput type="text" formControlName="name" placeholder="Nome"
+        />
+        <app-input 
+            type="email" formControlName="email" placeholder="Email"
+        />
+        <app-input
+            type="password" formControlName="password" placeholder="Senha"
+        />
+        <div class="role-container">
+            <app-select-button
+                name="Cargo"
+                customClass="fit"
+                [simplified]="true"
+                [options]="roleOptions"
+                [selectedValue]="form.get('role')?.value ?? ''"
+                (option)="onRoleSelect($event)"
+            />
+        </div>
+        <div class="wrapper">
+            <div class="message-container">
+                @if (errorMessage) {
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>{{ errorMessage }}</span>
+                }
+            </div>
+            <button
+                type="submit" [disabled]="isRequesting" (click)="onSubmit($event)"
+            >
+                {{ (formMode === 'register') ? 'Cadastrar' : 'Atualizar' }}
+            </button>
+        </div>
+    </form>
+</app-page-body>
+<app-alert-popup
+    #updatePopup
+    title="Atualizar usuário?"
+    message="Ao atualizar o usuário, todos os seus dados serão substituídos pelos novos dados fornecidos. Deseja continuar?"
+    buttonMessage="Atualizar"
+    (accepted)="updateUser()"
+/>

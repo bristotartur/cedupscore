@@ -34,5 +34,19 @@ export class UserService {
         catchError(handleError)
       );
   }
+
+  createUser(req: User): Observable<User> {
+    return this.httpClient.post<User>(`${this.url}/api/v1/users/signup`, req)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
+  updateUser(id: number, req: User): Observable<User> {
+    return this.httpClient.put<User>(`${this.url}/api/v1/users/${id}`, req)
+      .pipe(
+        catchError(handleError)
+      );
+  }
   
 }

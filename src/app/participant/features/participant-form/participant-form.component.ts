@@ -51,7 +51,7 @@ export class ParticipantFormComponent implements OnInit, AfterViewInit {
     gender: [null as Gender | null, Validators.required],
     type: [null as ParticipantType | null, Validators.required],
     team: [0, Validators.required]
-  })
+  });
 
   participant$ = new BehaviorSubject<Participant | null>(null);
 
