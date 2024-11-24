@@ -16,6 +16,8 @@ export class EventService {
 
   private url = environment.api;
   private httpClient = inject(HttpClient);
+  
+  previousDetailsUrl: string = '/';
 
   listEvents(type?: 'task' | 'sport', editionId?: number, userId?: number): Observable<PaginationResponse<EventModel>> {
     const params = ['?size=50'];

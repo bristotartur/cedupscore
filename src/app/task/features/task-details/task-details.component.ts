@@ -59,7 +59,7 @@ export class TaskDetailsComponent implements OnInit, AfterViewInit {
   private eventService = inject(EventService);
   private editionService = inject(EditionService);
   private participantService = inject(ParticipantService);
-  userService= inject(UserService);
+  protected userService = inject(UserService);
 
   @ViewChild('output') output!: ElementRef<HTMLDivElement>;
   @ViewChild('participantsContainer') participantsContainer!: ElementRef<HTMLDivElement>;
@@ -162,7 +162,9 @@ export class TaskDetailsComponent implements OnInit, AfterViewInit {
 
   comeBack(): void {
     document.documentElement.scrollTop = 0;
-    this.router.navigate(['/tasks']);
+
+    const url = this.eventService.previousDetailsUrl;
+    this.router.navigate([url]);
   }
 
   private loadEdition(): void {

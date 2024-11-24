@@ -12,6 +12,7 @@ import { Status } from '../../../shared/enums/status.enum';
 import { NgClass } from '@angular/common';
 import { UserService } from '../../../user/services/user.service';
 import { OptionsButtonComponent } from '../../../shared/components/options-button/options-button.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tasks',
@@ -28,9 +29,10 @@ import { OptionsButtonComponent } from '../../../shared/components/options-butto
 })
 export class TasksComponent implements OnInit {
 
+  private router = inject(Router);
   private eventService = inject(EventService);
   private editionService = inject(EditionService);
-  userService = inject(UserService);
+  protected userService = inject(UserService);
 
   tasks$ = new BehaviorSubject<EventModel[] | null>(null);
   latestEdition$ = new BehaviorSubject<Edition | null>(null);
@@ -47,6 +49,7 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.eventService.previousDetailsUrl = this.router.url;
     this.editions$.pipe(
       tap(editions => this.setEditinsOptions(editions))
     ).subscribe();
