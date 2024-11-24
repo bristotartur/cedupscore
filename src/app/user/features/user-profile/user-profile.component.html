@@ -1,3 +1,8 @@
+<div class="buttons-container form">
+    @if (isNotCurrentUserProfile) {
+        <button (click)="router.navigate(['/users'])">Voltar</button>
+    }
+</div>
 <app-page-body class="user-profile">
     @if (user$) {
         <app-profile 

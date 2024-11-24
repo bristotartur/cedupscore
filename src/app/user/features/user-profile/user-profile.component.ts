@@ -22,13 +22,13 @@ import { RoleType } from '../../../shared/enums/role-type.enum';
 })
 export class UserProfileComponent implements OnInit {
 
-  private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  userService = inject(UserService);
+  protected router = inject(Router);
+  protected userService = inject(UserService);
 
   user$!: Observable<User>;
 
-  isCurrentUserProfile: boolean = false;
+  isNotCurrentUserProfile: boolean = false;
   isSuperAdmin: boolean = false;
   userUpdateLink: string = '';
 
@@ -36,15 +36,15 @@ export class UserProfileComponent implements OnInit {
     const currentUrl = this.router.url;
     const currentUser = this.userService.currentUserSignal();
 
-    this.isCurrentUserProfile = currentUrl.includes('/users');
+    this.isSuperAdmin = currentUser?.role == RoleType.SUPER_ADMIN;
+    this.isNotCurrentUserProfile = currentUrl.includes('/users');
 
-    if (!this.isCurrentUserProfile && !currentUser) return;
+    if (!this.isNotCurrentUserProfile && !currentUser) return;
       
-    if (this.isCurrentUserProfile) {
+    if (this.isNotCurrentUserProfile) {
       this.user$ = this.loadUser(currentUser);
     } else {
       this.user$ = of(currentUser!);
-      this.isSuperAdmin = currentUser?.role == RoleType.SUPER_ADMIN;
       this.userUpdateLink = `/users/${currentUser!.id}/update`;
     }
   }

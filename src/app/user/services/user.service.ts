@@ -6,6 +6,7 @@ import { LoginResponse } from '../models/login-response.model';
 import { LoginRequest } from '../models/login-request.model';
 import { handleError } from '../../shared/utils/common-utils';
 import { User } from '../models/user.model';
+import { PaginationResponse } from '../../shared/models/pagination-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,10 @@ export class UserService {
 
   logout(): void {
     this.currentUserSignal.set(null);
+  }
+
+  listUsers(): Observable<PaginationResponse<User>> {
+    return this.httpClient.get<PaginationResponse<User>>(`${this.url}/api/v1/users`);
   }
 
   findUser(userId: number): Observable<User> {
