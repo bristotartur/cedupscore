@@ -47,6 +47,13 @@ export class UserService {
       );
   }
 
+  deleteUser(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.url}/api/v1/users/${id}`)
+      .pipe(
+        catchError(handleError)
+      );
+  }
+
   updateUser(id: number, req: User): Observable<User> {
     return this.httpClient.put<User>(`${this.url}/api/v1/users/${id}`, req)
       .pipe(

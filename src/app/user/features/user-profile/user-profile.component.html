@@ -1,6 +1,14 @@
 <div class="buttons-container form">
     @if (isNotCurrentUserProfile) {
         <button (click)="router.navigate(['/users'])">Voltar</button>
+
+        @if (isSuperAdmin) {
+            <app-options-button
+                iconClass="fa fa-solid fa-gear"
+                [options]="[{ name: 'Remover usuário', value: 'remove' }]"
+                (optionSelected)="onOptionSelected($event)"
+            />
+        }
     }
 </div>
 <app-page-body class="user-profile">
@@ -22,3 +30,21 @@
         </section>
     }
 </app-page-body>
+
+@if (isNotCurrentUserProfile && isSuperAdmin) {
+    <app-alert-popup
+        #deletePopup
+        title="Remover usuário?"
+        message="Ao remover o usuário, ele não terá mais acesso ao sistema. Deseja continuar?"
+        buttonMessage="Remover"
+        (accepted)="deleteUser()"
+    />
+    <app-alert-popup
+        #errorPopup
+        title="ERRO!"
+        [message]="errorMessage"
+        buttonMessage="Ok"
+        customClass="error"
+        [hasOnlyMessage]="true"
+    />
+}
