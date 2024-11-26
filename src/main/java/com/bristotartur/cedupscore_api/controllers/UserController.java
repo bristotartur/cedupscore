@@ -74,6 +74,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUserResponseDto(user));
     }
 
+    @DeleteMapping(path = "/{id}")
+    @PreAuthorize(
+            "hasAuthority('SCOPE_SUPER_ADMIN')"
+    )
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping(path = "/{id}")
     @PreAuthorize(
             "hasAuthority('SCOPE_SUPER_ADMIN')"

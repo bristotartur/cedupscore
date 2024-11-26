@@ -62,6 +62,11 @@ public class UserService {
         return userRepository.save(userMapper.toNewUser(dto, password));
     }
 
+    public void deleteUser(Long id) {
+        var user = this.findUserById(id);
+        userRepository.delete(user);
+    }
+
     public User replaceUser(Long id, UserRequestDto dto) {
         this.findUserById(id);
         this.validateEmail(dto.email());
