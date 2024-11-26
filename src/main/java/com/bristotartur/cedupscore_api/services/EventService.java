@@ -151,7 +151,6 @@ public class EventService {
             }
             case SportEventRequestDto sportDto -> {
                 eventValidator.checkExtraType(EventType.SPORT, sportDto.getSportType());
-                eventValidator.checkSportEventForUpdate(sportDto, event, edition);
 
                 var name = this.createSportEventName(sportDto.getSportType(), sportDto.getModality());
                 yield eventRepository.save(eventMapper.toExistingSportEvent(sportDto, event, name, edition, user));

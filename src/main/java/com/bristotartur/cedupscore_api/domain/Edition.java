@@ -44,10 +44,6 @@ public class Edition {
     @Builder.Default
     private Set<EditionRegistration> editionRegistrations = new HashSet<>();
 
-    @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<Punishment> punishments = new HashSet<>();
-
     @Override
     public String toString() {
         return "Edition{" +

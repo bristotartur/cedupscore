@@ -19,7 +19,6 @@ public interface EventMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "scores", ignore = true)
     @Mapping(target = "registrations", ignore = true)
-    @Mapping(target = "matches", ignore = true)
     @Mapping(target = "name", source = "dto.name")
     @Mapping(target = "extraType", source = "dto.taskType")
     @Mapping(target = "type", expression = "java(com.bristotartur.cedupscore_api.enums.EventType.TASK)")
@@ -32,7 +31,6 @@ public interface EventMapper {
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "scores", ignore = true)
     @Mapping(target = "registrations", ignore = true)
-    @Mapping(target = "matches", ignore = true)
     @Mapping(target = "name", source = "name")
     @Mapping(target = "extraType", source = "dto.sportType")
     @Mapping(target = "type", expression = "java(com.bristotartur.cedupscore_api.enums.EventType.SPORT)")
@@ -41,7 +39,6 @@ public interface EventMapper {
     @Mapping(target = "endedAt", expression = "java(java.time.LocalDateTime.now())")
     Event toNewSportEvent(SportEventRequestDto dto, String name, Edition edition, User responsibleUser);
 
-    @Mapping(target = "matches", ignore = true)
     @Mapping(target = "name", source = "dto.name")
     @Mapping(target = "description", source = "dto.description")
     @Mapping(target = "extraType", source = "dto.taskType")
@@ -72,7 +69,6 @@ public interface EventMapper {
     @Mapping(target = "endedAt", source = "event.endedAt")
     @Mapping(target = "scores", source = "event.scores")
     @Mapping(target = "registrations", source = "event.registrations")
-    @Mapping(target = "matches", source = "event.matches")
     @Mapping(target = "edition", source = "edition")
     @Mapping(target = "responsibleUser", source = "responsibleUser")
     Event toExistingSportEvent(SportEventRequestDto dto, Event event, String name, Edition edition, User responsibleUser);

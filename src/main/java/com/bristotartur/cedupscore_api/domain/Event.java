@@ -76,10 +76,6 @@ public class Event {
     @Builder.Default
     private Set<EventRegistration> registrations = new HashSet<>();
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<Match> matches = new HashSet<>();
-
     @Override
     public String toString() {
         return "Event{" +

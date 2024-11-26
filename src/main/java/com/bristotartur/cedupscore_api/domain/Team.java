@@ -45,14 +45,6 @@ public class Team {
     @Builder.Default
     private Set<EventRegistration> eventRegistrations = new HashSet<>();
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<Punishment> punishments = new HashSet<>();
-
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<MatchTeam> matchTeams = new HashSet<>();
-
     @Override
     public String toString() {
         return "Team{" +

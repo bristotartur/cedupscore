@@ -4,7 +4,9 @@ import com.bristotartur.cedupscore_api.domain.*;
 import com.bristotartur.cedupscore_api.dtos.request.EventRequestDto;
 import com.bristotartur.cedupscore_api.dtos.request.EventScoreRequestDto;
 import com.bristotartur.cedupscore_api.dtos.request.SportEventRequestDto;
-import com.bristotartur.cedupscore_api.enums.*;
+import com.bristotartur.cedupscore_api.enums.EventType;
+import com.bristotartur.cedupscore_api.enums.ExtraType;
+import com.bristotartur.cedupscore_api.enums.Status;
 import com.bristotartur.cedupscore_api.exceptions.BadRequestException;
 import com.bristotartur.cedupscore_api.exceptions.ConflictException;
 import com.bristotartur.cedupscore_api.exceptions.UnprocessableEntityException;
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.bristotartur.cedupscore_api.enums.EventType.*;
+import static com.bristotartur.cedupscore_api.enums.EventType.SPORT;
+import static com.bristotartur.cedupscore_api.enums.EventType.TASK;
 import static com.bristotartur.cedupscore_api.enums.ExtraType.CULTURAL;
 import static com.bristotartur.cedupscore_api.enums.ExtraType.getTaskTypePlural;
 import static com.bristotartur.cedupscore_api.enums.ParticipantType.STUDENT;
@@ -47,19 +50,6 @@ public class EventValidationService {
                 }
             }
             default -> throw new BadRequestException("O campo 'tipo' não pode ser vazio.");
-        }
-    }
-
-    public void checkSportEventForUpdate(SportEventRequestDto dto, Event event, Edition edition) throws ConflictException {
-        this.checkEventForUpdate(dto, event);
-        this.checkSportEvent(dto, edition, event.getId());
-
-        var sportType = dto.getSportType();
-
-        if (!event.getExtraType().equals(sportType) && !event.getMatches().isEmpty()) {
-            throw new ConflictException(
-                    "O tipo de esporte não pode ser alterado pois há partidas de outro esporte relacionadas ao evento."
-            );
         }
     }
 
@@ -175,9 +165,6 @@ public class EventValidationService {
         if (isForClosing && (newStatus.equals(SCHEDULED) || newStatus.equals(CANCELED))) {
             throw new UnprocessableEntityException("O evento não pode ser encerrado.");
         }
-        if (event.getType().equals(TASK) || (!newStatus.equals(ENDED) && !newStatus.equals(CANCELED))) return;
-
-        this.checkMatchesToCloseEvent(event.getMatches());
     }
 
     public void checkEdition(Edition edition, Boolean isForUpdate) throws ConflictException {
@@ -214,23 +201,6 @@ public class EventValidationService {
 
                     throw new UnprocessableEntityException(message.formatted(team));
                 });
-    }
-
-    private void checkMatchesToCloseEvent(Set<Match> matches) throws ConflictException {
-        matches.stream()
-                .filter(match -> {
-                    var importance = match.getImportance();
-                    var status = match.getStatus();
-
-                    return importance.equals(Importance.FINAL) && (status.equals(ENDED) || status.equals(CANCELED));
-                })
-                .findFirst()
-                .ifPresentOrElse(
-                        match -> {},
-                        () -> {
-                            throw new ConflictException("O evento não pode ser encerrado pois ainda há partidas a serem realizadas.");
-                        }
-                );
     }
     
     public void validateEventToClose(Event event) throws UnprocessableEntityException {
