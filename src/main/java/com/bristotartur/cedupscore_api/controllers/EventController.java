@@ -1,5 +1,6 @@
 package com.bristotartur.cedupscore_api.controllers;
 
+import com.bristotartur.cedupscore_api.dtos.request.EventFilterDto;
 import com.bristotartur.cedupscore_api.dtos.request.EventRequestDto;
 import com.bristotartur.cedupscore_api.dtos.request.EventScoreRequestDto;
 import com.bristotartur.cedupscore_api.dtos.response.EventResponseDto;
@@ -25,11 +26,12 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public ResponseEntity<Page<EventResponseDto>> listEvents(@RequestParam(value = "type", required = false) String type,
-                                                             @RequestParam(value = "edition", required = false) Long editionId,
+    public ResponseEntity<Page<EventResponseDto>> listEvents(@ModelAttribute EventFilterDto filter,
                                                              @RequestParam(value = "responsible-user", required = false) Long userId,
                                                              Pageable pageable) {
-        var events = eventService.findAllEvents(type, editionId, userId, pageable);
+        var updatedFiler = (userId != null) ? filter.withUpdatedUser(userId) : filter;
+
+        var events = eventService.findAllEvents(updatedFiler, pageable);
         var dtos = events.getContent()
                 .stream()
                 .map(eventService::createEventResponseDto)

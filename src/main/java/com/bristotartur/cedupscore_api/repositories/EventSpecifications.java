@@ -1,11 +1,9 @@
 package com.bristotartur.cedupscore_api.repositories;
 
-import org.springframework.data.jpa.domain.Specification;
-
 import com.bristotartur.cedupscore_api.domain.Event;
 import com.bristotartur.cedupscore_api.enums.EventType;
-
 import jakarta.persistence.criteria.JoinType;
+import org.springframework.data.jpa.domain.Specification;
 
 public final class EventSpecifications {
     
@@ -17,6 +15,18 @@ public final class EventSpecifications {
         return (root, query, criteria) -> (type != null)
                 ? criteria.equal(root.get("type"), type)
                 : null;
+    }
+
+    public static Specification<Event> hasParticipant(Long participantId) {
+
+        return (root, query, criteria) -> {
+            if (participantId == null) return criteria.conjunction();
+
+            var registrationJoin = root.join("registrations", JoinType.LEFT);
+            var participantJoin = registrationJoin.join("participant", JoinType.LEFT);
+
+            return criteria.equal(participantJoin.get("id"), participantId);
+        };
     }
 
     public static Specification<Event> fromEdition(Long editionId) {

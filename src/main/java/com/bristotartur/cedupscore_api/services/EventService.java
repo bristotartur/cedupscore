@@ -1,10 +1,7 @@
 package com.bristotartur.cedupscore_api.services;
 
 import com.bristotartur.cedupscore_api.domain.Event;
-import com.bristotartur.cedupscore_api.dtos.request.EventRequestDto;
-import com.bristotartur.cedupscore_api.dtos.request.EventScoreRequestDto;
-import com.bristotartur.cedupscore_api.dtos.request.SportEventRequestDto;
-import com.bristotartur.cedupscore_api.dtos.request.TaskEventRequestDto;
+import com.bristotartur.cedupscore_api.dtos.request.*;
 import com.bristotartur.cedupscore_api.dtos.response.EventResponseDto;
 import com.bristotartur.cedupscore_api.enums.EventType;
 import com.bristotartur.cedupscore_api.enums.ExtraType;
@@ -48,14 +45,15 @@ public class EventService {
     private final TeamService teamService;
     private final EventScoreRepository eventScoreRepository;
 
-    public Page<Event> findAllEvents(String type, Long editionId, Long userId, Pageable pageable) {
-        var eventType = (type != null) 
-                ? EventType.findEventTypeLike(type)
+    public Page<Event> findAllEvents(EventFilterDto filter, Pageable pageable) {
+        var eventType = (filter.type() != null)
+                ? EventType.findEventTypeLike(filter.type())
                 : null;
 
         var spec = Specification.where(hasType(eventType)
-                .and(fromEdition(editionId))
-                .and(fromUser(userId))
+                .and(hasParticipant(filter.participant()))
+                .and(fromEdition(filter.edition()))
+                .and(fromUser(filter.user()))
         );
         return eventRepository.findAll(spec, PageRequest.of(
                 pageable.getPageNumber(), pageable.getPageSize(), Sort.by("startedAt").descending()
