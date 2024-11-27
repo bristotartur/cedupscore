@@ -44,6 +44,10 @@ app-page-body {
         }
 
         &#event-list-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+
             padding: 20px 0px;
 
             .message-container {

@@ -19,11 +19,12 @@ export class EventService {
   
   previousDetailsUrl: string = '/';
 
-  listEvents(type?: 'task' | 'sport', editionId?: number, userId?: number): Observable<PaginationResponse<EventModel>> {
+  listEvents(type?: 'task' | 'sport', editionId?: number, userId?: number, participantId?: number): Observable<PaginationResponse<EventModel>> {
     const params = ['?size=50'];
     
     if (type) params.push(`type=${type}`);
     if (editionId) params.push(`edition=${editionId}`);
+    if (participantId) params.push(`participant=${participantId}`);
     if (userId) params.push(`responsible-user=${userId}`);
 
     const query = params.join('&');

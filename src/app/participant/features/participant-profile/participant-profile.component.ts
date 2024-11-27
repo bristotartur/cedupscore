@@ -18,6 +18,9 @@ import { Edition } from '../../../edition/models/edition.model';
 import { AlertPopupComponent } from '../../../shared/components/alert-popup/alert-popup.component';
 import { ExceptionResponse } from '../../../shared/models/exception-response.model';
 import { SelectionPopupComponent } from '../../../shared/components/selection-popup/selection-popup.component';
+import { EventService } from '../../../shared/services/event.service';
+import { EventModel } from '../../../shared/models/event.model';
+import { EventCardComponent } from "../../../shared/components/event-card/event-card.component";
 
 @Component({
   selector: 'app-participant-profile',
@@ -29,7 +32,8 @@ import { SelectionPopupComponent } from '../../../shared/components/selection-po
     SelectButtonComponent,
     OptionsButtonComponent,
     AlertPopupComponent,
-    SelectionPopupComponent
+    SelectionPopupComponent,
+    EventCardComponent
 ],
   templateUrl: './participant-profile.component.html',
   styleUrl: './participant-profile.component.scss'
@@ -40,7 +44,8 @@ export class ParticipantProfileComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private participantService = inject(ParticipantService);
   private editionService = inject(EditionService);
-  userService = inject(UserService);
+  private eventService = inject(EventService);
+  protected userService = inject(UserService);
 
   @ViewChild('deletePopup') deletePopup!: AlertPopupComponent;
   @ViewChild('inactivationPopup') inactivationPopup!: AlertPopupComponent;
@@ -61,11 +66,13 @@ export class ParticipantProfileComponent implements OnInit {
   buttonOptions!: Option[];
   latestRegistration!: EditionRegistration;
   registrationsOptions: Option[] = [];
+  events: EventModel[] = [];
   teamsOptions: Option[] = [];
   errorMessage: string = '';
 
   constructor() {
     this.currentUrl = this.router.url;
+    this.eventService.previousDetailsUrl = this.currentUrl;
 
     if (this.currentUrl.includes('tasks') || this.currentUrl.includes('sports')) {
       this.previousLocation = this.currentUrl.split('/participants')[0];
@@ -250,6 +257,7 @@ export class ParticipantProfileComponent implements OnInit {
         next: (participant) => {
             this.participant$.next(participant);
             this.setButtonOptions(id);
+            this.loadParticipantEvents(id);
             this.setRegistrationsOptions(participant.editionRegistrations);
           },
         error: () => this.router.navigate(['/**'])
@@ -299,6 +307,7 @@ export class ParticipantProfileComponent implements OnInit {
   onEditionSelected(value: string | number): void {
     if (isNaN(+value) || value === 0) {
       this.selectedRegistration$.next(this.latestRegistration);
+      this.loadParticipantEvents(this.participant$.value.id);
       return;
     }
     this.participant$.pipe(
@@ -307,7 +316,20 @@ export class ParticipantProfileComponent implements OnInit {
       first()
     ).subscribe(registration => {
       this.selectedRegistration$.next(registration);
+      this.loadParticipantEvents(this.participant$.value.id, registration.editionId);
     });
+  }
+
+  private loadParticipantEvents(participantId: number, editionId?: number): void {
+    if (editionId) {
+      this.eventService.listEvents(undefined, editionId, undefined, participantId).pipe(
+        tap(events => this.events = events.content)
+      ).subscribe();
+    } else {
+      this.eventService.listEvents(undefined, undefined, undefined, participantId).pipe(
+        tap(events => this.events = events.content)
+      ).subscribe();
+    }
   }
 
 }
