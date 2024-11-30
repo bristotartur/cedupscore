@@ -242,13 +242,16 @@ VALUES
 INSERT INTO 
 	tb_event (name, type, status, extra_type, allowed_participant_type, modality, min_participants_per_team, max_participants_per_team, description, started_at, ended_at, edition_id, responsible_user_id)
 VALUES 
-    ('Tentilhões de Darwin', 'TASK', 'ENDED', 'NORMAL', 'STUDENT', 'MIXED',  10, 10, 'bla bla bla', '2024-10-21T12:49:17.039397708', '2024-10-22T13:10:17.039436623', 2, 1),
-    ('Geometria Humana', 'TASK', 'ENDED', 'CULTURAL', 'STUDENT', 'MIXED',  20, 10000, 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?', '2024-10-21T20:10:00.039397708', '2024-10-21T21:05:17.039436623', 2, 1),
-    ('Cores olímpicas', 'TASK', 'ENDED', 'NORMAL', 'STUDENT', 'MIXED',  1, 1, 'bla bla bla', '2024-10-21T12:49:17.039397708', '2024-10-22T13:10:17.039436623', 2, 1);
+    ('Tentilhões de Darwin', 'TASK', 'ENDED', 'NORMAL', 'STUDENT', 'MIXED',  5, 5, 'bla bla bla', '2024-09-21T12:49:17.039397708', '2024-09-22T13:10:17.039436623', 2, 1),
+    ('Geometria Humana', 'TASK', 'ENDED', 'CULTURAL', 'STUDENT', 'MIXED',  20, 10000, 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?', '2024-08-21T20:10:00.039397708', '2024-08-21T21:05:17.039436623', 2, 1),
+    ('Cores olímpicas', 'TASK', 'ENDED', 'NORMAL', 'STUDENT', 'MIXED',  5, 5, 'bla bla bla', '2024-08-21T12:49:17.039397708', '2024-08-22T13:10:17.039436623', 2, 1),
+    ('Desfile de Abertura', 'TASK', 'ENDED', 'NORMAL', 'STUDENT', 'MIXED',  5, 5, 'bla bla bla', '2024-08-07T12:49:17.039397708', '2024-10-22T13:10:17.039436623', 2, 1),
+    ('Astros do Rock', 'TASK', 'ENDED', 'CULTURAL', 'TEACHER_STUDENT', 'MIXED',  5, 5, 'bla bla bla', '2023-05-05T12:49:17.039397708', '2023-05-05T13:10:17.039436623', 1, 1),
+    ('Se Ela Canta Eu Me Encanto', 'TASK', 'ENDED', 'CULTURAL', 'STUDENT', 'MIXED',  5, 5, 'bla bla bla', '2023-05-05T12:49:17.039397708', '2023-05-05T13:10:17.039436623', 1, 1);
 
 INSERT INTO
     tb_event_score (score, team_id, event_id)
-VALUES 
+VALUES
     -- Tentilhões
     (20, 1, 1),
     (50, 2, 1),
@@ -268,38 +271,215 @@ VALUES
     (50, 2, 3),
     (50, 3, 3),
     (10, 4, 3),
-    (50, 5, 3);
+    (50, 5, 3),
+
+    -- Desfile
+    (50, 1, 4),
+    (50, 2, 4),
+    (50, 3, 4),
+    (50, 4, 4),
+    (50, 5, 4),
+
+    -- Astros
+    (100, 1, 5),
+    (70, 2, 5),
+    (50, 3, 5),
+    (80, 4, 5),
+    (90, 5, 5),
+
+    -- Se ela canta
+    (100, 1, 6),
+    (90, 2, 6),
+    (50, 3, 6),
+    (70, 4, 6),
+    (80, 5, 6);
+
 
 INSERT INTO
     tb_event_registration (participant_id, team_id, event_id)
 VALUES
+    -- Tentilhões
+    (4, 1, 1),
+    (5, 1, 1),
+    (6, 1, 1),
+    (7, 1, 1),
+    (20, 1, 1),
+
+    (14, 2, 1),
+    (15, 2, 1),
+    (16, 2, 1),
+    (18, 2, 1),
+    (19, 2, 1),
+
+    (51, 3, 1),
+    (52, 3, 1),
+    (53, 3, 1),
+    (54, 3, 1),
+    (55, 3, 1),
+
+    (34, 4, 1),
+    (35, 4, 1),
+    (36, 4, 1),
+    (38, 4, 1),
+    (39, 4, 1),
+
+    (44, 5, 1),
+    (45, 5, 1),
+    (46, 5, 1),
+    (47, 5, 1),
+    (49, 5, 1),
+
+    -- Geometria
     (4, 1, 2),
     (5, 1, 2),
     (6, 1, 2),
     (7, 1, 2),
     (20, 1, 2),
-    
-    (14, 1, 2),
-    (15, 1, 2),
-    (16, 1, 2),
-    (18, 1, 2),
-    (19, 1, 2),
-    
+
+    (14, 2, 2),
+    (15, 2, 2),
+    (16, 2, 2),
+    (18, 2, 2),
+    (19, 2, 2),
+
     (51, 3, 2),
     (52, 3, 2),
     (53, 3, 2),
     (54, 3, 2),
     (55, 3, 2),
-    
-    (34, 1, 2),
-    (35, 1, 2),
-    (36, 1, 2),
-    (38, 1, 2),
-    (39, 1, 2),
-    
-    (44, 1, 2),
-    (45, 1, 2),
-    (46, 1, 2),
-    (47, 1, 2),
-    (49, 1, 2);
-    
+
+    (34, 4, 2),
+    (35, 4, 2),
+    (36, 4, 2),
+    (38, 4, 2),
+    (39, 4, 2),
+
+    (44, 5, 2),
+    (45, 5, 2),
+    (46, 5, 2),
+    (47, 5, 2),
+    (49, 5, 2),
+
+    -- Cores
+    (4, 1, 3),
+    (5, 1, 3),
+    (6, 1, 3),
+    (7, 1, 3),
+    (20, 1, 3),
+
+    (14, 2, 3),
+    (15, 2, 3),
+    (16, 2, 3),
+    (18, 2, 3),
+    (19, 2, 3),
+
+    (51, 3, 3),
+    (52, 3, 3),
+    (53, 3, 3),
+    (54, 3, 3),
+    (55, 3, 3),
+
+    (34, 4, 3),
+    (35, 4, 3),
+    (36, 4, 3),
+    (38, 4, 3),
+    (39, 4, 3),
+
+    (44, 5, 3),
+    (45, 5, 3),
+    (46, 5, 3),
+    (47, 5, 3),
+    (49, 5, 3),
+
+    -- Desfile
+    (4, 1, 4),
+    (5, 1, 4),
+    (6, 1, 4),
+    (7, 1, 4),
+    (20, 1, 4),
+
+    (14, 2, 4),
+    (15, 2, 4),
+    (16, 2, 4),
+    (18, 2, 4),
+    (19, 2, 4),
+
+    (51, 3, 4),
+    (52, 3, 4),
+    (53, 3, 4),
+    (54, 3, 4),
+    (55, 3, 4),
+
+    (34, 4, 4),
+    (35, 4, 4),
+    (36, 4, 4),
+    (38, 4, 4),
+    (39, 4, 4),
+
+    (44, 5, 4),
+    (45, 5, 4),
+    (46, 5, 4),
+    (47, 5, 4),
+    (49, 5, 4),
+
+    -- Astros
+    (4, 1, 5),
+    (5, 1, 5),
+    (6, 1, 5),
+    (7, 1, 5),
+    (20, 1, 5),
+
+    (14, 2, 5),
+    (15, 2, 5),
+    (16, 2, 5),
+    (18, 2, 5),
+    (19, 2, 5),
+
+    (51, 3, 5),
+    (52, 3, 5),
+    (53, 3, 5),
+    (54, 3, 5),
+    (55, 3, 5),
+
+    (34, 4, 5),
+    (35, 4, 5),
+    (36, 4, 5),
+    (38, 4, 5),
+    (39, 4, 5),
+
+    (44, 5, 5),
+    (45, 5, 5),
+    (46, 5, 5),
+    (47, 5, 5),
+    (49, 5, 5),
+
+     -- Astros
+    (4, 1, 6),
+    (5, 1, 6),
+    (6, 1, 6),
+    (7, 1, 6),
+    (20, 1, 6),
+
+    (14, 2, 6),
+    (15, 2, 6),
+    (16, 2, 6),
+    (18, 2, 6),
+    (19, 2, 6),
+
+    (51, 3, 6),
+    (52, 3, 6),
+    (53, 3, 6),
+    (54, 3, 6),
+    (55, 3, 6),
+
+    (34, 4, 6),
+    (35, 4, 6),
+    (36, 4, 6),
+    (38, 4, 6),
+    (39, 4, 6),
+
+    (44, 5, 6),
+    (45, 5, 6),
+    (46, 5, 6),
+    (47, 5, 6),
+    (49, 5, 6);
