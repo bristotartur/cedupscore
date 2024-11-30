@@ -115,12 +115,13 @@ export class ParticipantEventRegistrationComponent implements AfterViewInit {
 
   private createBaseParticipantQuery(event: EventModel): void {
     const eventId = event.id;
+    const editionId = event.editionId;
     const participantType = event.allowedParticipantType;
     const gender = getAcceptableGender(event.modality);
 
     const genderQuery = (gender) ? `&gender=${gender}` : '';
 
-    this.baseParticipantQuery = `?type=${participantType}${genderQuery}&status=active&not-in-event=${eventId}`;
+    this.baseParticipantQuery = `?type=${participantType}${genderQuery}&edition=${editionId}&status=active&not-in-event=${eventId}`;
   }
 
   private setTeamsOptions(scores: EventScore[]): void {

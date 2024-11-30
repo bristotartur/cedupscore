@@ -23,7 +23,7 @@ import { Router } from '@angular/router';
     EventCardComponent,
     SelectButtonComponent,
     OptionsButtonComponent
-],
+  ],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
@@ -45,7 +45,9 @@ export class TasksComponent implements OnInit {
 
   constructor() {
     this.editions$ = this.editionService.listEditions();
-    this.loadTasks();
+    this.editions$.subscribe(editions => {
+      this.loadTasks(editions[0].id);
+    });
   }
 
   ngOnInit(): void {

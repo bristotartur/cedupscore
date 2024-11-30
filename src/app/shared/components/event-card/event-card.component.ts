@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TeamPosition } from '../../models/team-postion.model';
 import { NgClass } from '@angular/common';
 import { EventModel } from '../../models/event.model';
@@ -17,7 +17,7 @@ import { Status } from '../../enums/status.enum';
   templateUrl: './event-card.component.html',
   styleUrl: './event-card.component.scss'
 })
-export class EventCardComponent {
+export class EventCardComponent implements OnChanges {
 
   @Input({ required: true }) event!: EventModel;
 
@@ -28,7 +28,7 @@ export class EventCardComponent {
   eventUrl!: string;
   linkMessage!: string;
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     this.status = transformStatus(this.event.status, 'o');
     this.date = transformDate(new Date(this.event.endedAt), 'full', this.event.status);
     this.setPositions();
