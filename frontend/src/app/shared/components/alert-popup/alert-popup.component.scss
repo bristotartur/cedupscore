@@ -1,0 +1,129 @@
+@import '../../../../styles/variables.scss';
+
+dialog {
+    border: none;
+
+    background-color: transparent;
+
+    position: fixed;
+    top: 44%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        width: 390px;
+        height: 426px;
+
+        border-radius: $default-radius;
+        background-color: $background-color;
+
+        color: $font-color;
+
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            padding: 10px;
+
+            h2 { margin-top: 20px; }
+
+            p {
+                margin-top: 18px;
+                padding: 0px 18px;
+
+                color: $neutral-color-2;
+                font-size: 18px;
+                text-align: justify;
+            }
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: row;
+
+            button {
+                width: 50%;
+                height: 80px;
+
+                border: none;
+                background-color: $neutral-color-3;
+
+                color: inherit;
+                font-size: 18px;
+                font-weight: 600;
+
+                cursor: pointer;
+                
+                &#cancel {
+                    border-radius: 0px 0px 0px $default-radius;
+
+                    &.fit { width: 100%; }
+
+                    &:hover { background-color: $neutral-color-4; }
+
+                    &.error { 
+                        background-color: $dark-accent-color;
+                        border-radius: 0px 0px $default-radius $default-radius;
+                        
+                        &:hover { background-color: $accent-color; }
+                    }
+                }
+                
+                &#ok {
+                    background-color: $dark-accent-color;
+                    border-radius: 0px 0px $default-radius 0px;
+
+                    &:hover { background-color: $accent-color; }
+                }
+            }
+        }
+    }
+
+    &::backdrop { background-color: rgba(0, 0, 0, 0.2); }
+}
+
+@media screen and (max-width: 688px) {
+    dialog {
+        .wrapper {
+            width: 350px;
+            height: 396px;
+
+            .text-container {
+                p { margin-top: 12px; }
+            }
+
+            .btn-container {
+                button { height: 70px; }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    dialog {
+        .wrapper {
+            width: 80vw;
+            min-height: 300px;
+            max-height: 450px;
+
+            .text-container {
+                h2 { font-size: 22px; }
+
+                p {
+                    margin-top: 0px;
+                    font-size: 16px;
+                }
+            }
+
+            .btn-container {
+                button { height: 60px; }
+            }
+        }
+    }
+}

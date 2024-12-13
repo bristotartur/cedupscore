@@ -1,0 +1,24 @@
+<dialog #modal>
+    <div class="wrapper">
+        <div class="teams-container">
+            <h2>Selecione as posições</h2>
+            @for (score of scores; track $index) {
+                <div class="team">
+                    <span>{{ score.team.name| teamName: screenWidth : 668 }}</span>
+                    <app-select-button
+                        name="Posição"
+                        [options]="options"
+                        (option)="onOptionSelected($event, $index)"
+                    />
+                </div>
+            }
+        </div>
+        <div class="btn-container">
+            <button 
+                [disabled]="!canFinish" (click)="onClick(true)"
+            >
+                Finalizar
+            </button>
+        </div>
+    </div>
+</dialog>

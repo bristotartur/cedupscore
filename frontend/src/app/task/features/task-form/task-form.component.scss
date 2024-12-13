@@ -1,0 +1,138 @@
+@import '../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+app-page-body {
+    h2, form { width: 89%; }
+
+    h2 {
+        font-size: 32px;
+        font-weight: 600;
+
+        margin-top: 20px;
+        margin-bottom: 45px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+
+        abbr { width: 100%; }
+
+        .select-box {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+
+            width: 100%;
+
+            .first-line {
+                display: flex;
+                flex-direction: row;
+                gap: 20px;
+            }
+
+            #type-container,
+            #modality-container,
+            #participant-type-container { width: 50%; }
+
+            #participant-type-container { padding-right: 10px; }
+        }
+
+        .quantities-wrapper,
+        .description-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+
+            h3 { font-size: 19px; }
+        }
+
+        .quantities-wrapper {
+            .quantities-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+    
+                #min-container,
+                #max-container { width: 48%; }
+            }
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            margin-bottom: 50px;
+
+            .message-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 8px;
+    
+                width: 100%;
+                height: 50px;
+    
+                i {
+                    margin-top: 2px;
+                    color: $accent-color;
+                }
+    
+                span {
+                    font-size: 16px;
+                    color: $accent-color;
+    
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                    overflow: hidden; 
+                    white-space: normal; 
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 992px) {
+    app-page-body {
+        h2, form { width: 93%; }
+    }
+}
+
+@media screen and (max-width: 688px) {
+    app-page-body {
+        h2 { font-size: 28px; }
+
+        form {
+            .quantities-wrapper,
+            .description-wrapper {
+                h3 { font-size: 18px; }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    app-page-body {
+        h2, form { width: 95%; }
+
+        h2 { font-size: 24px; }
+
+        form {
+            .quantities-wrapper,
+            .description-wrapper {
+                h3 { font-size: 16px; }
+            }
+        }
+    }
+}

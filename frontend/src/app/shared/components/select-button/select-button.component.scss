@@ -1,0 +1,119 @@
+@import '../../../../styles/variables.scss';
+
+:host { width: fit-content; }
+
+.select-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: fit-content;
+
+    margin: 15px 0px;
+
+    position: relative;
+
+    select {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    
+        height: 40px;
+    
+        padding: 0px 38px 0px 30px;
+        border: none;
+        border-radius: $default-radius;
+    
+        background-color: $primary-color;
+    
+        color: $font-color;
+        font-weight: 700;
+        font-size: 17px;
+    
+        appearance: none;
+        outline: none;
+
+        cursor: inherit;
+    }
+    
+    i {
+        display: block;
+        margin-top: 12px;
+
+        color: $font-color; 
+
+        position: absolute; 
+        top: 0;
+        right: 13px;
+
+        pointer-events: none;
+    }
+
+    &.simplified {
+        margin: 0px;
+        cursor: default;
+
+        select {
+            min-width: 126px;
+            background-color: $neutral-color-3;
+            font-weight: 500;
+
+            &.has-outline {
+                &:focus { outline: 2px solid lighten($neutral-color-4, 5%); } 
+            }
+        }
+    }
+
+    &.disabled {
+        cursor: default;
+        select, i { color: $neutral-color-1; }
+    }
+
+    &.simplified.fit { 
+        width: 100% !important;
+
+        select { width: 100% !important; }
+    }
+
+    &:not(.disabled) { cursor: pointer; }
+}
+
+@media screen and (max-width: 844px) {
+    :host {
+        &:has(div.simplified) { width: 100%; }
+    }
+
+    .select-container {
+        &.simplified,
+        &.fit-on-reduce {
+            width: 100%;
+
+            select { width: 100%; }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .select-container {
+        margin: 10px 0px;
+
+        select {
+            height: 32px;
+            font-size: 14px;
+        }
+
+        i { 
+            margin-top: 9px; 
+            font-size: 14px;
+        }
+
+        &.simplified {
+            i { margin-top: 12px; }
+
+            select {
+                height: 38px; 
+                min-width: 116px; 
+            }
+        }
+    }
+}

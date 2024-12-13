@@ -1,0 +1,100 @@
+@import './../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+}
+
+button {
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: $default-radius;
+
+    background-color: $primary-color;
+
+    cursor: pointer;
+
+    i {
+        color: $font-color;
+        font-size: 24px;
+    }
+
+    &.disabled {
+        cursor: default;
+
+        i { color: $neutral-color-1; }
+    }
+
+    &:not(.disabled) {
+        &:hover { background-color: $neutral-color-4; }
+    }
+}
+
+.list-container {
+    display: none;
+    width: 300px;
+    position: relative;
+
+    &.is-visible { display: block; }
+}
+
+ul {
+    display: none;
+    cursor: pointer;
+
+    width: 100%;
+            
+    border-radius: $default-radius;
+    padding: 5px;
+            
+    background-color: $secondary-color;
+    list-style: none;
+
+    position: absolute;
+    top: 10px;
+    z-index: 5;
+            
+    li {
+        display: flex;
+        height: 34px;
+        border-radius: 7px;
+        cursor: pointer;
+                
+        a, span {
+            display: flex;
+            flex-grow: 1;
+            align-items: center;
+
+            padding-left: 5px;
+                    
+            color: inherit;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        &:hover { background-color: $neutral-color-2; }
+    }
+
+    &.is-visible { display: block; }
+}
+
+@media screen and (max-width: 480px) {
+    button {
+        height: 32px !important;
+        width: 32px !important;
+
+        i { font-size: 20px; }
+    }
+
+    .list-container { width: 100px; }
+
+    ul { 
+        width: 260px;
+        font-size: 14px;
+        left: -160px;
+    }
+}

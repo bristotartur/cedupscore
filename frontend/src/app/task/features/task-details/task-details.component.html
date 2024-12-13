@@ -1,0 +1,100 @@
+<div class="buttons-container">
+    <button (click)="comeBack()">Voltar</button>
+    @if (userService.currentUserSignal()) {
+        <app-options-button 
+            iconClass="fa-solid fa-gear"
+            [options]="buttonOptions"
+            (optionSelected)="onButtonOptionSelected($event)"
+        />
+    }
+</div>
+<app-page-body>
+    <section id="task-header">
+        <div class="general-info">
+            <h2>{{ task$.value?.name }}</h2>
+            <div class="info">
+                <span>Tipo: {{ task$.value?.taskType | eventType }}</span>
+                <span>Status: {{ task$.value?.status | status: 'a' }}</span>
+            </div>
+        </div>
+        <div class="task-schedule">
+            <span id="date">{{ task$.value?.endedAt | customDate: dateType : task$.value?.status }}</span>
+            <span id="time">
+                <i class="fa-regular fa-clock"></i>
+                {{ task$.value?.startedAt | customTime: task$.value?.status }} - {{ task$.value?.endedAt | customTime: task$.value?.status }}
+            </span>
+        </div>
+    </section>
+    <section id="scoreboard">
+        @if (scores$.value && scores$.value.length > 0) {
+            <app-leaderboard
+                [scores]="scores$.value"
+                [columns]="['Pts']"
+                [fit]="true"
+            />
+        }
+    </section>
+    <section id="details">
+        <h2>Descrição</h2>
+        <div #output class="output"></div>
+    </section>
+    <section id="participants">
+        <h2>Participantes</h2>
+        <div class="search-container">
+            <app-search-bar
+                [focus]="false"
+                (valueChange)="onSearchValueChange($event)"
+                (searchTypeChange)="this.currentSearchType = $event"
+            />
+            <abbr title="Equipe dos participantes">
+                <app-select-button
+                    name="Equipes"
+                    [options]="teamsOptions"
+                    [simplified]="true"
+                    [disabled]="currentSearchType == 'cpf'"
+                    (option)="onTeamSelect($event)"
+                />
+            </abbr>
+        </div>
+        <div 
+            #participantsContainer
+            class="participants-container"
+        >
+            <app-participant-pagination
+                [totalPages]="totalPages || 1"
+                [content]="participantsPage$.getValue()?.content || []"
+                [currentPage]="currentPage"
+                [edition]="edition$.value?.id || ''"
+                (pageChange)="onPageChange($event)"
+            />
+        </div>
+    </section>
+</app-page-body>
+<app-alert-popup 
+    #deletePopup
+    title="Excluir tarefa?"
+    message="A exclusão de uma tarefa é irreversível e todos os seus dados serão perdidos. Deseja continuar?"
+    buttonMessage="Excluir"
+    (accepted)="deleteTask()"
+/>
+<app-selection-popup
+    #statusPopup
+    title="Selecione o status da edição"
+    buttonMessage="Atualizar"
+    [options]="statusOptions"
+    (optionSelected)="updateTaskStatus($event)"
+/>
+<app-close-event-popup
+    #closePopup
+    [scores]="task$.value?.scores ?? []"
+    [eventType]="task$.value?.taskType!"
+    (scoresDefined)="onScoresDefined($event)"
+/>
+<app-alert-popup 
+    #errorPopup
+    title="ERRO!"
+    [message]="errorMessage"
+    buttonMessage="Ok"
+    [hasOnlyMessage]="true"
+    customClass="error"
+/>

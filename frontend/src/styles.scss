@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'styles/variables.scss';
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+
+    font-family: 'Inter', sans-serif;
+
+    transition: width .15s, height .15s;
+    transition-timing-function: ease;
+
+    ::-webkit-scrollbar {
+        width: 5px; 
+        height: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background-color: $neutral-color-4;
+        border-radius: 6px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover { background-color: $neutral-color-1; }
+    
+    ::-webkit-scrollbar-track { background: transparent; }
+}
+
+body { 
+    background-color: $background-color; 
+    color: $font-color;
+    
+    overflow-x: hidden;
+}
+
+abbr { text-decoration: none; }
+
+button {
+    width: 170px;
+    height: 44px;
+        
+    border: none;
+    border-radius: $default-radius;
+        
+    background-color: $neutral-color-3;
+        
+    color: $font-color;
+    font-size: 18px;
+    font-weight: 500;
+    
+    cursor: pointer;
+        
+    &:hover { background-color: $neutral-color-4; }
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 900px;
+    height: 70px;
+
+    button {
+        width: 100px;
+        height: 40px;
+
+        background-color: $primary-color;
+
+        font-size: 17px;
+        font-weight: 700;
+
+        &:hover { background-color: $secondary-color; }
+    }
+
+    &.form { width: 650px; }
+}
+
+.status-box {
+    width: fit-content;
+
+    border-radius: 20px;
+    background-color: $background-color;
+
+    padding: 8px 16px;
+
+    span { font-size: 18px; }
+}
+
+.output {
+    height: 400px;
+    overflow-y: auto;
+
+    border-radius: $default-radius;
+    padding: 20px;
+
+    background-color: $neutral-color-3;
+
+    font-size: 18px;
+    line-height: 1.6;
+
+    outline: none;
+
+    ul, ol {
+        padding-inline-start: 25px;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .buttons-container { width: 80vw; }
+}
+
+@media screen and (max-width: 768px) {
+    .buttons-container, .buttons-container.form { 
+        width: 90vw; 
+    }
+}
+
+@media screen and (max-width: 688px) {
+    .buttons-container, .buttons-container.form { width: 94vw; }
+
+    .status-box {
+        span { font-size: 16px; }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .buttons-container, .buttons-container.form { 
+        width: 95vw; 
+        height: 52px;
+
+        button:not(.dropdown) {
+            width: fit-content;
+            height: 32px;
+
+            padding: 0px 20px;
+
+            font-size: 14px;
+        }
+    }
+
+    .status-box {
+        padding: 8px 12px;
+
+        span { font-size: 14px; }
+    }
+}

@@ -1,0 +1,17 @@
+<div class="buttons-container">
+    <button (click)="comeBack()">Voltar</button>
+    <app-options-button 
+        iconClass="fa-solid fa-plus" 
+        [options]="[{ name: 'Cadastrar usuário', value: '/users/register', isLink: true }]"
+    />
+</div>
+<app-page-body>
+    @for (user of users; track $index) {
+        <app-user-card [user]="user"/>
+    }
+    @empty {
+        <div class="message">
+            <span>Nenhum usuário encontrado.</span>
+        </div>
+    }
+</app-page-body>

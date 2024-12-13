@@ -1,0 +1,43 @@
+<div class="buttons-container">
+    <app-select-button 
+        [options]="editionsOptions"
+        [selectedValue]="editionsOptions[0].value"
+        (option)="onEditionChange($event)"
+    />
+    @if (userService.currentUserSignal()) {
+        <app-options-button 
+            iconClass="fa-solid fa-plus" 
+            [disabled]="selectedOption !== 1"       
+            [options]="buttonOptions" 
+        />
+    }
+</div>
+<app-page-body>
+    @if (inProgressTasks.length > 0) {
+        <section id="in-progress">
+            <div class="status-box">
+                <span>EM ANDAMENTO</span>
+            </div>
+            <div class="list">
+                @for (task of inProgressTasks; track $index) {
+                    <app-event-card [event]="task"/>
+                }
+            </div>
+        </section>
+    }
+    <section id="tasks">
+        <h2 [ngClass]="{ 'invisible': tasks$.value && tasks$.value.length < 1 }">Tarefas</h2>
+        <div class="list">
+            @if (tasks$.value) {
+                @for (task of tasks$.value; track $index) {
+                    <app-event-card [event]="task"/>
+                } 
+                @empty {
+                    <div class="message">
+                        <p>Não há tarefas nessa edição.</p>
+                    </div>
+                }
+            }
+        </div>
+    </section>
+</app-page-body>

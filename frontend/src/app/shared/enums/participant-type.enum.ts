@@ -1,0 +1,9 @@
+export enum ParticipantType {
+    STUDENT = 'STUDENT',
+    TEACHER = 'TEACHER',
+    PARENT = 'PARENT',
+    STUDENT_PARENT = 'STUDENT_PARENT',
+    TEACHER_PARENT = 'TEACHER_PARENT',
+    TEACHER_STUDENT = 'TEACHER_STUDENT',
+    ALL = 'ALL'
+}

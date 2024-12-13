@@ -1,0 +1,123 @@
+<div class="buttons-container">
+    <button (click)="comeBack()">Voltar</button>
+</div>
+<app-page-body>
+    <section id="registration-management">
+        <h2>Controle de inscrições</h2>
+        <div class="counter-container">
+            <span #count class="count"></span>
+        </div>
+        <div class="btns-wrapper">
+            <div class="buttons">
+                <abbr title="Listar participantes selecionados">
+                    <button
+                        [ngClass]="{ 'selected': currentList === 'selectedParticipants' }" (click)="changeList('selectedParticipants')"
+                    >
+                        Selecionados
+                    </button>
+                </abbr>
+                <abbr title="Listar participantes já inscritos">
+                    <button
+                        [ngClass]="{ 'selected': currentList === 'registerdParticipants' }" (click)="changeList('registerdParticipants')"
+                    >
+                        Inscritos
+                    </button>
+                </abbr>
+            </div>
+            <abbr title="Equipe dos participantes">
+                <app-select-button
+                    name="Equipes"
+                    [options]="teamsOptions"
+                    [simplified]="true"
+                    (option)="onTeamSelect($event, 'management-list')"
+                />
+            </abbr>
+        </div>
+        <div class="participants-container">
+            @switch (currentList) {
+                @case ('selectedParticipants') {
+                    <div [ngClass]="{ 'participants-content': true, 'empty': participantsToAdd$.value.length == 0 }">
+                        @for (participant of participantsToAdd$.value; track $index) {
+                            <app-participant-card
+                                mode="registration"
+                                rootUrl=""
+                                [id]="participant.id"
+                                [name]="participant.name"
+                                [team]="participant.editionRegistrations[0].team.name"
+                                [status]="participant.isActive"
+                                [type]="participant.type"
+                                [isSelected]="true"
+                                (onSelect)="onCardSelected($event)"
+                            />
+                        }
+                        @empty {
+                            <span>Nenhum participante selecionado</span>
+                        }
+                    </div>
+                }
+                @case ('registerdParticipants') {
+                    <div [ngClass]="{ 'participants-content': true, 'empty': registeredParticipants$.value.length == 0 }">
+                        @for (participant of registeredParticipants$.value; track $index) {
+                            <app-participant-card
+                                mode="registration"
+                                rootUrl=""
+                                [id]="participant.id"
+                                [name]="participant.name"
+                                [team]="participant.editionRegistrations[0].team.name"
+                                [status]="participant.isActive"
+                                [type]="participant.type"
+                                [isSelected]="true"
+                                (onSelect)="unregisterParticipants([participant])"
+                            />
+                        }
+                        @empty {
+                            <span>Nenhum participante inscrito</span>
+                        }
+                    </div>
+                }
+            }
+            @if (showActionButton) {
+                <button id="action-btn" (click)="handleActionBtnClick()">
+                    {{ (currentList == 'selectedParticipants') ? 'Inscrever todos' : 'Desinscrever todos' }}
+                </button>
+            }
+        </div>
+    </section>
+    <section id="participants-list">
+        <div class="search-container">
+            <app-search-bar
+                [focus]="false"
+                [searchType]="currentSearchType"
+                (valueChange)="onSearchValueChange($event)"
+                (searchTypeChange)="this.currentSearchType = $event"
+            />
+            <abbr title="Equipe dos participantes">
+                <app-select-button
+                    name="Equipes"
+                    [options]="teamsOptions"
+                    [simplified]="true"
+                    [disabled]="currentSearchType == 'cpf'"
+                    (option)="onTeamSelect($event, 'search')"
+                />
+            </abbr>
+        </div>
+        <div #paginationContainer>
+            <app-participant-pagination
+                mode="registration"
+                [totalPages]="totalPages"
+                [content]="participantsPage$.getValue()?.content || []"
+                [edition]="edition$.value?.id || ''"
+                (pageChange)="onPageChange($event)"
+                (onCardSelected)="onCardSelected($event)"
+            />
+        </div>
+    </section>
+</app-page-body>
+<app-alert-popup 
+    #errorPopup
+    title="ERRO!"
+    [message]="errorMessage"
+    buttonMessage="Ok"
+    [hasOnlyMessage]="true"
+    customClass="error"
+/>

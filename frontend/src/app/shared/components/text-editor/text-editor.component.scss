@@ -1,0 +1,56 @@
+@import '../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    width: 100%;
+}
+
+ul {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 12px;
+
+    border-radius: $default-radius;
+    padding: 12px 15px;
+
+    background-color: $secondary-color;
+
+    list-style: none;
+    overflow: hidden;
+
+    button {
+        width: 28px;
+        height: 28px;
+    
+        border: none;
+        border-radius: 5px;
+
+        background-color: $neutral-color-3;
+
+        font-size: 16px;
+        color: $font-color;    
+
+        cursor: pointer;
+
+        &:hover { background-color: $neutral-color-4; }
+    }
+}
+
+@media screen and (max-width: 688px) {
+    ul {
+        gap: 15px;
+
+        button {
+            width: 24px;
+            height: 24px;
+            font-size: 15px;
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    ul { padding: 8px 12px; }
+}

@@ -1,0 +1,50 @@
+<div class="buttons-container form">
+    @if (isNotCurrentUserProfile) {
+        <button (click)="router.navigate(['/users'])">Voltar</button>
+
+        @if (isSuperAdmin) {
+            <app-options-button
+                iconClass="fa fa-solid fa-gear"
+                [options]="[{ name: 'Remover usuário', value: 'remove' }]"
+                (optionSelected)="onOptionSelected($event)"
+            />
+        }
+    }
+</div>
+<app-page-body class="user-profile">
+    @if (user$) {
+        <app-profile 
+            [content]="(user$ | async)!"
+        />
+    }
+    @else {
+        <div class="message-container">
+            <span>Você não está autenticado no sistema. Realize o login para visualizar seu perfil.</span>
+            <a routerLink="/login">Entrar</a>
+        </div>
+    }
+    @if (isSuperAdmin) {
+        <section id="user-management">
+            <a [routerLink]="userUpdateLink">Editar perfil</a>
+            <a routerLink="/users">Gerenciar usuários</a>
+        </section>
+    }
+</app-page-body>
+
+@if (isNotCurrentUserProfile && isSuperAdmin) {
+    <app-alert-popup
+        #deletePopup
+        title="Remover usuário?"
+        message="Ao remover o usuário, ele não terá mais acesso ao sistema. Deseja continuar?"
+        buttonMessage="Remover"
+        (accepted)="deleteUser()"
+    />
+    <app-alert-popup
+        #errorPopup
+        title="ERRO!"
+        [message]="errorMessage"
+        buttonMessage="Ok"
+        customClass="error"
+        [hasOnlyMessage]="true"
+    />
+}

@@ -1,0 +1,29 @@
+<app-page-body
+    [ngClass]="{ 'user-form': true, 'requesting': isRequesting }"
+>
+    <h2>Login</h2>
+    <form 
+        [formGroup]="form" method="post" autocomplete="on"
+    >
+        <app-input
+            type="email" formControlName="email" placeholder="email" autocomplete="email" [isFirst]="true"
+        />
+        <app-input
+            type="password" formControlName="password" placeholder="senha" autocomplete="current-password"
+        />
+
+        <button
+            type="submit" [disabled]="isRequesting" (click)="onClick()"
+        >
+            Entrar
+        </button>
+
+        <div class="message-container">
+            @if (errorMessage) {
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>{{ errorMessage }}</span>
+            }
+        </div>
+    </form>
+    <a routerLink="/">Voltar para a tela inicial</a>
+</app-page-body>

@@ -1,0 +1,42 @@
+@for (participant of content; track $index) {
+    <app-participant-card
+        [rootUrl]="rootUrl"
+        [id]="participant.id"
+        [name]="participant.name"
+        [type]="participant.type"
+        [team]="teams[$index]"
+        [status]="participant.isActive"
+        [mode]="mode"
+        (onSelect)="onCardSelected.emit($event)"
+    />
+} @empty {
+    <div class="message">
+        <span>Nenhum participante encontrado.</span>
+    </div>
+}
+<nav>
+    @if (totalPages > 1) {
+        <ul>
+            @if (totalPages > 5) {
+                <i class="fa-solid fa-caret-left" (click)="emitPageChange(currentPage - 1)"></i>
+                @for (page of pages; track $index) {
+                    <li
+                        [ngClass]="{ selected: currentPage === page }" (click)="emitPageChange(page)"
+                    >
+                        {{ page }}
+                    </li>
+                }
+                <i class="fa-solid fa-caret-right" (click)="emitPageChange(currentPage + 1)"></i>
+            }
+            @else {
+                @for (page of pages; track $index) {
+                    <li
+                        [ngClass]="{ selected: currentPage === page }" (click)="emitPageChange(page)"
+                    >
+                        {{ page }}
+                    </li>
+                }
+            }
+        </ul>
+    }
+</nav>

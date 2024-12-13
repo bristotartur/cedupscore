@@ -1,0 +1,22 @@
+<div class="row _1">
+    <span id="name">{{ adjustedName }}</span>
+    <span class="dimmed">{{ type }}</span>
+    <span>{{ adjuestedTeamName }}</span>
+</div>
+<div class="row _2">
+    <span>
+        Status: <span class="dimmed">{{ status }}</span>
+    </span>
+    @switch (mode) {
+        @case ('view') {
+            <a [routerLink]="participantUrl" (click)="onLinkClick()">
+                Mais detalhes <i class="fa-solid fa-caret-down"></i>
+            </a>
+        }
+        @case ('registration') {
+            <abbr [title]="abbrMessage">
+                <button (click)="onButtonClick()">{{ buttonMessage }}</button>
+            </abbr>
+        }
+    }
+</div>

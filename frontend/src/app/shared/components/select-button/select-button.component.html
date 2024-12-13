@@ -1,0 +1,22 @@
+<div [ngClass]="{ 
+    'select-container': true, 
+    'simplified': isSimplified,
+    'disabled': isDisabled,
+    'fit': customClass === 'fit', 
+    'fit-on-reduce': customClass === 'fit-on-reduce',
+}">
+    <select
+        [ngClass]="{ 'has-outline' : hasOutline }"
+        [disabled]="isDisabled"
+        [(ngModel)]="selectedValue"
+        (change)="onOptionSelected($event)"
+    >
+        @if (selectName) {
+            <option value="" hidden>{{ selectName }}</option>
+        }
+        @for (option of options; track $index) {
+            <option [value]="option.value">{{ option.name }}</option>
+        }
+    </select>
+    <i class="fa-solid fa-caret-down" ></i>
+</div>

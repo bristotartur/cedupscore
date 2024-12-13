@@ -1,0 +1,237 @@
+@import '../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 80%;
+
+    border-radius: $default-radius;
+    padding-top: 5px;
+
+    &:has(.fit) { 
+        width: 100%;
+        background-color: $neutral-color-3;
+    }
+}
+
+.table-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    &.fit { 
+        width: 85%; 
+
+        table {
+            tbody {
+                tr {
+                    border-top: 2px solid $neutral-color-4;
+                    border-bottom: 2px solid $neutral-color-4;
+                }
+            }
+        }
+    }
+}
+
+.team-logo {
+    width: 54px;
+    height: 54px;
+
+    background-color: $neutral-color-2;
+
+    border-radius: 50%;
+}
+
+table {
+    font-weight: 700;
+    font-size: 22px;
+
+    border-collapse: collapse;
+
+    tbody {
+        tr {
+            height: 90px;
+
+            border-top: 2px solid $neutral-color-3;
+            border-bottom: 2px solid $neutral-color-3;
+        }
+    }
+
+    &#table-1 {
+        width: 100%; 
+        max-width: 60%;
+
+        margin-top: 39px;
+
+        tbody {
+            .position {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                width: 32px;
+                height: 32px;
+        
+                border-radius: 50%;
+
+                &._1 {
+                    background-color: $gold-1;
+                    color: $gold-2;
+                }
+
+                &._2 {
+                    background-color: $silver-1;
+                    color: $silver-2;
+                }
+
+                &._3 {
+                    background-color: $bronze-1;
+                    color: $bronze-2;
+                }
+            }
+        }
+    }
+
+    &#table-2 {
+        width: 50%;
+        max-width: 100%;
+
+        overflow-x: auto;
+
+        thead {
+            height: 18px;
+        
+            th {
+                min-width: 70px;
+                height: 40px;
+
+                font-size: 14px;
+                text-align: center;
+            }
+        }
+
+        tbody {
+            td {
+                min-width: 70px;
+                text-align: center;
+            }
+        }
+
+        &.single-column {
+            thead {
+                th {
+                    text-align: right;
+                    padding-right: 32px;
+                }
+            }
+
+            tbody {
+                td {
+                    text-align: right;
+                    padding-right: 30px;
+                }
+            }
+        }
+    }
+
+}
+
+.table-legend {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    row-gap: 30px;
+    
+    width: 100%;
+    padding-top: 30px;
+
+    span { width: auto; }
+
+    &.two-elements { grid-template-columns: 1fr; }
+
+    &.more-than-two {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: auto;
+    }
+}
+
+
+@media screen and (max-width: 992px) {
+    :host { width: 90%; }
+
+    .team-logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    table {
+        font-size: 20px;
+
+        &#table-1 {
+            width: 100%;
+
+            tbody {
+                .position {
+                    width: 24px;
+                    height: 24px;
+    
+                    font-size: 16px;
+                }
+
+                .team-logo { margin-left: 5px; }
+            }
+        }
+
+        &#table-2 {
+            &.single-column {
+                thead {
+                    th {
+                        padding-right: 32px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    :host { width: 96%; }
+
+    table {
+        &#table-2:not(.fit) {
+            display: block;
+            width: auto;
+            overflow-x: auto;
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    :host { width: 98%; }
+
+    .team-logo {
+        width: 32px;
+        height: 32px;
+
+        margin-right: 5px;
+    }
+
+    table { 
+        font-size: 16px;
+
+        &#table-1 {
+            tbody {
+                .position {
+                    width: 20px;
+                    height: 20px;
+    
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+
+    .table-legend { font-size: 12px; }
+}

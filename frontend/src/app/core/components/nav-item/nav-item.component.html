@@ -1,0 +1,16 @@
+<li>
+    <a 
+        [routerLink]="link"
+        [ngClass]="{ 'selected': isSelected }"
+        (click)="onClick()"
+    >
+        <div class="icon-container">
+            <i [ngClass]="iconClass"></i>
+        </div>
+        <span>{{ itemName }}</span>
+
+        @if (isSelected) {
+            <div class="select-bar"></div>
+        }
+    </a>
+</li>

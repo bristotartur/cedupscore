@@ -1,0 +1,220 @@
+@import '../../../../styles/variables.scss';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section {
+    width: 100%;
+    padding-bottom: 25px;
+    
+    
+    &#registration-management {
+        h2 { font-size: 32px; }
+
+        .counter-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+
+            width: 100%;
+
+            padding: 5px 0px 22px 0px;
+
+            span {
+                font-size: 18px;
+                text-align: right;
+            }
+        }
+
+        .btns-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            abbr { width: fit-content; }
+            
+            .buttons {
+                display: flex;
+                gap: 15px;
+
+                button {
+                    height: 40px;
+
+                    &.selected,
+                    &.selected:hover { 
+                        background-color: $neutral-color-5;
+                    }
+    
+                    &:hover { background-color: $neutral-color-3; }
+                }
+            }
+        }
+
+        .participants-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            width: 100%;
+
+            border-radius: $default-radius;
+            margin-top: 15px;
+            padding: 10px 0px 20px 0px;
+            
+            background-color: $secondary-color;
+
+            overflow-x: hidden;
+            overflow-y: hidden;
+
+            &>button { width: 200px; }
+
+            .participants-content {
+                width: 100%;
+                height: 500px;
+
+                padding: 0px 10px;
+    
+                overflow-x: hidden;
+                overflow-y: auto;
+    
+                &.empty {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+    
+                    span {
+                        padding-bottom: 30px; 
+                        color: $neutral-color-2;
+                        font-size: 20px; 
+                    }
+                }
+            }
+        }
+    }
+
+    &#participants-list {
+        margin-top: 15px;
+        
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+
+            border-bottom: 2px solid $neutral-color-3;
+            padding-bottom: 25px;
+
+            abbr { width: fit-content; }
+        }
+    }
+}
+
+@media screen and (max-width: 992px) {
+    section {
+        &#registration-management {
+            h2 { font-size: 32px; }
+
+            .counter-container {
+                justify-content: flex-start;
+                padding: 22px 0px 22px 0px;
+    
+                span { text-align: left; }
+            }
+
+            .btns-wrapper {
+                flex-direction: column;
+                justify-content: none;
+                gap: 12px;
+
+                .buttons {
+                    button { width: 211px; }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 688px) {
+    section {
+        &#registration-management {
+            h2 {
+                margin-top: 14px;
+                font-size: 28px;
+            }
+
+            .counter-container {
+                justify-content: flex-start;
+    
+                span { font-size: 16px; }
+            }
+
+            .btns-wrapper {
+                .buttons {
+                    justify-content: space-between;
+                    width: 100%;
+                }
+            }
+
+            .participants-container {
+                .participants-content.empty { 
+                    span { font-size: 18px; }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    section {
+        &#registration-management {
+            h2 { font-size: 24px; }
+
+            .btns-wrapper {
+                .buttons {
+                    button { 
+                        width: 187px;
+                        height: 40px;
+
+                        font-size: 14px;
+                    }
+                }
+            }
+
+            .participants-container {
+                button { font-size: 16px; }
+
+                .participants-content.empty { 
+                    span { font-size: 18px; }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 418px) {
+    section {
+        &#registration-management {
+            .btns-wrapper {
+                .buttons {
+                    button { 
+                        width: 170px; 
+                    }
+                }
+            }
+
+            .participants-container {
+                .participants-content.empty { 
+                    span {
+                        max-width: 72vw; 
+                        
+                        font-size: 16px;
+                        text-align: center; 
+                    }
+                }
+            }
+        }
+    }
+}

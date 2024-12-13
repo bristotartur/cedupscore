@@ -1,0 +1,24 @@
+<app-page-body>
+    @if (inProgressEvents.length > 0) {
+        <section id="in-progress">
+            <div class="status-box">
+                <span>EM ANDAMENTO</span>
+            </div>
+            <div class="list">
+                @for (task of inProgressEvents; track $index) {
+                    <app-event-card [event]="task"/>
+                }
+            </div>
+        </section>
+    }
+    <section id="events">
+        @for (event of events; track $index) {
+            <app-event-card [event]="event"/>
+        }
+        @empty {
+            <div class="message">
+                <p>Nenhum evento encontrado/p>
+            </div>
+        }
+    </section>
+</app-page-body>

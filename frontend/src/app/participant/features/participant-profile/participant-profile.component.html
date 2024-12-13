@@ -1,0 +1,92 @@
+<div class="buttons-container">
+    <button (click)="comeBack()">Voltar</button>
+    @if (userService.currentUserSignal()) {
+        <app-options-button 
+            iconClass="fa-solid fa-gear"
+            [options]="buttonOptions"
+            (optionSelected)="onButtonOptionSelected($event)"
+        />
+    }
+</div>
+<app-page-body>
+    <section id="profile-section">
+        @if (participant$ | async) {
+            <app-profile [content]="participant$.value"/>
+        }
+    </section>
+    <section id="history-section">
+        <h2>Histórico do participante</h2>
+        <div class="wrapper">
+            <div class="select-container">
+                <app-select-button 
+                    name="Edições"
+                    customClass="fit-on-reduce"
+                    [options]="registrationsOptions"
+                    [simplified]="true"
+                    (option)="onEditionSelected($event)"
+                />
+            </div>
+            <span>Equipe: <strong>{{ selectedRegistration$.value?.team?.name }}</strong></span>
+        </div>
+    </section>
+    <section id="event-list-section">
+        @for (event of events; track $index) {
+            <app-event-card [event]="event"/>
+        }
+        @empty {
+            <div class="message-container">
+                <span>O participante ainda não participou de nenhum evento.</span>
+            </div>
+        }
+    </section>
+</app-page-body>
+<app-alert-popup 
+    #deletePopup
+    title="Excluir participante?"
+    message="A exclusão de um participante é irreversível e todos os seus dados serão perdidos. Deseja continuar?"
+    buttonMessage="Excluir"
+    (accepted)="deleteParticipant()"
+/>
+<app-alert-popup 
+    #inactivationPopup
+    title="Desativar participante?"
+    message="Ao desativar um participante, ele será incapaz de participar de qualquer evento na edição atual, caso esteja inscrito, e de se inscrever nas próximas edições. Deseja continuar?"
+    buttonMessage="Desativar"
+    (accepted)="updateParticipantStatus(false)"
+/>
+<app-alert-popup 
+    #activationPopup
+    title="Ativar participante?"
+    message="Ao ativar um participante, ele será capaz de participar de qualquer evento na edição atual, caso esteja inscrito, e de se inscrever nas próximas edições. Deseja continuar?"
+    buttonMessage="Ativar"
+    (accepted)="updateParticipantStatus(true)"
+/>
+<app-alert-popup
+    #registrationPopup
+    title="Atenção!"
+    message="Este participante já está inscrito na edição atual. Caso seja reinscrito em outra equipe, ele não poderá mais atuar na equipe anterior. Deseja continuar?"
+    buttonMessage="Prosseguir"
+    (accepted)="openTeamsSelection()"
+/>
+<app-alert-popup
+    #unregistrationPopup
+    title="Desinscrever participante?"
+    message="Ao desinscrever o participante da edição atual, ele não poderá mais atuar em qualquer evento desta edição. Deseja continuar?"
+    buttonMessage="Desinscrever"
+    (accepted)="unregisterParticipant()"
+/>
+<app-selection-popup 
+    #teamSelectionPopup
+    title="Selecione a equipe do participante"
+    buttonMessage="Inscrever"
+    [options]="teamsOptions"
+    (optionSelected)="registerParticipant($event)"
+/>
+<app-alert-popup 
+    #errorPopup
+    title="ERRO!"
+    [message]="errorMessage"
+    buttonMessage="Ok"
+    [hasOnlyMessage]="true"
+    customClass="error"
+/>

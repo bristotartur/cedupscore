@@ -1,0 +1,32 @@
+<div class="wrapper">
+    <div [ngClass]="{ 'table-container': true, 'empty': isContentEmpty }">
+        @if (isContentEmpty) {
+            <span>Não há nenhum problema.</span>
+        } @else {
+            <table>
+                <thead>
+                    <tr>
+                        @for (header of headers; track $index) {
+                            <th scope="col">{{ header }}</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of content; track $index) {
+                        <tr>
+                            @for (value of getItemValues(item); track $index) {
+                                @if ($index === 0) {
+                                    <td>
+                                        <input type="text" [value]="value" disabled>
+                                    </td>
+                                } @else {
+                                    <td>{{ value }}</td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

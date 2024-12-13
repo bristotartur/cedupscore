@@ -1,0 +1,53 @@
+<div class="filters-container">
+    <abbr title="Equipe dos participantes">
+        <app-select-button 
+            name="Equipe" 
+            customClass="fit-on-reduce"
+            [disabled]="isDisabled"
+            [simplified]="true" 
+            [options]="teams"
+            (option)="updateFilter('team', $event)" 
+        />
+    </abbr>
+    <abbr title="Gênero dos participantes">
+        <app-select-button 
+            name="Gênero"
+            customClass="fit-on-reduce"
+            [disabled]="isDisabled"
+            [simplified]="true"
+            [options]="genderOptions"
+            (option)="updateFilter('gender', $event)" 
+        />
+    </abbr>
+    <abbr title="Tipo de participante">
+        <app-select-button 
+            name="Tipo"
+            customClass="fit-on-reduce"
+            [disabled]="isDisabled"
+            [simplified]="true"
+            [options]="participantTypeOptions"
+            (option)="updateFilter('type', $event)" 
+        />
+    </abbr>
+    <abbr title="Status dos participantes">
+        <app-select-button 
+            name="Status"
+            customClass="fit-on-reduce"
+            [disabled]="isDisabled"
+            [simplified]="true"
+            [options]="statusOptions"
+            (option)="updateFilter('status', $event)" 
+        />
+    </abbr>
+</div>
+<div class="ordering-container">
+    <abbr title="Ordem da listagem">
+        <app-select-button 
+            name="Ordem"
+            [disabled]="isDisabled"
+            [simplified]="true"
+            [options]="orderOptions"
+            (option)="updateFilter('order', $event)" 
+        />
+    </abbr>
+</div>

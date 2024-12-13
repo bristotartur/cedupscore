@@ -1,0 +1,50 @@
+<div [ngClass]="{ 'table-container': true, 'fit': fit }">
+    <table id="table-1">
+        <tbody>
+            @for (team of positions$.value; track $index) {
+                <tr>
+                    <td>
+                        <div [ngClass]="['position', '_' + team.position]">
+                            {{ (team.position === 0) ? '?' : team.position }}
+                        </div>
+                    </td>
+                    <!-- <td>
+                        <div class="team-logo"></div>
+                    </td> -->
+                    <td>{{ team.name }}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table 
+        id="table-2"
+        [ngClass]="{ 'fit': columns.length < 3, 'single-column': columns.length === 1}"
+    >
+        <thead>
+            <tr>
+                @for (column of columns; track $index) {
+                    <th scope="col">{{ column }}</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (data of teamsData; track $index) {
+                <tr>
+                    @for (value of getValues(data); track $index) {
+                        <td>{{ value }}</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div
+    [ngClass]="[
+        'table-legend',
+        (legends.length < 3) ? 'two-elements' : 'more-than-two'
+    ]"
+>
+    @for (legend of legends; track $index) {
+        <span>{{ legend }}</span>
+    }
+</div>

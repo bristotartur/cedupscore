@@ -1,0 +1,63 @@
+<header>
+    <div class="header-container">
+        <h1 routerLink="/">{{ title }}</h1>
+        
+        <details #userDetails>
+            <summary>
+                <div class="user-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </summary>
+            <ul>
+                @if (userService.currentUserSignal() === null) {
+                    <li (click)="closeDetails()">
+                        <a routerLink="/login">Entrar</a>
+                    </li>    
+                }
+                @else {
+                    <li (click)="closeDetails()">
+                        <a routerLink="/profile">Perfil</a>
+                    </li>
+                    <li (click)="openChildModal($event)">
+                        <span>Sair</span>
+                    </li>
+                }
+            </ul>
+        </details>
+    </div>
+    <nav>
+        @if (screenWidth <= 768) {
+            <div class="toggle-btn" (click)="toggleMenu()">
+                <i [ngClass]="currentItem.iconClass"></i>
+                <span>{{ currentItem.name }}</span>
+            </div>
+        }
+        <ul
+            [ngClass]="{ 
+                'open': isMenuOpen, 'closed': !isMenuOpen && screenWidth <= 768
+            }"
+        >
+            @if (screenWidth <= 768 && isMenuOpen) {
+                <div class="close-btn" (click)="toggleMenu()">
+                    <i class="fa-solid fa-x"></i>
+                </div>
+            }
+            
+            @for (item of navItems; track $index) {
+                <app-nav-item 
+                    [itemName]="item.name"
+                    [iconClass]="item.iconClass"
+                    [link]="item.link"
+                    [isSelected]="item.isSelected"
+                    (select)="selectItem($index)"
+                />
+            }
+        </ul>
+    </nav>
+</header>
+<app-alert-popup 
+    title="Sair da conta?"
+    message="Ao sair de sua conta, você não poderá mais acessar seu perfil ou interagir com suas tarefas a menos que realize o login novamente. Deseja prosseguir?"
+    buttonMessage="Sair"
+    (accepted)="handleLogoutAccepted()"
+/>
